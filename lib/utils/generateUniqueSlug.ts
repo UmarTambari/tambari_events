@@ -1,0 +1,24 @@
+import { db } from "@/lib/db";
+import { events } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+import { generateSlug } from "./generateSlug";
+
+export async function generateUniqueSlug(title: string): Promise<string> {
+  const baseSlug = generateSlug(title);
+  if (!baseSlug) throw new Error("Title is required");
+
+  let slug = baseSlug;
+  let counter = 1;
+
+  while (true) {
+    const exists = await db
+      .select()
+      .from(events)
+      .where(eq(events.slug, slug))
+      .limit(1);
+
+    if (exists.length === 0) return slug;
+
+    slug = `${baseSlug}-${++counter}`;
+  }
+}

@@ -1,0 +1,228 @@
+import Link from "next/link";
+import Image from "next/image";
+import {
+  Calendar,
+  MapPin,
+  Users,
+  TrendingUp,
+  MoreVertical,
+  Edit,
+  Eye,
+  Trash2,
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+
+interface EventCardProps {
+  event: {
+    id: string;
+    title: string;
+    slug: string;
+    description: string;
+    eventDate: Date;
+    location: string;
+    venue: string;
+    thumbnailImageUrl: string | null;
+    isPublished: boolean;
+    isCancelled: boolean;
+    totalTicketsSold: number;
+    totalCapacity: number | null;
+    totalRevenue: number;
+    category?: string | null;
+  };
+  isPast?: boolean;
+}
+
+export function EventCard({ event, isPast = false }: EventCardProps) {
+  const soldPercentage = event.totalCapacity
+    ? (event.totalTicketsSold / event.totalCapacity) * 100
+    : 0;
+
+  const isUpcoming = event.eventDate > new Date();
+  const daysUntil = Math.ceil(
+    (event.eventDate.getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  return (
+    <Card className="bg-white border-[#85A947]/20 hover:shadow-lg transition-all overflow-hidden group">
+      {/* Image/Thumbnail */}
+      <div className="relative h-48 bg-linear-to-br from-[#123524] to-[#3E7B27]">
+        {event.thumbnailImageUrl ? (
+          <Image
+            src={event.thumbnailImageUrl}
+            alt={event.title}
+            width={300}
+            height={150}
+            unoptimized
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <Calendar className="h-16 w-16 text-[#EFE3C2] opacity-50" />
+          </div>
+        )}
+
+        {/* Status badges */}
+        <div className="absolute top-3 left-3 flex gap-2">
+          {!event.isPublished && (
+            <Badge className="bg-yellow-500 text-white border-0">Draft</Badge>
+          )}
+          {event.isCancelled && (
+            <Badge className="bg-red-500 text-white border-0">Cancelled</Badge>
+          )}
+          {isUpcoming && event.isPublished && daysUntil <= 7 && (
+            <Badge className="bg-[#85A947] text-white border-0">
+              {daysUntil} days left
+            </Badge>
+          )}
+        </div>
+
+        {/* Action menu */}
+        <div className="absolute top-3 right-3">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 bg-white/90 hover:bg-white"
+              >
+                <MoreVertical className="h-4 w-4 text-[#123524]" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/events/${event.slug}`}>
+                  <Eye className="mr-2 h-4 w-4" />
+                  View Details
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={`/dashboard/events/${event.slug}/edit`}>
+                  <Edit className="mr-2 h-4 w-4" />
+                  Edit Event
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-red-600">
+                <Trash2 className="mr-2 h-4 w-4" />
+                Delete Event
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      <CardContent className="p-5 space-y-4">
+        {/* Title and category */}
+        <div>
+          <div className="flex items-start justify-between gap-2 mb-2">
+            <Link href={`/dashboard/events/${event.slug}`}>
+              <h3 className="font-semibold text-[#123524] line-clamp-1 group-hover:text-[#3E7B27] transition-colors">
+                {event.title}
+              </h3>
+            </Link>
+          </div>
+          {event.category && (
+            <Badge
+              variant="outline"
+              className="text-xs text-[#3E7B27] border-[#85A947]/30"
+            >
+              {event.category}
+            </Badge>
+          )}
+        </div>
+
+        {/* Description */}
+        <p className="text-sm text-[#3E7B27] line-clamp-2">
+          {event.description}
+        </p>
+
+        {/* Event details */}
+        <div className="space-y-2 text-sm text-[#3E7B27]">
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4 w-4 text-[#85A947]" />
+            <span>
+              {event.eventDate.toLocaleDateString("en-US", {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <MapPin className="h-4 w-4 text-[#85A947]" />
+            <span className="truncate">{event.location}</span>
+          </div>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-2 gap-3 pt-3 border-t border-[#85A947]/20">
+          <div className="space-y-1">
+            <div className="flex items-center gap-1 text-xs text-[#85A947]">
+              <Users className="h-3 w-3" />
+              <span>Tickets Sold</span>
+            </div>
+            <p className="text-lg font-semibold text-[#123524]">
+              {event.totalTicketsSold}
+              {event.totalCapacity && (
+                <span className="text-sm font-normal text-[#85A947]">
+                  /{event.totalCapacity}
+                </span>
+              )}
+            </p>
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center gap-1 text-xs text-[#85A947]">
+              <TrendingUp className="h-3 w-3" />
+              <span>Revenue</span>
+            </div>
+            <p className="text-lg font-semibold text-[#123524]">
+              ₦{(event.totalRevenue / 100).toLocaleString()}
+            </p>
+          </div>
+        </div>
+
+        {/* Progress bar */}
+        {event.totalCapacity && (
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[#3E7B27]">Capacity</span>
+              <span className="font-medium text-[#123524]">
+                {soldPercentage.toFixed(0)}%
+              </span>
+            </div>
+            <div className="h-2 bg-[#EFE3C2] rounded-full overflow-hidden">
+              <div
+                className={cn(
+                  "h-full rounded-full transition-all",
+                  soldPercentage >= 90
+                    ? "bg-red-500"
+                    : soldPercentage >= 70
+                    ? "bg-yellow-500"
+                    : "bg-[#85A947]"
+                )}
+                style={{ width: `${Math.min(soldPercentage, 100)}%` }}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Action button */}
+        <Link href={`/dashboard/events/${event.slug}`} className="block">
+          <Button className="w-full bg-[#3E7B27] hover:bg-[#123524] text-white">
+            {isPast ? "View Results" : "Manage Event"}
+          </Button>
+        </Link>
+      </CardContent>
+    </Card>
+  );
+}
