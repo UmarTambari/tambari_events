@@ -45,18 +45,14 @@ export const orderSchema = z.object({
 });
 
 export const createOrderSchema = z.object({
-  customerName: z.string().min(2, "Customer name is required").max(200),
-  customerEmail: z.email("Invalid email address"),
-  customerPhone: z
-    .string()
-    .regex(/^(\+?234|0)[7-9][0-1]\d{8}$/, "Invalid phone number")
-    .optional(),
+  eventId: z.uuid(),
   notes: z.string().max(1000).optional(),
   items: z
     .array(
       z.object({
         ticketTypeId: z.uuid(),
         quantity: z.number().int().positive().min(1).max(100),
+        price: z.number().int().nonnegative(),
       })
     )
     .min(1, "At least one ticket type is required"),

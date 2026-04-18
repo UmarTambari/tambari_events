@@ -1,4 +1,3 @@
-// components/orders/order-detail-client.tsx
 "use client";
 
 import Link from "next/link";
@@ -54,13 +53,13 @@ interface OrderDetailClientProps {
       reference: string;
       provider: string;
       amount: number;
-      status: string;
-      channel?: string;
-      cardType?: string;
-      lastFourDigits?: string;
-      bank?: string;
+      status: string | null;
+      channel?: string | null;
+      cardType?: string | null;
+      lastFourDigits?: string | null;
+      bank?: string | null;
       paidAt: Date | null;
-    };
+    } | null;
   };
 }
 

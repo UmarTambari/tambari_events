@@ -1,4 +1,3 @@
-// components/orders/transaction-card.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CreditCard, Building2, CheckCircle2 } from "lucide-react";
@@ -9,11 +8,11 @@ interface TransactionCardProps {
     reference: string;
     provider: string;
     amount: number;
-    status: string;
-    channel?: string;
-    cardType?: string;
-    lastFourDigits?: string;
-    bank?: string;
+    status: string | null;
+    channel?: string | null;
+    cardType?: string | null;
+    lastFourDigits?: string | null;
+    bank?: string | null;
     paidAt: Date | null;
   };
 }

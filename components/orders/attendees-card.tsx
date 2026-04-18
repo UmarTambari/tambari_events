@@ -1,4 +1,3 @@
-// components/orders/attendees-card.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Users, CheckCircle2, XCircle } from "lucide-react";

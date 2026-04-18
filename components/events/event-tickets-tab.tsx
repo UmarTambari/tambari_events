@@ -14,7 +14,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
-import { TicketType } from "@/lib/types/ticketTypes.types"
+import { TicketType } from "@/lib/types/ticketTypes.type"
 
 import { AddTicketDialog } from "./add-ticket-dialog";
 import { EditTicketDialog } from "./edit-ticket-dialog";

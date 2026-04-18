@@ -8,7 +8,6 @@ import {
   MoreVertical,
   Edit,
   Eye,
-  Trash2,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -21,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import { DeleteEventMenuItem } from "@/components/events/delete-event-menu-item";
 
 interface EventCardProps {
   event: {
@@ -111,10 +111,10 @@ export function EventCard({ event, isPast = false }: EventCardProps) {
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-red-600">
-                <Trash2 className="mr-2 h-4 w-4" />
-                Delete Event
-              </DropdownMenuItem>
+              <DeleteEventMenuItem
+                eventId={event.id}
+                eventTitle={event.title}
+              />
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

@@ -5,7 +5,7 @@ export const users = pgTable("users", {
   authId: text("auth_id").notNull().unique(),
   email: text("email").notNull().unique(),
   fullName: text("full_name").notNull(),
-  phoneNumber: text("phone_number"),
+  phoneNumber: text("phone_number").notNull(),
 
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

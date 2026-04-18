@@ -71,6 +71,36 @@ export const createEventFormSchema = z.object({
 
 export type CreateEventFormValues = z.infer<typeof createEventFormSchema>;
 
+/** Dashboard edit form: same core fields as create, without ticket types (managed on the event page). */
+export const editEventFormSchema = z.object({
+  title: z.string().min(3, "Title must be at least 3 characters").max(200),
+  description: z
+    .string()
+    .min(10, "Description must be at least 10 characters")
+    .max(5000),
+  category: z.string().nonempty("Please select a category"),
+  tags: z.array(z.string()).default([]).optional(),
+
+  venue: z.string().min(2, "Venue is required"),
+  location: z.string().min(2, "Location is required"),
+  eventDate: z.string().nonempty("Start date is required"),
+  eventEndDate: z.string().optional(),
+  totalCapacity: z.string().optional(),
+
+  bannerImageUrl: z
+    .url("Please enter a valid image URL")
+    .optional()
+    .or(z.literal("")),
+  thumbnailImageUrl: z
+    .url("Please enter a valid image URL")
+    .optional()
+    .or(z.literal("")),
+
+  isPublished: z.boolean(),
+});
+
+export type EditEventFormValues = z.infer<typeof editEventFormSchema>;
+
 export const updateEventFormSchema = createEventFormSchema.partial();
 
 export type UpdateEventForm = z.infer<typeof updateEventFormSchema>;

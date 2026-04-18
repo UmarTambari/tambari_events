@@ -24,7 +24,7 @@ export async function getCurrentUserId(): Promise<string> {
   const supabaseUser = await getCurrentUser();
 
   if (!supabaseUser) {
-    redirect("/login");
+    redirect("/sign-in");
   }
 
   // Get or create user in your database
@@ -50,7 +50,7 @@ export async function requireAuth() {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/login");
+    redirect("/sign-in");
   }
 
   return user;

@@ -32,7 +32,7 @@ import {
   transformTicketFormToAPI,
   transformTicketAPIToForm,
 } from "@/lib/types/ticketTypesForm";
-import { TicketType } from "@/lib/types/ticketTypes.types";
+import { TicketType } from "@/lib/types/ticketTypes.type";
 
 interface EditTicketDialogProps {
   eventId: string;

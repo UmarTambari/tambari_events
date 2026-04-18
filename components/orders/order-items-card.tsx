@@ -1,4 +1,3 @@
-// components/orders/order-items-card.tsx
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Ticket } from "lucide-react";
 

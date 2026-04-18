@@ -18,10 +18,7 @@ export const orderStatusEnum = pgEnum("order_status", [
   "refunded",
 ]);
 
-/**
- * Orders table - Main order records
- * One order can contain multiple ticket types
- */
+// One order can contain multiple ticket types
 export const orders = pgTable("orders", {
   id: uuid("id").primaryKey().defaultRandom(),
 

@@ -2,6 +2,17 @@ import { db } from "@/lib/db";
 import { eq, sql } from "drizzle-orm";
 import { ticketTypes } from "@/lib/db/schema";
 
+export async function sumQuantitySoldForEvent(eventId: string) {
+  const [row] = await db
+    .select({
+      total: sql<number>`coalesce(sum(${ticketTypes.quantitySold}), 0)`,
+    })
+    .from(ticketTypes)
+    .where(eq(ticketTypes.eventId, eventId));
+
+  return Number(row?.total ?? 0);
+}
+
 export async function getTicketTypesByEvent(eventId: string) {
   return await db
     .select()

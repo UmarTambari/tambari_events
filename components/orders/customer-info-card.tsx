@@ -1,4 +1,3 @@
-// components/orders/customer-info-card.tsx
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { User, Mail, Phone, Calendar, MapPin, FileText } from "lucide-react";
@@ -34,7 +33,6 @@ export function CustomerInfoCard({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Customer Info */}
         <div className="space-y-3">
           <p className="text-xs font-semibold text-[#85A947] uppercase tracking-wide">
             Customer
@@ -73,7 +71,6 @@ export function CustomerInfoCard({
 
         <div className="h-px bg-[#85A947]/20" />
 
-        {/* Event Info */}
         <div className="space-y-3">
           <p className="text-xs font-semibold text-[#85A947] uppercase tracking-wide">
             Event Details

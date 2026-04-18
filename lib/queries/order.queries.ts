@@ -6,6 +6,7 @@ import {
   orderItems,
   attendees,
   transactions,
+  ticketTypes,
 } from "@/lib/db/schema";
 import { getEventById } from "./events.queries";
 
@@ -38,19 +39,38 @@ export async function getOrderByNumber(orderNumber: string) {
   return order;
 }
 
-// Get order with all related data
+// Get order with all related data - Supports BOTH dashboard and public pages
 export async function getOrderWithDetails(orderId: string) {
   const order = await getOrderById(orderId);
   if (!order) return null;
 
   const items = await db
-    .select()
+    .select({
+      id: orderItems.id,
+      ticketTypeId: orderItems.ticketTypeId,        // needed for attendee creation
+      ticketTypeName: ticketTypes.name,
+      pricePerTicket: orderItems.pricePerTicket,
+      quantity: orderItems.quantity,
+      subtotal: orderItems.subtotal,
+    })
     .from(orderItems)
+    .innerJoin(ticketTypes, eq(orderItems.ticketTypeId, ticketTypes.id))
     .where(eq(orderItems.orderId, orderId));
 
   const attendeesList = await db
-    .select()
+    .select({
+      id: attendees.id,
+      firstName: attendees.firstName,
+      lastName: attendees.lastName,
+      email: attendees.email,
+      ticketCode: attendees.ticketCode,
+      isCheckedIn: attendees.isCheckedIn,
+      checkedInAt: attendees.checkedInAt,
+      ticketTypeName: ticketTypes.name,
+      qrCodeUrl: attendees.qrCodeUrl,               // ← Added for public page
+    })
     .from(attendees)
+    .innerJoin(ticketTypes, eq(attendees.ticketTypeId, ticketTypes.id))
     .where(eq(attendees.orderId, orderId));
 
   const [transaction] = await db
@@ -65,7 +85,29 @@ export async function getOrderWithDetails(orderId: string) {
     items,
     attendees: attendeesList,
     transaction,
-    event,
+    
+    // === Flattened fields (for Dashboard OrderDetailClient) ===
+    eventTitle: event?.title ?? "",
+    eventSlug: event?.slug ?? "",
+    eventDate: event?.eventDate ?? new Date(),
+    eventVenue: event?.venue ?? "",
+    eventLocation: event?.location ?? "",
+    customerPhone: order.customerPhone ?? "",
+    notes: order.notes ?? null,
+    paidAt: order.paidAt ?? null,
+
+    // === Nested event object (for Public Order Confirmation Page) ===
+    event: event
+      ? {
+          title: event.title,
+          slug: event.slug,
+          eventDate: event.eventDate,
+          venue: event.venue,
+          location: event.location,
+          thumbnailImageUrl: event.thumbnailImageUrl,
+          // add any other fields the public page might need later
+        }
+      : null,
   };
 }
 
@@ -75,7 +117,7 @@ export async function createOrder(data: {
   eventId: string;
   customerName: string;
   customerEmail: string;
-  customerPhone?: string | null;
+  customerPhone: string;
   subtotal: number;
   serviceFee: number;
   totalAmount: number;

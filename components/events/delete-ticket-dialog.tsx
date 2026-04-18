@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import type { TicketType } from "@/lib/types/ticketTypes.types"
+import type { TicketType } from "@/lib/types/ticketTypes.type"
 
 interface DeleteTicketDialogProps {
   eventId: string;

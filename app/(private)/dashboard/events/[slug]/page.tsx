@@ -5,11 +5,11 @@ import { EventHeader } from "@/components/events/event-header";
 import { EventStatsCards } from "@/components/events/event-stats-cards";
 import { EventTabsWrapper } from "@/components/events/event-tabs-wrapper";
 import {
-  getEventBySlug,
+  getEventForOrganizerBySlug,
   getEventWithStats,
 } from "@/lib/queries/events.queries";
 import { getCurrentUserId } from "@/lib/auth";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
 interface EventDetailPageProps {
   params: Promise<{
@@ -22,15 +22,11 @@ export default async function EventDetailPage({
 }: EventDetailPageProps) {
 
   const { slug } = await params;
-  const userId = await getCurrentUserId();
-  const event = await getEventBySlug(slug);
+  const organizerId = await getCurrentUserId();
+  const event = await getEventForOrganizerBySlug(slug, organizerId);
 
   if (!event) {
     notFound();
-  }
-
-  if (event.userId !== userId) {
-    redirect("/dashboard/events");
   }
 
   const eventWithStats = await getEventWithStats(event.id);

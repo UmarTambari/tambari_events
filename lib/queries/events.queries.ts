@@ -15,6 +15,18 @@ export async function getEventBySlug(slug: string) {
   return event;
 }
 
+/** Event row only if this slug belongs to the organizer (dashboard access). */
+export async function getEventForOrganizerBySlug(
+  slug: string,
+  organizerId: string
+) {
+  const [event] = await db
+    .select()
+    .from(events)
+    .where(and(eq(events.slug, slug), eq(events.organizerId, organizerId)));
+  return event;
+}
+
 export async function getEventById(eventId: string) {
   const [event] = await db.select().from(events).where(eq(events.id, eventId));
   return event;
@@ -59,8 +71,8 @@ export async function updateEvent(
     bannerImageUrl: string | null;
     thumbnailImageUrl: string | null;
     totalCapacity: number | null;
-    category: string;
-    tags: string[];
+    category: string | null;
+    tags: string[] | null;
     isPublished: boolean;
     isCancelled: boolean;
   }>
@@ -75,6 +87,15 @@ export async function updateEvent(
 
 export async function deleteEvent(eventId: string) {
   await db.delete(events).where(eq(events.id, eventId));
+}
+
+export async function countPaidOrdersForEvent(eventId: string) {
+  const [row] = await db
+    .select({ total: count() })
+    .from(orders)
+    .where(and(eq(orders.eventId, eventId), eq(orders.status, "paid")));
+
+  return Number(row?.total ?? 0);
 }
 
 // Get event with statistics

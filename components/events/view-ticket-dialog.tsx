@@ -14,7 +14,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import type { TicketType } from "@/lib/types/ticketTypes.types";
+import type { TicketType } from "@/lib/types/ticketTypes.type";
 
 interface ViewTicketDialogProps {
   ticket: TicketType;
