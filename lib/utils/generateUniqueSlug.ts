@@ -1,6 +1,6 @@
-import { db } from "@/lib/db";
+import { db }     from "@/lib/db";
 import { events } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { eq }     from "drizzle-orm";
 import { generateSlug } from "./generateSlug";
 
 export async function generateUniqueSlug(title: string): Promise<string> {

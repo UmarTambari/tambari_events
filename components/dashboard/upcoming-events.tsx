@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { ArrowRight, Calendar, MapPin, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Button }               from "@/components/ui/button";
+import { Badge }                from "@/components/ui/badge";
+import { db }                   from "@/lib/db";
+import { eq, sql }              from "drizzle-orm";
+import { getCurrentUserId }     from "@/lib/auth";
+import { ticketTypes }          from "@/lib/db/schema";
 import { getEventsByOrganizer } from "@/lib/queries/events.queries";
-import { getCurrentUserId } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { ticketTypes } from "@/lib/db/schema";
-import { eq, sql } from "drizzle-orm";
-import type { EventWithStats } from "@/lib/types/event.type";
+import type { EventWithStats }  from "@/lib/types/event.type";
 
 async function getUpcomingEventsWithStats(): Promise<EventWithStats[]> {
   const organizerId = await getCurrentUserId();

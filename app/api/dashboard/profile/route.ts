@@ -1,18 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getUserById, updateUser } from "@/lib/queries/users.queries";
+import { getUserById, updateUser }   from "@/lib/queries/users.queries";
 import { updateUserSchema } from "@/lib/types/user.type";
-import { formatZodErrors } from "@/lib/validations";
+import { getCurrentUserId } from "@/lib/auth";
+import { apiErrorResponse } from "@/lib/error";
+import { formatZodErrors }  from "@/lib/validations";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const userId = request.headers.get("x-user-id");
-
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    const userId = await getCurrentUserId();
 
     const user = await getUserById(userId);
 
@@ -27,33 +22,20 @@ export async function GET(request: NextRequest) {
       success: true,
       data: user,
     });
-  } catch (error) {
-    console.error("Error fetching user:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Failed to fetch user profile",
-      },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+      return apiErrorResponse("Unauthorized", 401);
+    }
+    return apiErrorResponse(error);
   }
 }
 
-// PATCH /api/user/profile - Update user profile
 export async function PATCH(request: NextRequest) {
   try {
-    const userId = request.headers.get("x-user-id");
-
-    if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    const userId = await getCurrentUserId();
 
     const body = await request.json();
 
-    // Validate request body
     const validation = updateUserSchema.safeParse(body);
 
     if (!validation.success) {
@@ -76,14 +58,10 @@ export async function PATCH(request: NextRequest) {
       data: updatedUser,
       message: "Profile updated successfully",
     });
-  } catch (error) {
-    console.error("Error updating user:", error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: "Failed to update profile",
-      },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
+      return apiErrorResponse("Unauthorized", 401);
+    }
+    return apiErrorResponse(error);
   }
 }

@@ -1,11 +1,11 @@
 import { redirect, notFound } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
+import { createClient }       from "@/lib/supabase/server";
 
 import { getOrderWithDetails } from "@/lib/queries/order.queries";
-import { getUserByAuthId } from "@/lib/queries/users.queries";
-import { CheckoutForm } from "@/components/public/checkout-form";
+import { getUserByAuthId }     from "@/lib/queries/users.queries";
+import { CheckoutForm }        from "@/components/public/checkout-form";
 import { ShieldCheck, CreditCard } from "lucide-react";
-import Image from "next/image";
+import Image      from "next/image";
 import { format } from "date-fns";
 
 interface CheckoutPageProps {

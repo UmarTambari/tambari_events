@@ -29,7 +29,7 @@ export const attendees = pgTable("attendees", {
   ticketTypeId: uuid("ticket_type_id")
     .notNull()
     .references(() => ticketTypes.id, { onDelete: "restrict" }),
-  
+    
   // Unique ticket code for check-in
   ticketCode: text("ticket_code").notNull().unique(), // e.g., "TKT-ABC123XYZ"
   

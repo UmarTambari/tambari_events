@@ -6,7 +6,7 @@ import {
 } from "@/lib/queries/ticketTypes.queries";
 import { getEventById } from "@/lib/queries/events.queries";
 import { updateTicketTypeSchema } from "@/lib/types/ticketTypes.type";
-import { getCurrentUserId } from "@/lib/auth";
+import { getCurrentUserIdOrNull } from "@/lib/auth";
 import { validatePrice, validateQuantity } from "@/lib/validations";
 
 export async function PATCH(
@@ -15,16 +15,17 @@ export async function PATCH(
 ) {
   try {
     const { eventId, ticketId } = await params;
-    const user = await getCurrentUserId();
-    if (!user)
+
+    const user = await getCurrentUserIdOrNull();
+    if (!user) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 }
       );
+    }
 
     const body = await request.json();
 
-    //processed body with dates with dates support in string and objects
     const processedBody = {
       ...body,
       saleStartDate: body.saleStartDate ? new Date(body.saleStartDate) : null,
@@ -44,30 +45,30 @@ export async function PATCH(
     }
 
     const data = validation.data;
-    
 
-    // Fetch ticket + event
     const ticket = await getTicketTypeById(ticketId);
-    if (!ticket)
+    if (!ticket) {
       return NextResponse.json(
         { success: false, error: "Ticket not found" },
         { status: 404 }
       );
+    }
 
     const event = await getEventById(eventId);
-    if (!event || event.id !== ticket.eventId)
+    if (!event || event.id !== ticket.eventId) {
       return NextResponse.json(
         { success: false, error: "Event not found" },
         { status: 404 }
       );
+    }
 
-    if (event.organizerId !== user)
+    if (event.organizerId !== user) {
       return NextResponse.json(
         { success: false, error: "Forbidden" },
         { status: 403 }
       );
+    }
 
-    // BLOCK edits if tickets already sold
     if (ticket.quantitySold > 0) {
       const allowedFields = [
         "description",
@@ -92,7 +93,6 @@ export async function PATCH(
       }
     }
 
-    // Validate price if being updated
     if (data.price !== undefined) {
       const priceCheck = validatePrice(data.price);
       if (!priceCheck.valid) {
@@ -103,7 +103,6 @@ export async function PATCH(
       }
     }
 
-    // Validate quantity if being updated
     if (data.quantity !== undefined) {
       const qtyCheck = validateQuantity(data.quantity);
       if (!qtyCheck.valid) {
@@ -113,7 +112,6 @@ export async function PATCH(
         );
       }
 
-      // Prevent reducing below sold
       if (data.quantity < ticket.quantitySold) {
         return NextResponse.json(
           {
@@ -125,12 +123,17 @@ export async function PATCH(
       }
     }
 
-    const updated = await updateTicketType(ticketId, data);
+    const updated = await updateTicketType(ticketId, {
+      ...data,
+      saleStartDate: data.saleStartDate ?? undefined,
+      saleEndDate: data.saleEndDate ?? undefined,
+    });
 
     return NextResponse.json(
       { success: true, message: "Ticket updated", data: updated },
       { status: 200 }
     );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("[PATCH /tickets] Error:", error);
     return NextResponse.json(
@@ -140,41 +143,44 @@ export async function PATCH(
   }
 }
 
-// DELETE - Delete ticket type
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ eventId: string; ticketId: string }> }
 ) {
   try {
     const { eventId, ticketId } = await params;
-    const user = await getCurrentUserId();
-    if (!user)
+
+    const user = await getCurrentUserIdOrNull();
+    if (!user) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 }
       );
+    }
 
     const ticket = await getTicketTypeById(ticketId);
-    if (!ticket)
+    if (!ticket) {
       return NextResponse.json(
         { success: false, error: "Ticket not found" },
         { status: 404 }
       );
+    }
 
     const event = await getEventById(eventId);
-    if (!event || event.id !== ticket.eventId)
+    if (!event || event.id !== ticket.eventId) {
       return NextResponse.json(
         { success: false, error: "Event not found" },
         { status: 404 }
       );
+    }
 
-    if (event.organizerId !== user)
+    if (event.organizerId !== user) {
       return NextResponse.json(
         { success: false, error: "Forbidden" },
         { status: 403 }
       );
+    }
 
-    // CRITICAL: Block deletion if any sold
     if (ticket.quantitySold > 0) {
       return NextResponse.json(
         {

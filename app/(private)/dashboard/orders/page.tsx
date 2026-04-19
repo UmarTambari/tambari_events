@@ -1,13 +1,13 @@
-import { Suspense } from "react";
+import { Suspense }                 from "react";
 import { Search, Download, Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button }                   from "@/components/ui/button";
+import { Input }                    from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { OrdersTable } from "@/components/orders/orders-table";
-import { OrdersStats } from "@/components/orders/orders-stats";
+import { OrdersTable }          from "@/components/orders/orders-table";
+import { OrdersStats }          from "@/components/orders/orders-stats";
 import { getOrdersByOrganizer } from "@/lib/queries/order.queries";
-import { getCurrentUserId } from "@/lib/auth";
-import type { Order } from "@/lib/types/order.type";
+import { getCurrentUserId }     from "@/lib/auth";
+import type { Order }           from "@/lib/types/order.type";
 
 interface OrderDisplay extends Order {
   eventTitle: string;

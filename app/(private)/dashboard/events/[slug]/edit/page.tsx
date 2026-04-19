@@ -1,11 +1,11 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { notFound } from "next/navigation";
+import Link           from "next/link";
+import { ArrowLeft }  from "lucide-react";
+import { notFound }   from "next/navigation";
 
-import { Button } from "@/components/ui/button";
-import { EditEventForm } from "@/components/events/edit-event-form";
+import { Button }         from "@/components/ui/button";
+import { EditEventForm }  from "@/components/events/edit-event-form";
 import { getEventForOrganizerBySlug } from "@/lib/queries/events.queries";
-import { getCurrentUserId } from "@/lib/auth";
+import { getCurrentUserId }           from "@/lib/auth";
 
 interface EditEventPageProps {
   params: Promise<{ slug: string }>;

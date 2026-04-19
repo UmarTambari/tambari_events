@@ -1,8 +1,11 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProfileInfoTab } from "./profile-info-tab";
-import { SecurityTab } from "./security-tab";
+import { Tabs, 
+  TabsContent, 
+  TabsList, 
+  TabsTrigger }             from "@/components/ui/tabs";
+import { ProfileInfoTab }   from "./profile-info-tab";
+import { SecurityTab }      from "./security-tab";
 import { ProfileStatsCard } from "./profile-stats-card";
 
 interface ProfileClientProps {

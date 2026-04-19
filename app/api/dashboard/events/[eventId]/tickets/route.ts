@@ -2,10 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   getTicketTypesByEvent,
   createTicketType,
-} from "@/lib/queries/ticketTypes.queries";
+}                       from "@/lib/queries/ticketTypes.queries";
 import { getEventById } from "@/lib/queries/events.queries";
-import { createTicketTypeSchema } from "@/lib/types/ticketTypes.type";
-import { getCurrentUserId } from "@/lib/auth";
+import { createTicketTypeSchema }          from "@/lib/types/ticketTypes.type";
+import { getCurrentUserIdOrNull }          from "@/lib/auth";
 import { validatePrice, validateQuantity } from "@/lib/validations";
 
 interface RouteContext {
@@ -16,9 +16,15 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
   try {
     const { eventId } = await params;
 
-    const user = await getCurrentUserId();
-    const event = await getEventById(eventId);
+    const user = await getCurrentUserIdOrNull();
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 401 }
+      );
+    }
 
+    const event = await getEventById(eventId);
     if (!event) {
       return NextResponse.json(
         { success: false, error: "Event not found" },
@@ -27,7 +33,10 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
     }
 
     if (event.organizerId !== user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+      return NextResponse.json(
+        { success: false, error: "Unauthorized" },
+        { status: 403 }
+      );
     }
 
     const tickets = await getTicketTypesByEvent(eventId);
@@ -54,13 +63,15 @@ export async function GET(request: NextRequest, { params }: RouteContext) {
 
 export async function POST(request: NextRequest, { params }: RouteContext) {
   try {
-    const {eventId} = await params;
-    const user = await getCurrentUserId();
-    if (!user)
+    const { eventId } = await params;
+
+    const user = await getCurrentUserIdOrNull();
+    if (!user) {
       return NextResponse.json(
         { success: false, error: "Unauthorized" },
         { status: 401 }
       );
+    }
 
     const body = await request.json();
 
@@ -78,7 +89,6 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
 
     const data = validation.data;
 
-    // Validate price
     const priceCheck = validatePrice(data.price);
     if (!priceCheck.valid) {
       return NextResponse.json(
@@ -87,7 +97,7 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
       );
     }
 
-    const qtyCheck = validateQuantity(data.quantity, 50000); // allow up to 50k
+    const qtyCheck = validateQuantity(data.quantity, 50000);
     if (!qtyCheck.valid) {
       return NextResponse.json(
         { success: false, error: qtyCheck.error },
@@ -96,16 +106,18 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
     }
 
     const event = await getEventById(eventId);
-    if (!event)
+    if (!event) {
       return NextResponse.json(
         { success: false, error: "Event not found" },
         { status: 404 }
       );
-    if (event.organizerId !== user)
+    }
+    if (event.organizerId !== user) {
       return NextResponse.json(
         { success: false, error: "Forbidden" },
         { status: 403 }
       );
+    }
 
     if (event.totalCapacity) {
       const currentTickets = await getTicketTypesByEvent(eventId);
@@ -135,6 +147,7 @@ export async function POST(request: NextRequest, { params }: RouteContext) {
       { success: true, message: "Ticket type created", data: ticket },
       { status: 201 }
     );
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error("[POST /tickets] Error:", error);
     if (error?.code === "23505") {

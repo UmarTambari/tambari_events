@@ -4,14 +4,18 @@ import {
   getEventsByOrganizer,
   createEvent,
 } from "@/lib/queries/events.queries";
-import { createTicketType } from "@/lib/queries/ticketTypes.queries";
-import { generateUniqueSlug } from "@/lib/utils/generateUniqueSlug";
-import { getCurrentUserId } from "@/lib/auth";
-import { apiErrorResponse } from "@/lib/error";
+import { createTicketType }       from "@/lib/queries/ticketTypes.queries";
+import { generateUniqueSlug }     from "@/lib/utils/generateUniqueSlug";
+import { getCurrentUserIdOrNull } from "@/lib/auth";
+import { apiErrorResponse }       from "@/lib/error";
 
 export async function GET() {
   try {
-    const organizerId = await getCurrentUserId();
+    const organizerId = await getCurrentUserIdOrNull();
+
+    if (!organizerId) {
+      return apiErrorResponse("Unauthorized", 401);
+    }
 
     const events = await getEventsByOrganizer(organizerId);
 
@@ -21,16 +25,17 @@ export async function GET() {
       data: events,
     });
   } catch (error: unknown) {
-    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
-      return apiErrorResponse("Unauthorized", 401);
-    }
     return apiErrorResponse(error);
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const organizerId = await getCurrentUserId();
+    const organizerId = await getCurrentUserIdOrNull();
+
+    if (!organizerId) {
+      return apiErrorResponse("Unauthorized", 401);
+    }
 
     const body = await request.json();
 
@@ -73,7 +78,7 @@ export async function POST(request: NextRequest) {
 
     if (Array.isArray(ticketTypes) && ticketTypes.length > 0) {
       for (const ticket of ticketTypes) {
-        const priceInKobo = Math.round(parseFloat(ticket.price) * 100); // Naira → kobo
+        const priceInKobo = Math.round(parseFloat(ticket.price) * 100);
         const quantity = parseInt(ticket.quantity, 10);
         const minPurchase = parseInt(ticket.minPurchase, 10) || 1;
         const maxPurchase = parseInt(ticket.maxPurchase, 10) || 10;
@@ -106,7 +111,7 @@ export async function POST(request: NextRequest) {
     console.log("EVENT + TICKETS CREATED SUCCESSFULLY");
     console.log("Title:", newEvent.title);
     console.log("Published:", newEvent.isPublished);
-    console.log("Tickets Types Created:", ticketTypes.length)
+    console.log("Tickets Types Created:", ticketTypes.length);
     console.log("Full Event Object:", newEvent);
 
     return NextResponse.json(

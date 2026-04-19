@@ -1,8 +1,11 @@
-// components/dashboard/revenue-chart.tsx
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { 
+  Card, 
+  CardContent, 
+  CardHeader, 
+  CardTitle } from "@/components/ui/card";
 import {
   AreaChart,
   Area,
@@ -25,7 +28,7 @@ export function RevenueChart() {
         setIsLoading(true);
         setError(null);
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/dashboard/revenue`, {
+        const response = await fetch(`/api/dashboard/revenue`, {
           cache: "no-store",
         });
 

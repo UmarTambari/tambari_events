@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getMonthlyRevenue } from "@/lib/queries/dashboard.queries";
-import { getCurrentUserId } from "@/lib/auth";
+import { getCurrentUserIdOrNull } from "@/lib/auth";
 import { apiErrorResponse } from "@/lib/error";
 
 export async function GET(request: NextRequest) {
   try {
-    const organizerId = await getCurrentUserId();
+    const organizerId = await getCurrentUserIdOrNull();
 
     if (!organizerId) {
       return apiErrorResponse("Unauthorized", 401);

@@ -1,13 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { Card, 
+  CardContent, 
+  CardHeader, 
+  CardTitle }     from "@/components/ui/card";
+import { Label }  from "@/components/ui/label";
+import { Input }  from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { Badge }  from "@/components/ui/badge";
 import { User, Mail, Phone, Calendar, Save, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast }     from "sonner";
 
 interface ProfileInfoTabProps {
   user: {
@@ -26,19 +30,40 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
     fullName: user.fullName,
-    phoneNumber: user.phoneNumber,
+    phoneNumber: user.phoneNumber ?? "",
   });
 
   const handleSave = async () => {
+    if (!formData.fullName.trim() || formData.fullName.trim().length < 2) {
+      toast.error("Full name must be at least 2 characters");
+      return;
+    }
+
     setIsSaving(true);
     try {
-      // TODO: Implement API call to update user profile
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log("Saving profile:", formData);
+      const response = await fetch("/api/dashboard/profile", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: formData.fullName.trim(),
+          phoneNumber: formData.phoneNumber.trim() || undefined,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to update profile");
+      }
+
+      toast.success("Profile updated successfully!");
       setIsEditing(false);
       router.refresh();
     } catch (error) {
       console.error("Error saving profile:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update profile",
+      );
     } finally {
       setIsSaving(false);
     }
@@ -47,7 +72,7 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
   const handleCancel = () => {
     setFormData({
       fullName: user.fullName,
-      phoneNumber: user.phoneNumber,
+      phoneNumber: user.phoneNumber ?? "",
     });
     setIsEditing(false);
   };

@@ -18,6 +18,23 @@ export async function createAttendee(data: {
   return attendee;
 }
 
+/**
+ * Updates the qrCodeUrl (QR data string) for an attendee after creation.
+ * Called immediately after createAttendee so we can include the attendeeId
+ * in the QR payload.
+ */
+export async function updateAttendeeQRCode(
+  attendeeId: string,
+  qrCodeData: string
+) {
+  const [attendee] = await db
+    .update(attendees)
+    .set({ qrCodeUrl: qrCodeData, updatedAt: new Date() })
+    .where(eq(attendees.id, attendeeId))
+    .returning();
+  return attendee;
+}
+
 export async function getAttendeesByOrder(orderId: string) {
   return await db
     .select()

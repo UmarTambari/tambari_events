@@ -1,15 +1,15 @@
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { EventHeader } from "@/components/events/event-header";
-import { EventStatsCards } from "@/components/events/event-stats-cards";
+import Link             from "next/link";
+import { ArrowLeft }    from "lucide-react";
+import { Button }       from "@/components/ui/button";
+import { EventHeader }  from "@/components/events/event-header";
+import { EventStatsCards }  from "@/components/events/event-stats-cards";
 import { EventTabsWrapper } from "@/components/events/event-tabs-wrapper";
 import {
   getEventForOrganizerBySlug,
   getEventWithStats,
-} from "@/lib/queries/events.queries";
+}                           from "@/lib/queries/events.queries";
 import { getCurrentUserId } from "@/lib/auth";
-import { notFound } from "next/navigation";
+import { notFound }         from "next/navigation";
 
 interface EventDetailPageProps {
   params: Promise<{

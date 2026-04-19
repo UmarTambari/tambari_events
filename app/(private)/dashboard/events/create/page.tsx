@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useState }   from "react";
+import Link           from "next/link";
+import { ArrowLeft }  from "lucide-react";
+import { Button }     from "@/components/ui/button";
 import { CreateEventWizard } from "@/components/events/create-event-wizard";
-import { StepIndicator } from "@/components/events/step-indicator";
+import { StepIndicator }     from "@/components/events/step-indicator";
 
 const steps = [
   { id: 1, name: "Basic Info", description: "Event details" },

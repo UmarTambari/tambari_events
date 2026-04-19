@@ -1,14 +1,14 @@
-import { Suspense } from "react";
+import { Suspense }   from "react";
 import { Calendar, Users, ShoppingBag, TrendingUp } from "lucide-react";
-import { StatsCard } from "@/components/dashboard/stats-card";
-import { RecentOrders } from "@/components/dashboard/recent-orders";
-import { UpcomingEvents } from "@/components/dashboard/upcoming-events";
-import { RevenueChart } from "@/components/dashboard/revenue-chart";
+import { StatsCard }        from "@/components/dashboard/stats-card";
+import { RecentOrders }     from "@/components/dashboard/recent-orders";
+import { UpcomingEvents }   from "@/components/dashboard/upcoming-events";
+import { RevenueChart }     from "@/components/dashboard/revenue-chart";
 import {
   getDashboardStats,
   getRevenueGrowth,
   getOrdersGrowth,
-} from "@/lib/queries/dashboard.queries";
+}                           from "@/lib/queries/dashboard.queries";
 import { getCurrentUserId } from "@/lib/auth";
 
 async function getDashboardData() {

@@ -15,4 +15,4 @@ export async function GET() {
       message: "Database connection failed" 
     }, { status: 500 });
   }
-}w
+}

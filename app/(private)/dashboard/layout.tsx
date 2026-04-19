@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useState }     from "react";
+import Link             from "next/link";
+import { usePathname }  from "next/navigation";
 import {
   Calendar,
   LayoutDashboard,
@@ -12,8 +12,8 @@ import {
   X,
   Plus,
   LogOut,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+}                 from "lucide-react";
+import { cn }     from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,7 +22,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+}                 from "@/components/ui/dropdown-menu";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -58,7 +58,7 @@ export default function DashboardLayout({
           {/* Logo */}
           <div className="flex h-16 items-center justify-between px-6 border-b border-[#3E7B27]">
             <Link href="/dashboard" className="text-xl font-bold text-[#EFE3C2]">
-              EventHub
+              Tambari EventHub
             </Link>
             <button
               onClick={() => setSidebarOpen(false)}

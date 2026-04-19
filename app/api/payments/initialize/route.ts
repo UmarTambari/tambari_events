@@ -8,8 +8,9 @@ import {
 } from "@/lib/queries/order.queries";
 import { getUserByAuthId } from "@/lib/queries/users.queries";
 import { createTransaction } from "@/lib/queries/transactions.queries";
-import { createAttendee } from "@/lib/queries/attendee.queries";
+import { createAttendee, updateAttendeeQRCode } from "@/lib/queries/attendee.queries";
 import { incrementTicketSold } from "@/lib/queries/ticketTypes.queries";
+import { generateQRData } from "@/lib/utils/generateQRdata";
 
 const attendeeSchema = z.object({
   firstName: z.string().min(2),
@@ -23,7 +24,6 @@ const initializePaymentSchema = z.object({
   attendees: z.array(attendeeSchema),
 });
 
-// Generate unique ticket code
 function generateTicketCode(): string {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   let code = "TKT-";
@@ -35,12 +35,12 @@ function generateTicketCode(): string {
 
 export async function POST(request: NextRequest) {
   try {
-    // Create Supabase server client (reads cookies automatically)
     const supabase = await createClient();
 
-    // Get authenticated user
-    const { data: { user: supabaseUser }, error: authError } =
-      await supabase.auth.getUser();
+    const {
+      data: { user: supabaseUser },
+      error: authError,
+    } = await supabase.auth.getUser();
 
     if (authError || !supabaseUser) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -51,22 +51,18 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Parse request
     const body = await request.json();
     const { orderId, attendees } = initializePaymentSchema.parse(body);
 
-    // Get order
     const order = await getOrderWithDetails(orderId);
     if (!order) {
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
 
-    // Verify order belongs to user
     if (order.userId !== user.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    // Check order status
     if (order.status === "paid") {
       return NextResponse.json(
         { error: "Order already paid" },
@@ -74,7 +70,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify attendee count matches ticket quantity
     const totalTickets = order.items.reduce(
       (sum: number, item: any) => sum + item.quantity,
       0
@@ -87,16 +82,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update order status to processing
     await updateOrderStatus(orderId, "processing");
 
-    // Generate transaction reference
     const reference = `TXN-${Date.now()}-${Math.random()
       .toString(36)
       .substring(2, 10)
       .toUpperCase()}`;
 
-    // Initialize Paystack payment
     const paystackResponse = await fetch(
       "https://api.paystack.co/transaction/initialize",
       {
@@ -107,7 +99,7 @@ export async function POST(request: NextRequest) {
         },
         body: JSON.stringify({
           email: user.email,
-          amount: order.totalAmount, // Already in kobo
+          amount: order.totalAmount,
           reference,
           callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/orders/${order.orderNumber}`,
           metadata: {
@@ -128,7 +120,6 @@ export async function POST(request: NextRequest) {
 
     const paystackData = await paystackResponse.json();
 
-    // Create transaction record
     await createTransaction({
       reference,
       orderId: order.id,
@@ -141,30 +132,40 @@ export async function POST(request: NextRequest) {
       authorizationUrl: paystackData.data.authorization_url,
     });
 
-    // Create attendee records with ticket codes
+    // Create attendee records and generate QR data for each
     let attendeeIndex = 0;
     for (const item of order.items) {
       for (let i = 0; i < item.quantity; i++) {
-        const attendee = attendees[attendeeIndex];
+        const attendeeInput = attendees[attendeeIndex];
         const ticketCode = generateTicketCode();
 
-        await createAttendee({
+        // Step 1: Create the attendee to get the generated UUID
+        const newAttendee = await createAttendee({
           orderId: order.id,
           orderItemId: item.id,
           eventId: order.eventId,
           ticketTypeId: item.ticketTypeId,
           ticketCode,
-          firstName: attendee.firstName,
-          lastName: attendee.lastName,
-          email: attendee.email,
-          phoneNumber: attendee.phoneNumber,
-          // QR code URL will be generated after payment confirmation
+          firstName: attendeeInput.firstName,
+          lastName: attendeeInput.lastName,
+          email: attendeeInput.email,
+          phoneNumber: attendeeInput.phoneNumber,
         });
+
+        // Step 2: Generate QR data now that we have the attendee ID
+        // This data string is what gets encoded into the QR code image on the frontend
+        const qrData = generateQRData({
+          ticketCode,
+          attendeeId: newAttendee.id,
+          eventId: order.eventId,
+        });
+
+        // Step 3: Store the QR data string back on the attendee record
+        await updateAttendeeQRCode(newAttendee.id, qrData);
 
         attendeeIndex++;
       }
 
-      // Increment ticket sold count
       await incrementTicketSold(item.ticketTypeId, item.quantity);
     }
 

@@ -1,8 +1,8 @@
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-import Image from "next/image";
-import Link from "next/link";
+import Image      from "next/image";
+import Link       from "next/link";
 import { format } from "date-fns";
 import {
   CheckCircle,
@@ -10,15 +10,20 @@ import {
   MapPin,
   Clock,
   Ticket as TicketIcon,
-  AlertCircle
+  AlertCircle,
 } from "lucide-react";
 
-import { getOrderByNumber, getOrderWithDetails } from "@/lib/queries/order.queries";
-import { getUserByAuthId } from "@/lib/queries/users.queries";
-import { DownloadTicketsButton } from "@/components/public/download-tickets-button";
-import { VerifyPaymentButton } from "@/components/public/verify-payment-button";
-import { PrintButton } from "@/components/public/print-button";
-import { AutoVerifyPayment } from "@/components/public/auto-verify-payment";
+import {
+  getOrderByNumber,
+  getOrderWithDetails,
+} from "@/lib/queries/order.queries";
+import { getUserByAuthId }        from "@/lib/queries/users.queries";
+import { DownloadTicketsButton }  from "@/components/public/download-tickets-button";
+import { VerifyPaymentButton }    from "@/components/public/verify-payment-button";
+import { PrintButton }            from "@/components/public/print-button";
+import { AutoVerifyPayment }      from "@/components/public/auto-verify-payment";
+import { TicketQRCode }           from "@/components/public/ticket-qr-code";
+
 
 interface OrderPageProps {
   params: Promise<{
@@ -26,13 +31,17 @@ interface OrderPageProps {
   }>;
 }
 
-export default async function OrderConfirmationPage({ params }: OrderPageProps) {
+export default async function OrderConfirmationPage({
+  params,
+}: OrderPageProps) {
   const { orderNumber } = await params;
 
   const supabase = await createClient();
 
-  // Get authenticated user
-  const { data: { user: supabaseUser }, error: authError } = await supabase.auth.getUser();
+  const {
+    data: { user: supabaseUser },
+    error: authError,
+  } = await supabase.auth.getUser();
 
   if (authError || !supabaseUser) {
     redirect(`/sign-in?redirect=/orders/${orderNumber}`);
@@ -86,12 +95,15 @@ export default async function OrderConfirmationPage({ params }: OrderPageProps) 
                 <span className="font-semibold">{order.customerEmail}</span>
               </p>
               <p className="text-sm text-green-600">
-                Order Number: <span className="font-mono font-semibold">{order.orderNumber}</span>
+                Order Number:{" "}
+                <span className="font-mono font-semibold">
+                  {order.orderNumber}
+                </span>
               </p>
             </div>
           </div>
         )}
-        {isPending &&(
+        {isPending && (
           <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6 mb-8 flex items-start space-x-4">
             <AlertCircle className="h-8 w-8 text-yellow-600 shrink-0" />
             <div className="flex-1">
@@ -99,14 +111,23 @@ export default async function OrderConfirmationPage({ params }: OrderPageProps) 
                 Payment Pending
               </h1>
               <p className="text-yellow-700 mb-3">
-                We&apos;re waiting for payment confirmation. This usually takes a few seconds.
+                We&apos;re waiting for payment confirmation. This usually takes
+                a few seconds.
               </p>
               <p className="text-sm text-yellow-600">
-                Order Number: <span className="font-mono font-semibold">{order.orderNumber}</span>
+                Order Number:{" "}
+                <span className="font-mono font-semibold">
+                  {order.orderNumber}
+                </span>
               </p>
-              <AutoVerifyPayment reference={order.transaction?.reference || ""} orderStatus={order.transaction?.status} intervalSeconds={5} maxRetries={24} />
+              <AutoVerifyPayment
+                reference={order.transaction?.reference || ""}
+                orderStatus={order.transaction?.status}
+                intervalSeconds={5}
+                maxRetries={24}
+              />
             </div>
-              <VerifyPaymentButton reference={order.transaction?.reference} />
+            <VerifyPaymentButton reference={order.transaction?.reference} />
           </div>
         )}
         {isFailed && (
@@ -117,15 +138,18 @@ export default async function OrderConfirmationPage({ params }: OrderPageProps) 
                 Payment Failed
               </h1>
               <p className="text-red-700 mb-3">
-                Unfortunately, your payment could not be processed. Please try again.
+                Unfortunately, your payment could not be processed. Please try
+                again.
               </p>
               <p className="text-sm text-red-600">
-                Order Number: <span className="font-mono font-semibold">{order.orderNumber}</span>
+                Order Number:{" "}
+                <span className="font-mono font-semibold">
+                  {order.orderNumber}
+                </span>
               </p>
             </div>
           </div>
         )}
-
         {/* Event Info */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
           <div className="flex gap-4">
@@ -150,7 +174,7 @@ export default async function OrderConfirmationPage({ params }: OrderPageProps) 
                     {order.event?.eventDate &&
                       format(
                         new Date(order.event.eventDate),
-                        "EEEE, MMMM dd, yyyy"
+                        "EEEE, MMMM dd, yyyy",
                       )}
                   </span>
                 </div>
@@ -171,11 +195,12 @@ export default async function OrderConfirmationPage({ params }: OrderPageProps) 
             </div>
           </div>
         </div>
-
         {/* Order Summary */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Order Summary</h3>
-         
+          <h3 className="text-xl font-bold text-gray-900 mb-4">
+            Order Summary
+          </h3>
+
           <div className="space-y-3 mb-4">
             {order.items.map((item) => (
               <div
@@ -183,7 +208,9 @@ export default async function OrderConfirmationPage({ params }: OrderPageProps) 
                 className="flex justify-between items-center py-2 border-b border-gray-100 last:border-0"
               >
                 <div>
-                  <p className="font-semibold text-gray-900">{item.ticketTypeName}</p>
+                  <p className="font-semibold text-gray-900">
+                    {item.ticketTypeName}
+                  </p>
                   <p className="text-sm text-gray-600">
                     {formatPrice(item.pricePerTicket)} × {item.quantity}
                   </p>
@@ -198,11 +225,15 @@ export default async function OrderConfirmationPage({ params }: OrderPageProps) 
           <div className="space-y-2 pt-4 border-t border-gray-200">
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Subtotal</span>
-              <span className="font-semibold">{formatPrice(order.subtotal)}</span>
+              <span className="font-semibold">
+                {formatPrice(order.subtotal)}
+              </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-gray-600">Service Fee</span>
-              <span className="font-semibold">{formatPrice(order.serviceFee)}</span>
+              <span className="font-semibold">
+                {formatPrice(order.serviceFee)}
+              </span>
             </div>
             <div className="flex justify-between text-lg font-bold pt-2 border-t border-gray-200">
               <span>Total Paid</span>
@@ -210,7 +241,6 @@ export default async function OrderConfirmationPage({ params }: OrderPageProps) 
             </div>
           </div>
         </div>
-
         {/* Tickets */}
         {isPaid && order.attendees && order.attendees.length > 0 && (
           <div className="bg-white rounded-xl shadow-sm p-6 mb-6 border border-gray-200">
@@ -236,26 +266,35 @@ export default async function OrderConfirmationPage({ params }: OrderPageProps) 
                           <p className="font-semibold text-gray-900">
                             {attendee.firstName} {attendee.lastName}
                           </p>
-                          <p className="text-sm text-gray-600">{attendee.email}</p>
+                          <p className="text-sm text-gray-600">
+                            {attendee.email}
+                          </p>
                         </div>
                       </div>
+
+                      {/* Ticket type */}
+                      <p className="text-sm text-gray-500 mb-2">
+                        {attendee.ticketTypeName}
+                      </p>
+
+                      {/* Ticket code */}
                       <div className="bg-gray-50 rounded px-3 py-2 inline-block">
-                        <p className="text-xs text-gray-500 mb-1">Ticket Code</p>
+                        <p className="text-xs text-gray-500 mb-1">
+                          Ticket Code
+                        </p>
                         <p className="font-mono font-bold text-gray-900">
                           {attendee.ticketCode}
                         </p>
                       </div>
                     </div>
 
+                    {/* QR Code — rendered from the stored data string */}
                     {attendee.qrCodeUrl && (
-                      <div className="ml-4">
-                        <Image
-                          src={attendee.qrCodeUrl}
-                          alt="QR Code"
-                          width={80}
-                          height={80}
-                          className="border border-gray-200 rounded"
-                        />
+                      <div className="ml-4 flex flex-col items-center gap-1">
+                        <TicketQRCode value={attendee.qrCodeUrl} size={100} />
+                        <p className="text-xs text-gray-400">
+                          Scan at entrance
+                        </p>
                       </div>
                     )}
                   </div>
@@ -265,14 +304,13 @@ export default async function OrderConfirmationPage({ params }: OrderPageProps) 
 
             <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-sm text-blue-900">
-                <strong>Important:</strong> Present your ticket code or QR code at the
-                event entrance for check-in. Save these tickets to your device or
-                print them out.
+                <strong>Important:</strong> Present your QR code or ticket code
+                at the event entrance for check-in. Download your tickets as a
+                PDF to save them offline.
               </p>
             </div>
           </div>
         )}
-
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-4">
           <Link

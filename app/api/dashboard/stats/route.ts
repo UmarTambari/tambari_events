@@ -4,12 +4,12 @@ import {
   getRevenueGrowth,
   getOrdersGrowth,
 } from "@/lib/queries/dashboard.queries";
-import { getCurrentUserId } from "@/lib/auth";
+import { getCurrentUserIdOrNull } from "@/lib/auth";
 import { apiErrorResponse } from "@/lib/error";
 
 export async function GET() {
   try {
-    const organizerId = await getCurrentUserId();
+    const organizerId = await getCurrentUserIdOrNull();
 
     if (!organizerId) {
       return apiErrorResponse("Unauthorized", 401);

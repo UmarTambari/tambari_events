@@ -7,7 +7,7 @@ import {
   updateEvent,
 } from "@/lib/queries/events.queries";
 import { sumQuantitySoldForEvent } from "@/lib/queries/ticketTypes.queries";
-import { getCurrentUserId } from "@/lib/auth";
+import { getCurrentUserIdOrNull } from "@/lib/auth";
 import { apiErrorResponse } from "@/lib/error";
 import { generateUniqueSlugForEvent } from "@/lib/utils/generateUniqueSlug";
 
@@ -33,9 +33,13 @@ const patchEventBodySchema = z.object({
 export async function PATCH(request: NextRequest, { params }: RouteContext) {
   try {
     const { eventId } = await params;
-    const organizerId = await getCurrentUserId();
-    const existing = await getEventById(eventId);
 
+    const organizerId = await getCurrentUserIdOrNull();
+    if (!organizerId) {
+      return apiErrorResponse("Unauthorized", 401);
+    }
+
+    const existing = await getEventById(eventId);
     if (!existing) {
       return NextResponse.json(
         { success: false, error: "Event not found" },
@@ -67,8 +71,7 @@ export async function PATCH(request: NextRequest, { params }: RouteContext) {
 
     if (
       body.totalCapacity != null &&
-      body.totalCapacity <
-        (await sumQuantitySoldForEvent(eventId))
+      body.totalCapacity < (await sumQuantitySoldForEvent(eventId))
     ) {
       return NextResponse.json(
         {
@@ -85,8 +88,7 @@ export async function PATCH(request: NextRequest, { params }: RouteContext) {
       slug = await generateUniqueSlugForEvent(body.title, eventId);
     }
 
-    const tags =
-      body.tags && body.tags.length > 0 ? body.tags : null;
+    const tags = body.tags && body.tags.length > 0 ? body.tags : null;
 
     const updated = await updateEvent(eventId, {
       title: body.title.trim(),
@@ -117,12 +119,6 @@ export async function PATCH(request: NextRequest, { params }: RouteContext) {
       data: updated,
     });
   } catch (error: unknown) {
-    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
     if (
       typeof error === "object" &&
       error !== null &&
@@ -142,9 +138,12 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
   try {
     const { eventId } = await params;
 
-    const userId = await getCurrentUserId();
-    const event = await getEventById(eventId);
+    const userId = await getCurrentUserIdOrNull();
+    if (!userId) {
+      return apiErrorResponse("Unauthorized", 401);
+    }
 
+    const event = await getEventById(eventId);
     if (!event) {
       return NextResponse.json(
         { success: false, error: "Event not found" },
@@ -178,12 +177,6 @@ export async function DELETE(_request: Request, { params }: RouteContext) {
       { status: 200 }
     );
   } catch (error: unknown) {
-    if (error instanceof Error && error.message === "NEXT_REDIRECT") {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
     return apiErrorResponse(error);
   }
 }

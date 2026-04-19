@@ -1,15 +1,15 @@
-import Link from "next/link";
+import Link             from "next/link";
 import { Plus, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button }       from "@/components/ui/button";
+import { Input }        from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { EventCard } from "@/components/events/event-card";
-import { EventsEmptyState } from "@/components/events/event-empty-state";
+import { EventCard }            from "@/components/events/event-card";
+import { EventsEmptyState }     from "@/components/events/event-empty-state";
 import { getEventsByOrganizer } from "@/lib/queries/events.queries";
-import { getCurrentUserId } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { ticketTypes } from "@/lib/db/schema/tickets.schema";
-import { eq, sql } from "drizzle-orm";
+import { getCurrentUserId }     from "@/lib/auth";
+import { db }                   from "@/lib/db";
+import { ticketTypes }          from "@/lib/db/schema/tickets.schema";
+import { eq, sql }              from "drizzle-orm";
 
 async function getEventsWithStats(organizerId: string) {
   const events = await getEventsByOrganizer(organizerId);

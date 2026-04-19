@@ -3,16 +3,21 @@ import crypto from "crypto";
 import { eq } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { webhookLogs } from "@/lib/db/schema";
-import { 
-  getTransactionByReference, 
-  updateTransaction 
+import {
+  getTransactionByReference,
+  updateTransaction,
 } from "@/lib/queries/transactions.queries";
-import { 
-  getOrderById, 
-  updateOrderStatus 
+import {
+  getOrderById,
+  updateOrderStatus,
 } from "@/lib/queries/order.queries";
+import {
+  createAttendee,
+  updateAttendeeQRCode,
+} from "@/lib/queries/attendee.queries";
+import { generateQRData } from "@/lib/utils/generateQRdata";
+import { generateTicketCode } from "@/lib/utils/generateReference";
 
-// Verify Paystack signature
 function verifySignature(payload: string, signature: string): boolean {
   const hash = crypto
     .createHmac("sha512", process.env.PAYSTACK_SECRET_KEY!)
@@ -25,8 +30,8 @@ export async function POST(request: NextRequest) {
   try {
     const signature = request.headers.get("x-paystack-signature");
     const body = await request.text();
-    
-    // Log webhook
+
+    // Log the incoming webhook immediately
     const webhookLog = await db
       .insert(webhookLogs)
       .values({
@@ -38,24 +43,23 @@ export async function POST(request: NextRequest) {
       })
       .returning();
 
-    // Verify signature
+    // Verify the Paystack signature
     if (!signature || !verifySignature(body, signature)) {
       console.error("Invalid webhook signature");
       await db
         .update(webhookLogs)
-        .set({ 
+        .set({
           status: "failed",
-          errorMessage: "Invalid signature" 
+          errorMessage: "Invalid signature",
         })
         .where(eq(webhookLogs.id, webhookLog[0].id));
-      
+
       return NextResponse.json(
         { error: "Invalid signature" },
         { status: 401 }
       );
     }
 
-    // Update webhook log
     await db
       .update(webhookLogs)
       .set({ isSignatureValid: true })
@@ -65,90 +69,75 @@ export async function POST(request: NextRequest) {
     const event = data.event;
     const webhookData = data.data;
 
-    // Update webhook log with event type
     await db
       .update(webhookLogs)
-      .set({ 
+      .set({
         event,
         reference: webhookData.reference,
-        status: "processing" 
+        status: "processing",
       })
       .where(eq(webhookLogs.id, webhookLog[0].id));
 
-    // Handle charge.success event
+    // Handle successful charge
     if (event === "charge.success") {
       const reference = webhookData.reference;
-      
-      // Get transaction
+
       const transaction = await getTransactionByReference(reference);
-      
+
       if (!transaction) {
         await db
           .update(webhookLogs)
-          .set({ 
-            status: "failed",
-            errorMessage: "Transaction not found" 
-          })
+          .set({ status: "failed", errorMessage: "Transaction not found" })
           .where(eq(webhookLogs.id, webhookLog[0].id));
-        
+
         return NextResponse.json(
           { error: "Transaction not found" },
           { status: 404 }
         );
       }
 
-      // Check if already processed
+      // Idempotency check — don't process the same webhook twice
       if (transaction.status === "success" && transaction.isVerified) {
         await db
           .update(webhookLogs)
-          .set({ 
-            status: "ignored",
-            errorMessage: "Already processed" 
-          })
+          .set({ status: "ignored", errorMessage: "Already processed" })
           .where(eq(webhookLogs.id, webhookLog[0].id));
-        
+
         return NextResponse.json({ message: "Already processed" });
       }
 
-      // Get order
       const order = await getOrderById(transaction.orderId);
       if (!order) {
         await db
           .update(webhookLogs)
-          .set({ 
-            status: "failed",
-            errorMessage: "Order not found" 
-          })
+          .set({ status: "failed", errorMessage: "Order not found" })
           .where(eq(webhookLogs.id, webhookLog[0].id));
-        
+
         return NextResponse.json(
           { error: "Order not found" },
           { status: 404 }
         );
       }
 
-      // Verify amount matches
+      // Amount integrity check
       if (webhookData.amount !== order.totalAmount) {
         await db
           .update(webhookLogs)
-          .set({ 
-            status: "failed",
-            errorMessage: "Amount mismatch" 
-          })
+          .set({ status: "failed", errorMessage: "Amount mismatch" })
           .where(eq(webhookLogs.id, webhookLog[0].id));
-        
+
         console.error("Payment amount mismatch:", {
           expected: order.totalAmount,
           received: webhookData.amount,
         });
-        
+
         return NextResponse.json(
           { error: "Amount mismatch" },
           { status: 400 }
         );
       }
 
-      // Update transaction
+      // Update transaction record
       await updateTransaction(transaction.id, {
         status: "success",
         channel: webhookData.channel,
@@ -164,34 +153,92 @@ export async function POST(request: NextRequest) {
         paidAt: new Date(webhookData.paid_at),
       });
 
-      // Update order status
+      // Mark order as paid
       await updateOrderStatus(order.id, "paid", {
         paidAt: new Date(webhookData.paid_at),
       });
 
-      // Mark webhook as processed
+      // Generate attendee records with QR data
+      // This path is hit when payment goes through Paystack redirect flow
+      // (as opposed to the inline flow handled in the initialize route).
+      // Only create attendees if they don't already exist for this order.
+      const { getAttendeesByOrder } = await import(
+        "@/lib/queries/attendee.queries"
+      );
+      const existingAttendees = await getAttendeesByOrder(order.id);
+
+      if (existingAttendees.length === 0) {
+        // Attendees not yet created — this is the redirect/callback flow.
+        // Fetch order items to know what tickets to create.
+        const { getOrderWithDetails } = await import(
+          "@/lib/queries/order.queries"
+        );
+        const orderWithDetails = await getOrderWithDetails(order.id);
+
+        if (orderWithDetails) {
+          for (const item of orderWithDetails.items) {
+            for (let i = 0; i < item.quantity; i++) {
+              const ticketCode = generateTicketCode();
+
+              const newAttendee = await createAttendee({
+                orderId: order.id,
+                orderItemId: item.id,
+                eventId: order.eventId,
+                ticketTypeId: item.ticketTypeId,
+                ticketCode,
+                firstName: order.customerName.split(" ")[0] || "Guest",
+                lastName:
+                  order.customerName.split(" ").slice(1).join(" ") || "",
+                email: order.customerEmail,
+                phoneNumber: order.customerPhone,
+              });
+
+              // Generate and store QR data
+              const qrData = generateQRData({
+                ticketCode,
+                attendeeId: newAttendee.id,
+                eventId: order.eventId,
+              });
+
+              await updateAttendeeQRCode(newAttendee.id, qrData);
+            }
+          }
+        }
+      } else {
+        // Attendees already exist (created at payment init time).
+        // Check if any are missing QR data and backfill if needed.
+        for (const attendee of existingAttendees) {
+          if (!attendee.qrCodeUrl) {
+            const qrData = generateQRData({
+              ticketCode: attendee.ticketCode,
+              attendeeId: attendee.id,
+              eventId: order.eventId,
+            });
+            await updateAttendeeQRCode(attendee.id, qrData);
+          }
+        }
+      }
+
+      // Mark webhook as fully processed
       await db
         .update(webhookLogs)
-        .set({ 
+        .set({
           status: "processed",
           processedAt: new Date(),
-          isProcessed: true 
+          isProcessed: true,
         })
         .where(eq(webhookLogs.id, webhookLog[0].id));
 
-      // TODO: Generate QR codes for attendees
       // TODO: Send confirmation email with tickets
 
-      return NextResponse.json({ 
-        message: "Webhook processed successfully" 
-      });
+      return NextResponse.json({ message: "Webhook processed successfully" });
     }
 
-    // Handle charge.failed event
+    // Handle failed charge
     if (event === "charge.failed") {
       const reference = webhookData.reference;
       const transaction = await getTransactionByReference(reference);
-      
+
       if (transaction) {
         await updateTransaction(transaction.id, {
           status: "failed",
@@ -208,27 +255,19 @@ export async function POST(request: NextRequest) {
 
       await db
         .update(webhookLogs)
-        .set({ 
-          status: "processed",
-          processedAt: new Date(),
-          isProcessed: true 
-        })
+        .set({ status: "processed", processedAt: new Date(), isProcessed: true })
         .where(eq(webhookLogs.id, webhookLog[0].id));
     }
 
-    // Ignore other events
+    // Ignore all other event types
     await db
       .update(webhookLogs)
-      .set({ 
-        status: "ignored",
-        processedAt: new Date() 
-      })
+      .set({ status: "ignored", processedAt: new Date() })
       .where(eq(webhookLogs.id, webhookLog[0].id));
 
     return NextResponse.json({ message: "Webhook received" });
   } catch (error) {
     console.error("Webhook error:", error);
-    
     return NextResponse.json(
       { error: "Webhook processing failed" },
       { status: 500 }
