@@ -73,10 +73,10 @@ export function BasicInfoStep() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-[#123524] mb-2">
+        <h2 className="text-2xl font-bold text-dash-ink mb-2">
           Basic Information
         </h2>
-        <p className="text-sm text-[#3E7B27]">
+        <p className="text-sm text-dash-muted">
           Let&apos;s start with the essential details about your event
         </p>
       </div>
@@ -88,18 +88,18 @@ export function BasicInfoStep() {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-[#123524]">
+              <FormLabel className="text-dash-ink">
                 Event Title <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
                 <Input
                   placeholder="Enter your event title"
-                  className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                  className="border-dash-border focus:border-dash-accent-strong"
                   {...field}
                 />
               </FormControl>
               {title && (
-                <p className="text-xs text-[#85A947]">
+                <p className="text-xs text-dash-accent">
                   Slug: <span className="font-medium">{generateSlug(title)}</span>
                 </p>
               )}
@@ -114,18 +114,18 @@ export function BasicInfoStep() {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-[#123524]">
+              <FormLabel className="text-dash-ink">
                 Description <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
                 <Textarea
                   placeholder="Describe your event in detail..."
                   rows={6}
-                  className="resize-none border-[#85A947]/20 focus:border-[#3E7B27]"
+                  className="resize-none border-dash-border focus:border-dash-accent-strong"
                   {...field}
                 />
               </FormControl>
-              <p className="text-xs text-[#85A947]">
+              <p className="text-xs text-dash-accent">
                 {field.value?.length || 0} characters
               </p>
               <FormMessage />
@@ -139,12 +139,12 @@ export function BasicInfoStep() {
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-[#123524]">
+              <FormLabel className="text-dash-ink">
                 Category <span className="text-red-500">*</span>
               </FormLabel>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
-                  <SelectTrigger className="border-[#85A947]/20 focus:border-[#3E7B27]">
+                  <SelectTrigger className="border-dash-border focus:border-dash-accent-strong">
                     <SelectValue placeholder="Select a category" />
                   </SelectTrigger>
                 </FormControl>
@@ -163,14 +163,14 @@ export function BasicInfoStep() {
 
         {/* Tags */}
         <FormItem>
-          <FormLabel className="text-[#123524]">Tags</FormLabel>
+          <FormLabel className="text-dash-ink">Tags</FormLabel>
           <FormControl>
             <Input
               placeholder="Type and press Enter to add tags"
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={handleAddTag}
-              className="border-[#85A947]/20 focus:border-[#3E7B27]"
+              className="border-dash-border focus:border-dash-accent-strong"
             />
           </FormControl>
 
@@ -180,13 +180,13 @@ export function BasicInfoStep() {
                 <Badge
                   key={tag}
                   variant="outline"
-                  className="bg-[#EFE3C2] border-[#85A947]/30 text-[#123524] pl-3 pr-1 py-1"
+                  className="bg-dash-highlight border-dash-accent/30 text-dash-ink pl-3 pr-1 py-1"
                 >
                   {tag}
                   <button
                     type="button"
                     onClick={() => handleRemoveTag(tag)}
-                    className="ml-2 rounded-full hover:bg-[#85A947]/20 p-0.5 transition"
+                    className="ml-2 rounded-full hover:bg-dash-accent/20 p-0.5 transition"
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -195,7 +195,7 @@ export function BasicInfoStep() {
             </div>
           )}
 
-          <p className="text-xs text-[#85A947] mt-2">
+          <p className="text-xs text-dash-accent mt-2">
             Add tags to help people find your event
           </p>
         </FormItem>

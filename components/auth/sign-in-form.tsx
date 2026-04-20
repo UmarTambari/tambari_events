@@ -1,8 +1,9 @@
 "use client";
 
 import { useState }     from "react";
-import { useRouter }    from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { sanitizePostAuthRedirect } from "@/lib/auth-redirect";
 import { Button }       from "@/components/ui/button";
 import { Input }        from "@/components/ui/input";
 import { Label }        from "@/components/ui/label";
@@ -10,6 +11,7 @@ import { Mail, Lock, Loader2 } from "lucide-react";
 
 export function SignInForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -35,7 +37,9 @@ export function SignInForm() {
         return;
       }
 
-      router.push("/dashboard");
+      const next =
+        sanitizePostAuthRedirect(searchParams.get("redirect")) ?? "/dashboard";
+      router.push(next);
       router.refresh();
     } catch (err) {
       setError("An unexpected error occurred");
@@ -54,11 +58,11 @@ export function SignInForm() {
       )}
 
       <div className="space-y-2">
-        <Label htmlFor="email" className="text-[#123524]">
+        <Label htmlFor="email" className="text-dash-ink">
           Email Address
         </Label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#85A947]" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-dash-accent" />
           <Input
             id="email"
             type="email"
@@ -68,17 +72,17 @@ export function SignInForm() {
             }
             placeholder="you@example.com"
             required
-            className="pl-10 border-[#85A947]/20 focus:border-[#3E7B27]"
+            className="pl-10 border-dash-border focus:border-dash-accent-strong"
           />
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="password" className="text-[#123524]">
+        <Label htmlFor="password" className="text-dash-ink">
           Password
         </Label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#85A947]" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-dash-accent" />
           <Input
             id="password"
             type="password"
@@ -88,7 +92,7 @@ export function SignInForm() {
             }
             placeholder="••••••••"
             required
-            className="pl-10 border-[#85A947]/20 focus:border-[#3E7B27]"
+            className="pl-10 border-dash-border focus:border-dash-accent-strong"
           />
         </div>
       </div>
@@ -96,7 +100,7 @@ export function SignInForm() {
       <Button
         type="submit"
         disabled={isLoading}
-        className="w-full bg-[#85A947] hover:bg-[#3E7B27] text-white"
+        className="w-full bg-dash-accent hover:bg-dash-accent-strong text-white"
       >
         {isLoading ? (
           <>

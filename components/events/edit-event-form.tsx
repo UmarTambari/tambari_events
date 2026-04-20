@@ -129,31 +129,31 @@ export function EditEventForm({ event }: EditEventFormProps) {
         )}
         className="space-y-8"
       >
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardContent className="p-6 space-y-6">
             <BasicInfoStep />
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardContent className="p-6 space-y-6">
             <LocationTimeStep />
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardContent className="p-6 space-y-6">
             <ImagesStep />
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardContent className="p-6 space-y-4">
             <div>
-              <h2 className="text-xl font-bold text-[#123524] mb-1">
+              <h2 className="text-xl font-bold text-dash-ink mb-1">
                 Visibility
               </h2>
-              <p className="text-sm text-[#3E7B27]">
+              <p className="text-sm text-dash-muted">
                 Published events appear on the public events page.
               </p>
             </div>
@@ -161,12 +161,12 @@ export function EditEventForm({ event }: EditEventFormProps) {
               control={methods.control}
               name="isPublished"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-[#85A947]/20 p-4">
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-dash-border p-4">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Published
                     </FormLabel>
-                    <p className="text-sm text-[#3E7B27]">
+                    <p className="text-sm text-dash-muted">
                       {field.value
                         ? "This event is visible to the public."
                         : "Draft — only you can see this event."}
@@ -190,14 +190,14 @@ export function EditEventForm({ event }: EditEventFormProps) {
             type="button"
             variant="outline"
             asChild
-            className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+            className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
           >
             <Link href={`/dashboard/events/${event.slug}`}>Cancel</Link>
           </Button>
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="bg-[#85A947] hover:bg-[#3E7B27] text-white"
+            className="bg-dash-accent hover:bg-dash-accent-strong text-white"
           >
             {isSubmitting ? "Saving…" : "Save changes"}
           </Button>

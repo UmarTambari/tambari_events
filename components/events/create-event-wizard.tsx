@@ -148,7 +148,7 @@ export function CreateEventWizard({
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit((data) => onSubmit(data, true))}>
         <div className="space-y-6">
-          <Card className="bg-white border-[#85A947]/20">
+          <Card className="bg-white border-dash-border">
             <CardContent className="p-6">
               {currentStep === 1 && <BasicInfoStep />}
               {currentStep === 2 && <LocationTimeStep />}
@@ -164,7 +164,7 @@ export function CreateEventWizard({
               variant="outline"
               onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
               disabled={currentStep === 1 || isSubmitting}
-              className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+              className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
             >
               Previous
             </Button>
@@ -195,7 +195,7 @@ export function CreateEventWizard({
                       );
                     }}
                     disabled={isSubmitting}
-                    className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+                    className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
                   >
                     {isSubmitting ? "Saving..." : "Save as Draft"}
                   </Button>
@@ -222,7 +222,7 @@ export function CreateEventWizard({
                         }
                       )
                     }
-                    className="bg-[#85A947] hover:bg-[#3E7B27] text-white"
+                    className="bg-dash-accent hover:bg-dash-accent-strong text-white"
                   >
                     {isSubmitting ? "Publishing..." : "Publish Event"}
                   </Button>
@@ -231,7 +231,7 @@ export function CreateEventWizard({
                 <Button
                   type="button"
                   onClick={handleNext}
-                  className="bg-[#85A947] hover:bg-[#3E7B27] text-white"
+                  className="bg-dash-accent hover:bg-dash-accent-strong text-white"
                 >
                   Next Step
                 </Button>

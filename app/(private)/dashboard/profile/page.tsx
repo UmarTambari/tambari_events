@@ -13,7 +13,7 @@ export default async function ProfilePage() {
   ]);
 
   if (!user) {
-    redirect("/sign-in");
+    redirect("/sign-in?redirect=/dashboard/profile");
   }
 
   return (

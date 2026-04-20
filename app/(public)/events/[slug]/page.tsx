@@ -235,7 +235,11 @@ export default async function EventPage({ params }: EventPageProps) {
           {/* Sidebar - Ticket Selector */}
           <div className="lg:col-span-1">
             {!isEventPast && (
-              <TicketSelector eventId={event.id} tickets={activeTickets} />
+              <TicketSelector
+                eventId={event.id}
+                eventSlug={event.slug}
+                tickets={activeTickets}
+              />
             )}
           </div>
         </div>

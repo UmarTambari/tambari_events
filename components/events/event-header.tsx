@@ -46,9 +46,9 @@ export function EventHeader({ event }: EventHeaderProps) {
   const eventDate = new Date(event.eventDate);
 
   return (
-    <div className="bg-white rounded-lg border border-[#85A947]/20 overflow-hidden">
+    <div className="bg-white rounded-lg border border-dash-border overflow-hidden">
       {/* Banner Image */}
-      <div className="relative h-64 bg-linear-to-br from-[#123524] to-[#3E7B27]">
+      <div className="relative h-64 bg-linear-to-br from-dash-sidebar to-dash-accent-strong">
         {event.bannerImageUrl ? (
           <Image
             src={event.bannerImageUrl}
@@ -59,7 +59,7 @@ export function EventHeader({ event }: EventHeaderProps) {
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
-            <Calendar className="h-24 w-24 text-[#EFE3C2] opacity-30" />
+            <Calendar className="h-24 w-24 text-white/40" />
           </div>
         )}
 
@@ -83,13 +83,13 @@ export function EventHeader({ event }: EventHeaderProps) {
       <div className="p-6">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div className="flex-1 min-w-0">
-            <h1 className="text-3xl font-bold text-[#123524] mb-2">
+            <h1 className="text-3xl font-bold text-dash-ink mb-2">
               {event.title}
             </h1>
 
-            <div className="flex flex-wrap items-center gap-4 text-sm text-[#3E7B27] mb-4">
+            <div className="flex flex-wrap items-center gap-4 text-sm text-dash-muted mb-4">
               <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-[#85A947]" />
+                <Calendar className="h-4 w-4 text-dash-accent" />
                 <span>
                   {eventDate.toLocaleDateString("en-US", {
                     weekday: "long",
@@ -100,7 +100,7 @@ export function EventHeader({ event }: EventHeaderProps) {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-[#85A947]" />
+                <MapPin className="h-4 w-4 text-dash-accent" />
                 <span>
                   {event.venue}, {event.location}
                 </span>
@@ -114,7 +114,7 @@ export function EventHeader({ event }: EventHeaderProps) {
                   <Badge
                     key={index}
                     variant="outline"
-                    className="text-xs bg-[#EFE3C2] border-[#85A947]/30 text-[#123524]"
+                    className="text-xs bg-dash-highlight border-dash-accent/30 text-dash-ink"
                   >
                     {tag}
                   </Badge>
@@ -122,7 +122,7 @@ export function EventHeader({ event }: EventHeaderProps) {
               </div>
             )}
 
-            <p className="text-[#3E7B27] leading-relaxed">
+            <p className="text-dash-muted leading-relaxed">
               {event.description}
             </p>
           </div>
@@ -133,7 +133,7 @@ export function EventHeader({ event }: EventHeaderProps) {
               href={`/dashboard/events/${event.slug}/edit`}
               className="w-full"
             >
-              <Button className="w-full bg-[#85A947] hover:bg-[#3E7B27] text-white">
+              <Button className="w-full bg-dash-accent hover:bg-dash-accent-strong text-white">
                 <Edit className="mr-2 h-4 w-4" />
                 Edit Event
               </Button>
@@ -145,7 +145,7 @@ export function EventHeader({ event }: EventHeaderProps) {
             >
               <Button
                 variant="outline"
-                className="w-full border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+                className="w-full border-dash-accent text-dash-muted hover:bg-dash-highlight"
               >
                 <QrCode className="mr-2 h-4 w-4" />
                 Check-in
@@ -154,7 +154,7 @@ export function EventHeader({ event }: EventHeaderProps) {
 
             <Button
               variant="outline"
-              className="w-full border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+              className="w-full border-dash-accent text-dash-muted hover:bg-dash-highlight"
               onClick={() => {
                 navigator.clipboard.writeText(publicUrl);
                 // You can add a toast notification here
@@ -168,7 +168,7 @@ export function EventHeader({ event }: EventHeaderProps) {
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+                  className="w-full border-dash-accent text-dash-muted hover:bg-dash-highlight"
                 >
                   <MoreVertical className="mr-2 h-4 w-4" />
                   More

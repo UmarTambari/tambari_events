@@ -30,28 +30,28 @@ export function EventTabsWrapper({ event }: EventTabsWrapperProps) {
 
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-      <TabsList className="bg-white border border-[#85A947]/20">
+      <TabsList className="bg-white border border-dash-border">
         <TabsTrigger
           value="overview"
-          className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+          className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
         >
           Overview
         </TabsTrigger>
         <TabsTrigger
           value="tickets"
-          className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+          className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
         >
           Tickets
         </TabsTrigger>
         <TabsTrigger
           value="orders"
-          className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+          className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
         >
           Orders
         </TabsTrigger>
         <TabsTrigger
           value="analytics"
-          className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+          className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
         >
           Analytics
         </TabsTrigger>
@@ -85,7 +85,7 @@ export function EventTabsWrapper({ event }: EventTabsWrapperProps) {
 function TabLoadingState() {
   return (
     <div className="flex items-center justify-center py-12">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#85A947]"></div>
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent"></div>
     </div>
   );
 }

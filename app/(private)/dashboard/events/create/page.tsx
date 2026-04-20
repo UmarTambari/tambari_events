@@ -22,13 +22,13 @@ export default function CreateEventPage() {
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
         <Link href="/dashboard/events">
-          <Button variant="ghost" size="sm" className="text-[#3E7B27] mb-4">
+          <Button variant="ghost" size="sm" className="text-dash-muted mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Events
           </Button>
         </Link>
-        <h1 className="text-3xl font-bold text-[#123524]">Create New Event</h1>
-        <p className="text-[#3E7B27] mt-1">
+        <h1 className="text-3xl font-bold text-dash-ink">Create New Event</h1>
+        <p className="text-dash-muted mt-1">
           Fill in the details below to create your event
         </p>
       </div>

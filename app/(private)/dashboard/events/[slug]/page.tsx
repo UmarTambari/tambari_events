@@ -38,7 +38,7 @@ export default async function EventDetailPage({
   return (
     <div className="space-y-6">
       <Link href="/dashboard/events">
-        <Button variant="ghost" size="sm" className="text-[#3E7B27]">
+        <Button variant="ghost" size="sm" className="text-dash-muted">
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Events
         </Button>

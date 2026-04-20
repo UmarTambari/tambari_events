@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getOrderWithDetails } from "@/lib/queries/order.queries";
 import { getEventById } from "@/lib/queries/events.queries";
-import { getUserByAuthId } from "@/lib/queries/users.queries";
-import { createClient } from "@/lib/supabase/server";
-
+import { getCurrentUserIdOrNull } from "@/lib/auth";
 interface RouteContext {
   params: {
     id: string;
@@ -13,19 +11,7 @@ interface RouteContext {
 export async function GET(request: NextRequest, context: RouteContext) {
   try {
     const { id } = context.params;
-    const supabase = createClient();
-    const {
-      data: { user },
-    } = await (await supabase).auth.getUser();
-
-    if (!user) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-
-    const organizerId = await getUserByAuthId(user.id).then((u) => u?.id);
+    const organizerId = await getCurrentUserIdOrNull();
 
     if (!organizerId) {
       return NextResponse.json(

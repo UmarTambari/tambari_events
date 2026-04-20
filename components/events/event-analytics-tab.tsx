@@ -14,7 +14,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -34,7 +33,12 @@ interface SalesData {
   revenue: number;
 }
 
-const COLORS = ["#85A947", "#3E7B27", "#123524", "#EFE3C2"];
+const COLORS = [
+  "var(--dash-accent)",
+  "var(--dash-accent-strong)",
+  "var(--dash-sidebar)",
+  "var(--dash-highlight)",
+];
 
 export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
   const [ticketTypeData, setTicketTypeData] = useState<TicketTypeData[]>([]);
@@ -49,7 +53,11 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
         const ticketsResult = await ticketsResponse.json();
 
         if (ticketsResult.success) {
-          const ticketTypes = ticketsResult.data.map((ticket: any) => ({
+          const ticketTypes = ticketsResult.data.map((ticket: {
+            name: string;
+            quantitySold: number;
+            price: number;
+          }) => ({
             name: ticket.name,
             value: ticket.quantitySold,
             revenue: ticket.quantitySold * ticket.price,
@@ -79,7 +87,7 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-pulse text-[#85A947]">Loading analytics...</div>
+        <div className="animate-pulse text-dash-accent">Loading analytics...</div>
       </div>
     );
   }
@@ -87,9 +95,9 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
     <div className="space-y-6">
       {/* Sales Over Time */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-[#123524]">
+            <CardTitle className="text-lg font-semibold text-dash-ink">
               Ticket Sales Over Time
             </CardTitle>
           </CardHeader>
@@ -99,19 +107,19 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                 <LineChart data={salesData}>
                   <CartesianGrid
                     strokeDasharray="3 3"
-                    stroke="#85A947"
+                    stroke="var(--dash-accent)"
                     opacity={0.1}
                   />
                   <XAxis
                     dataKey="date"
-                    stroke="#3E7B27"
+                    stroke="var(--dash-accent-strong)"
                     style={{ fontSize: "12px" }}
                   />
-                  <YAxis stroke="#3E7B27" style={{ fontSize: "12px" }} />
+                  <YAxis stroke="var(--dash-accent-strong)" style={{ fontSize: "12px" }} />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#EFE3C2",
-                      border: "1px solid #85A947",
+                      backgroundColor: "var(--dash-highlight)",
+                      border: "1px solid var(--dash-accent)",
                       borderRadius: "8px",
                       fontSize: "12px",
                     }}
@@ -119,24 +127,24 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                   <Line
                     type="monotone"
                     dataKey="tickets"
-                    stroke="#3E7B27"
+                    stroke="var(--dash-accent-strong)"
                     strokeWidth={2}
-                    dot={{ fill: "#3E7B27", r: 4 }}
+                    dot={{ fill: "var(--dash-accent-strong)", r: 4 }}
                     activeDot={{ r: 6 }}
                   />
                 </LineChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-[300px] flex items-center justify-center text-[#85A947]">
+              <div className="h-[300px] flex items-center justify-center text-dash-accent">
                 No sales data yet
               </div>
             )}
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-[#123524]">
+            <CardTitle className="text-lg font-semibold text-dash-ink">
               Revenue Over Time
             </CardTitle>
           </CardHeader>
@@ -146,16 +154,16 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                 <BarChart data={salesData}>
                   <CartesianGrid
                     strokeDasharray="3 3"
-                    stroke="#85A947"
+                    stroke="var(--dash-accent)"
                     opacity={0.1}
                   />
                   <XAxis
                     dataKey="date"
-                    stroke="#3E7B27"
+                    stroke="var(--dash-accent-strong)"
                     style={{ fontSize: "12px" }}
                   />
                   <YAxis
-                    stroke="#3E7B27"
+                    stroke="var(--dash-accent-strong)"
                     style={{ fontSize: "12px" }}
                     tickFormatter={(value) =>
                       `₦${(value / 100000).toFixed(0)}k`
@@ -163,8 +171,8 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                   />
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#EFE3C2",
-                      border: "1px solid #85A947",
+                      backgroundColor: "var(--dash-highlight)",
+                      border: "1px solid var(--dash-accent)",
                       borderRadius: "8px",
                       fontSize: "12px",
                     }}
@@ -173,11 +181,11 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                       "Revenue",
                     ]}
                   />
-                  <Bar dataKey="revenue" fill="#85A947" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="revenue" fill="var(--dash-accent)" radius={[8, 8, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-[300px] flex items-center justify-center text-[#85A947]">
+              <div className="h-[300px] flex items-center justify-center text-dash-accent">
                 No revenue data yet
               </div>
             )}
@@ -187,9 +195,9 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
 
       {/* Ticket Type Distribution */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-[#123524]">
+            <CardTitle className="text-lg font-semibold text-dash-ink">
               Ticket Type Distribution
             </CardTitle>
           </CardHeader>
@@ -219,8 +227,8 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                   </Pie>
                   <Tooltip
                     contentStyle={{
-                      backgroundColor: "#EFE3C2",
-                      border: "1px solid #85A947",
+                      backgroundColor: "var(--dash-highlight)",
+                      border: "1px solid var(--dash-accent)",
                       borderRadius: "8px",
                       fontSize: "12px",
                     }}
@@ -228,21 +236,21 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-[300px] flex items-center justify-center text-[#85A947]">
+              <div className="h-[300px] flex items-center justify-center text-dash-accent">
                 No ticket sales yet
               </div>
             )}
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardHeader>
-            <CardTitle className="text-lg font-semibold text-[#123524]">
+            <CardTitle className="text-lg font-semibold text-dash-ink">
               Traffic Sources
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-[300px] flex items-center justify-center text-[#85A947]">
+            <div className="h-[300px] flex items-center justify-center text-dash-accent">
               Traffic analytics coming soon
             </div>
           </CardContent>
@@ -250,9 +258,9 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
       </div>
 
       {/* Revenue Breakdown */}
-      <Card className="bg-white border-[#85A947]/20">
+      <Card className="bg-white border-dash-border">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Revenue by Ticket Type
           </CardTitle>
         </CardHeader>
@@ -275,15 +283,15 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                   return (
                     <div key={index} className="space-y-2">
                       <div className="flex items-center justify-between text-sm">
-                        <span className="font-medium text-[#123524]">
+                        <span className="font-medium text-dash-ink">
                           {ticket.name}
                         </span>
-                        <span className="text-[#3E7B27]">
+                        <span className="text-dash-muted">
                           ₦{(ticket.revenue / 100).toLocaleString()} (
                           {percentage.toFixed(1)}%)
                         </span>
                       </div>
-                      <div className="h-2 bg-[#EFE3C2] rounded-full overflow-hidden">
+                      <div className="h-2 bg-dash-highlight rounded-full overflow-hidden">
                         <div
                           className="h-full rounded-full transition-all"
                           style={{
@@ -292,7 +300,7 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                           }}
                         />
                       </div>
-                      <p className="text-xs text-[#85A947]">
+                      <p className="text-xs text-dash-accent">
                         {ticket.value} tickets sold
                       </p>
                     </div>
@@ -300,7 +308,7 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                 })}
             </div>
           ) : (
-            <div className="text-center py-8 text-[#85A947]">
+            <div className="text-center py-8 text-dash-accent">
               No revenue data yet
             </div>
           )}

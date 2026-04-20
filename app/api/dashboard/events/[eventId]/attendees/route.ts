@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getEventBySlug } from "@/lib/queries/events.queries";
-import { getAttendeesByEvent } from "@/lib/queries/attendee.queries";
+import { getCurrentUserIdOrNull } from "@/lib/auth";
+import { getAttendeesByEvent }    from "@/lib/queries/attendee.queries";
 
 interface RouteContext {
   params: {
@@ -11,7 +12,7 @@ interface RouteContext {
 export async function GET(request: NextRequest, context: RouteContext) {
   try {
     const { slug } = context.params;
-    const organizerId = request.headers.get("x-user-id");
+    const organizerId = await getCurrentUserIdOrNull();
 
     if (!organizerId) {
       return NextResponse.json(

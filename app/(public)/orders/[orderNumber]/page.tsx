@@ -49,7 +49,7 @@ export default async function OrderConfirmationPage({
 
   const user = await getUserByAuthId(supabaseUser.id);
   if (!user) {
-    redirect("/sign-in");
+    redirect(`/sign-in?redirect=/orders/${orderNumber}`);
   }
 
   // Get order
@@ -121,8 +121,8 @@ export default async function OrderConfirmationPage({
                 </span>
               </p>
               <AutoVerifyPayment
-                reference={order.transaction?.reference || ""}
-                orderStatus={order.transaction?.status}
+                reference={order.transaction?.reference}
+                orderStatus={order.status}
                 intervalSeconds={5}
                 maxRetries={24}
               />

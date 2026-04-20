@@ -70,11 +70,11 @@ export function DeleteEventMenuItem({
       <AlertDialog open={open} onOpenChange={setOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-[#123524]">
+            <AlertDialogTitle className="text-dash-ink">
               Delete this event?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-[#3E7B27]">
-              <span className="font-medium text-[#123524]">{eventTitle}</span>{" "}
+            <AlertDialogDescription className="text-dash-muted">
+              <span className="font-medium text-dash-ink">{eventTitle}</span>{" "}
               will be removed permanently, including draft ticket types and
               unpaid orders. Events with completed sales cannot be deleted.
             </AlertDialogDescription>
@@ -82,7 +82,7 @@ export function DeleteEventMenuItem({
           <AlertDialogFooter>
             <AlertDialogCancel
               disabled={isDeleting}
-              className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+              className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
             >
               Cancel
             </AlertDialogCancel>

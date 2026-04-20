@@ -60,13 +60,13 @@ export default async function EventsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-[#123524]">Events</h1>
-          <p className="text-[#3E7B27] mt-1">
+          <h1 className="text-3xl font-bold text-dash-ink">Events</h1>
+          <p className="text-dash-muted mt-1">
             Manage and monitor all your events
           </p>
         </div>
         <Link href="/dashboard/events/create">
-          <Button className="bg-[#85A947] hover:bg-[#3E7B27] text-white font-semibold">
+          <Button className="bg-dash-accent hover:bg-dash-accent-strong text-white font-semibold">
             <Plus className="mr-2 h-4 w-4" />
             Create Event
           </Button>
@@ -75,37 +75,37 @@ export default async function EventsPage() {
 
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#85A947]" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-dash-accent" />
           <Input
             placeholder="Search events..."
-            className="pl-10 bg-white border-[#85A947]/20 focus:border-[#3E7B27]"
+            className="pl-10 bg-white border-dash-border focus:border-dash-accent-strong"
           />
         </div>
       </div>
 
       <Tabs defaultValue="active" className="space-y-6">
-        <TabsList className="bg-white border border-[#85A947]/20">
+        <TabsList className="bg-white border border-dash-border">
           <TabsTrigger
             value="active"
-            className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+            className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
           >
             Active ({activeEvents.length})
           </TabsTrigger>
           <TabsTrigger
             value="draft"
-            className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+            className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
           >
             Drafts ({draftEvents.length})
           </TabsTrigger>
           <TabsTrigger
             value="past"
-            className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+            className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
           >
             Past ({pastEvents.length})
           </TabsTrigger>
           <TabsTrigger
             value="cancelled"
-            className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+            className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
           >
             Cancelled ({cancelledEvents.length})
           </TabsTrigger>

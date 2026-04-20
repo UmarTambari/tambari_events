@@ -1,6 +1,7 @@
 "use client";
 
 import QRCode from "react-qr-code";
+import { DASH_INK_HEX } from "@/lib/dash-palette";
 
 interface TicketQRCodeProps {
   /** The raw QR data string stored in attendees.qrCodeUrl */
@@ -24,7 +25,7 @@ export function TicketQRCode({ value, size = 120 }: TicketQRCodeProps) {
       <QRCode
         value={value}
         size={size}
-        fgColor="#123524"
+        fgColor={DASH_INK_HEX}
         bgColor="#FFFFFF"
         level="M"
       />

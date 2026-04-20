@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql } from "drizzle-orm";
 import {
   events,
   orders,
@@ -166,6 +166,11 @@ export async function getOrdersByOrganizer(organizerId: string) {
     .select({
       order: orders,
       event: events,
+      ticketCount: sql<number>`(
+        SELECT COALESCE(SUM(${orderItems.quantity}), 0)::int
+        FROM ${orderItems}
+        WHERE ${orderItems.orderId} = ${orders.id}
+      )`.mapWith(Number),
     })
     .from(orders)
     .innerJoin(events, eq(orders.eventId, events.id))

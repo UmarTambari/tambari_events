@@ -5,7 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getOrdersByOrganizer } from "@/lib/queries/order.queries";
-import { getCurrentUserId } from "@/lib/auth";
 import type { OrderStatus } from "@/lib/types/order.type";
 
 const statusConfig: Record<OrderStatus, { label: string; className: string }> =
@@ -36,9 +35,12 @@ const statusConfig: Record<OrderStatus, { label: string; className: string }> =
     },
   };
 
-export async function RecentOrders() {
-  const userId = await getCurrentUserId();
-  const ordersData = await getOrdersByOrganizer(userId);
+interface RecentOrdersProps {
+  organizerId: string;
+}
+
+export async function RecentOrders({ organizerId }: RecentOrdersProps) {
+  const ordersData = await getOrdersByOrganizer(organizerId);
 
   const recentOrders = ordersData.slice(0, 5).map((item) => ({
     ...item.order,
@@ -48,16 +50,16 @@ export async function RecentOrders() {
 
   if (recentOrders.length === 0) {
     return (
-      <Card className="bg-white border-[#85A947]/20">
+      <Card className="bg-white border-dash-border">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Recent Orders
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="text-center py-8">
-            <p className="text-[#85A947]">No orders yet</p>
-            <p className="text-sm text-[#3E7B27] mt-1">
+            <p className="text-dash-accent">No orders yet</p>
+            <p className="text-sm text-dash-muted mt-1">
               Orders will appear here once customers start purchasing tickets
             </p>
           </div>
@@ -67,16 +69,16 @@ export async function RecentOrders() {
   }
 
   return (
-    <Card className="bg-white border-[#85A947]/20">
+    <Card className="bg-white border-dash-border">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-lg font-semibold text-[#123524]">
+        <CardTitle className="text-lg font-semibold text-dash-ink">
           Recent Orders
         </CardTitle>
         <Link href="/dashboard/orders">
           <Button
             variant="ghost"
             size="sm"
-            className="text-[#3E7B27] hover:text-[#123524]"
+            className="text-dash-muted hover:text-dash-ink"
           >
             View all
             <ArrowRight className="ml-2 h-4 w-4" />
@@ -88,11 +90,11 @@ export async function RecentOrders() {
           {recentOrders.map((order) => (
             <div
               key={order.id}
-              className="flex items-center justify-between p-4 rounded-lg border border-[#85A947]/20 hover:bg-[#EFE3C2]/30 transition-colors"
+              className="flex items-center justify-between p-4 rounded-lg border border-dash-border hover:bg-dash-highlight/30 transition-colors"
             >
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <p className="text-sm font-medium text-[#123524] truncate">
+                  <p className="text-sm font-medium text-dash-ink truncate">
                     {order.orderNumber}
                   </p>
                   <Badge
@@ -104,25 +106,25 @@ export async function RecentOrders() {
                     {statusConfig[order.status].label}
                   </Badge>
                 </div>
-                <p className="text-sm text-[#3E7B27] truncate">
+                <p className="text-sm text-dash-muted truncate">
                   {order.customerName}
                 </p>
-                <p className="text-xs text-[#85A947] mt-0.5 truncate">
+                <p className="text-xs text-dash-accent mt-0.5 truncate">
                   {order.eventTitle}
                 </p>
               </div>
               <div className="flex items-center gap-4 ml-4">
                 <div className="text-right">
-                  <p className="text-sm font-semibold text-[#123524]">
+                  <p className="text-sm font-semibold text-dash-ink">
                     ₦{(order.totalAmount / 100).toLocaleString()}
                   </p>
-                  <p className="text-xs text-[#85A947]">
+                  <p className="text-xs text-dash-accent">
                     {new Date(order.createdAt).toLocaleDateString()}
                   </p>
                 </div>
                 <Link href={`/dashboard/orders/${order.id}`}>
                   <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <ExternalLink className="h-4 w-4 text-[#3E7B27]" />
+                    <ExternalLink className="h-4 w-4 text-dash-muted" />
                   </Button>
                 </Link>
               </div>

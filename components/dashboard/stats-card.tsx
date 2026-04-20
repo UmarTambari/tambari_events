@@ -21,17 +21,17 @@ export function StatsCard({
   const isNegative = trend && trend < 0;
 
   return (
-    <Card className="bg-white border-[#85A947]/20 hover:shadow-lg transition-shadow">
+    <Card className="bg-white border-dash-border hover:shadow-lg transition-shadow">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-[#3E7B27]">
+        <CardTitle className="text-sm font-medium text-dash-muted">
           {title}
         </CardTitle>
-        <div className="h-10 w-10 rounded-full bg-[#EFE3C2] flex items-center justify-center">
-          <Icon className="h-5 w-5 text-[#123524]" />
+        <div className="h-10 w-10 rounded-full bg-dash-highlight flex items-center justify-center">
+          <Icon className="h-5 w-5 text-dash-ink" />
         </div>
       </CardHeader>
       <CardContent>
-        <div className="text-2xl font-bold text-[#123524]">{value}</div>
+        <div className="text-2xl font-bold text-dash-ink">{value}</div>
         <div className="flex items-center mt-1">
           {trend !== null && trend !== undefined && (
             <span
@@ -46,7 +46,7 @@ export function StatsCard({
               {Math.abs(trend)}%
             </span>
           )}
-          <p className="text-xs text-[#3E7B27]">{description}</p>
+          <p className="text-xs text-dash-muted">{description}</p>
         </div>
       </CardContent>
     </Card>

@@ -24,7 +24,7 @@ async function getOrganizerOrders(): Promise<OrderDisplay[]> {
     ...item.order,
     eventTitle: item.event.title,
     eventSlug: item.event.slug,
-    ticketCount: item.items?.length || 0, // Assuming items array exists in your query
+    ticketCount: item.ticketCount,
   }));
 
   return orders;
@@ -43,14 +43,14 @@ export default async function OrdersPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-[#123524]">Orders</h1>
-          <p className="text-[#3E7B27] mt-1">
+          <h1 className="text-3xl font-bold text-dash-ink">Orders</h1>
+          <p className="text-dash-muted mt-1">
             Manage and track all customer orders
           </p>
         </div>
         <Button
           variant="outline"
-          className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+          className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
         >
           <Download className="mr-2 h-4 w-4" />
           Export Orders
@@ -67,15 +67,15 @@ export default async function OrdersPage() {
       {/* Search and Filter */}
       <div className="flex flex-col sm:flex-row gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#85A947]" />
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-dash-accent" />
           <Input
             placeholder="Search by order number, customer name, or email..."
-            className="pl-10 bg-white border-[#85A947]/20 focus:border-[#3E7B27]"
+            className="pl-10 bg-white border-dash-border focus:border-dash-accent-strong"
           />
         </div>
         <Button
           variant="outline"
-          className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+          className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
         >
           <Filter className="mr-2 h-4 w-4" />
           Filters
@@ -84,34 +84,34 @@ export default async function OrdersPage() {
 
       {/* Orders Tabs */}
       <Tabs defaultValue="all" className="space-y-6">
-        <TabsList className="bg-white border border-[#85A947]/20">
+        <TabsList className="bg-white border border-dash-border">
           <TabsTrigger
             value="all"
-            className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+            className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
           >
             All Orders ({allOrders.length})
           </TabsTrigger>
           <TabsTrigger
             value="paid"
-            className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+            className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
           >
             Paid ({paidOrders.length})
           </TabsTrigger>
           <TabsTrigger
             value="pending"
-            className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+            className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
           >
             Pending ({pendingOrders.length})
           </TabsTrigger>
           <TabsTrigger
             value="failed"
-            className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+            className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
           >
             Failed ({failedOrders.length})
           </TabsTrigger>
           <TabsTrigger
             value="refunded"
-            className="data-[state=active]:bg-[#85A947] data-[state=active]:text-white"
+            className="data-[state=active]:bg-dash-accent data-[state=active]:text-white"
           >
             Refunded ({refundedOrders.length})
           </TabsTrigger>

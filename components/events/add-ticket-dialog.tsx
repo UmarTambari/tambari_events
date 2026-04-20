@@ -93,17 +93,17 @@ export function AddTicketDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#85A947] hover:bg-[#3E7B27] text-white">
+        <Button className="bg-dash-accent hover:bg-dash-accent-strong text-white">
           <Plus className="mr-2 h-4 w-4" />
           Add Ticket Type
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-[#123524]">
+          <DialogTitle className="text-dash-ink">
             Create New Ticket Type
           </DialogTitle>
-          <DialogDescription className="text-[#3E7B27]">
+          <DialogDescription className="text-dash-muted">
             Add a new ticket type for your event with pricing and availability
             details.
           </DialogDescription>
@@ -116,13 +116,13 @@ export function AddTicketDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#123524]">
+                  <FormLabel className="text-dash-ink">
                     Name <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g., Early Bird, VIP, Regular"
-                      className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                      className="border-dash-border focus:border-dash-accent-strong"
                       {...field}
                     />
                   </FormControl>
@@ -136,12 +136,12 @@ export function AddTicketDialog({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#123524]">Description</FormLabel>
+                  <FormLabel className="text-dash-ink">Description</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Brief description of this ticket type"
                       rows={3}
-                      className="resize-none border-[#85A947]/20 focus:border-[#3E7B27]"
+                      className="resize-none border-dash-border focus:border-dash-accent-strong"
                       {...field}
                       value={field.value || ""}
                     />
@@ -157,7 +157,7 @@ export function AddTicketDialog({
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Price (₦) <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
@@ -166,11 +166,11 @@ export function AddTicketDialog({
                         placeholder="1000"
                         min="100"
                         step="0.01"
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         {...field}
                       />
                     </FormControl>
-                    <p className="text-xs text-[#85A947]">Price in Naira</p>
+                    <p className="text-xs text-dash-accent">Price in Naira</p>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -181,7 +181,7 @@ export function AddTicketDialog({
                 name="quantity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Quantity <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
@@ -189,11 +189,11 @@ export function AddTicketDialog({
                         type="number"
                         placeholder="100"
                         min="1"
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         {...field}
                       />
                     </FormControl>
-                    <p className="text-xs text-[#85A947]">Available tickets</p>
+                    <p className="text-xs text-dash-accent">Available tickets</p>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -206,14 +206,14 @@ export function AddTicketDialog({
                 name="minPurchase"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Min Purchase
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min="1"
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         {...field}
                       />
                     </FormControl>
@@ -227,14 +227,14 @@ export function AddTicketDialog({
                 name="maxPurchase"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Max Purchase
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min="1"
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         {...field}
                       />
                     </FormControl>
@@ -250,18 +250,18 @@ export function AddTicketDialog({
                 name="saleStartDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Sale Start Date
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="datetime-local"
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         value={field.value || ""}
                         onChange={field.onChange}
                       />
                     </FormControl>
-                    <p className="text-xs text-[#85A947]">When sales begin</p>
+                    <p className="text-xs text-dash-accent">When sales begin</p>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -272,18 +272,18 @@ export function AddTicketDialog({
                 name="saleEndDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Sale End Date
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="datetime-local"
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         value={field.value || ""}
                         onChange={field.onChange}
                       />
                     </FormControl>
-                    <p className="text-xs text-[#85A947]">When sales end</p>
+                    <p className="text-xs text-dash-accent">When sales end</p>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -296,14 +296,14 @@ export function AddTicketDialog({
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isSubmitting}
-                className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+                className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-[#85A947] hover:bg-[#3E7B27] text-white"
+                className="bg-dash-accent hover:bg-dash-accent-strong text-white"
               >
                 {isSubmitting ? "Creating..." : "Create Ticket Type"}
               </Button>

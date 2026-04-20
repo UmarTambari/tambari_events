@@ -1,38 +1,61 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { RefreshCw, AlertTriangle } from "lucide-react";
 
 interface AutoVerifyPaymentProps {
-  reference: string;
+  /** Paystack transaction reference; when missing, only soft-refresh runs (webhook catch-up). */
+  reference?: string | null;
+  /** Order row `status` — must be pending/processing for this UI to stay active. */
   orderStatus: string;
   intervalSeconds?: number;
-  maxRetries?: number;           // New: Maximum number of auto-checks
+  maxRetries?: number;
 }
 
+/**
+ * Pending-payment poller: calls Paystack verify when `reference` exists, and
+ * always uses `router.refresh()` so the server page can move to paid after
+ * verify or webhook. Without a reference, falls back to timed refresh-only
+ * polling (bounded), replacing a separate refresh-only component.
+ */
 export function AutoVerifyPayment({
   reference,
   orderStatus,
   intervalSeconds = 5,
-  maxRetries = 24,               // Default: 24 attempts × 5s = 2 minutes
+  maxRetries = 24,
 }: AutoVerifyPaymentProps) {
+  const router = useRouter();
   const [countdown, setCountdown] = useState(intervalSeconds);
-  const [isVerifying, setIsVerifying] = useState(false);
+  const [isWorking, setIsWorking] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [retryCount, setRetryCount] = useState(0);
+  const [attempts, setAttempts] = useState(0);
 
-  const shouldAutoVerify = 
-    orderStatus === "pending" || 
-    orderStatus === "processing";
+  const busyRef = useRef(false);
+  const attemptsRef = useRef(0);
 
-  // Stop auto-verifying if we've reached max retries
-  const hasReachedMaxRetries = retryCount >= maxRetries;
+  const shouldPoll =
+    orderStatus === "pending" || orderStatus === "processing";
 
-  // Main verification function
-  const verifyPayment = useCallback(async () => {
-    if (!reference || !shouldAutoVerify || hasReachedMaxRetries) return;
+  const atLimit = attempts >= maxRetries;
 
-    setIsVerifying(true);
+  const bumpAttempts = useCallback(() => {
+    attemptsRef.current += 1;
+    setAttempts(attemptsRef.current);
+  }, []);
+
+  const verifyWithPaystack = useCallback(async () => {
+    if (
+      !reference ||
+      !shouldPoll ||
+      busyRef.current ||
+      attemptsRef.current >= maxRetries
+    ) {
+      return;
+    }
+
+    busyRef.current = true;
+    setIsWorking(true);
     setError(null);
 
     try {
@@ -46,28 +69,53 @@ export function AutoVerifyPayment({
 
       if (!res.ok || !data.success) {
         setError(data.error || "Verification failed");
-        console.error("Auto verify failed:", data);
-      } else {
-        console.log("✅ Payment verified successfully via auto-check");
-        // Status will update on next server render → component will hide itself
       }
     } catch (err) {
       console.error("Auto verify network error:", err);
       setError("Network error while checking payment");
     } finally {
-      setIsVerifying(false);
-      setRetryCount((prev) => prev + 1);   // Count every attempt
+      busyRef.current = false;
+      setIsWorking(false);
+      bumpAttempts();
+      router.refresh();
     }
-  }, [reference, shouldAutoVerify, hasReachedMaxRetries]);
+  }, [reference, shouldPoll, maxRetries, router, bumpAttempts]);
 
-  // Auto-check interval
+  const runSoftRefresh = useCallback(() => {
+    if (busyRef.current || attemptsRef.current >= maxRetries) return;
+    busyRef.current = true;
+    setIsWorking(true);
+    try {
+      router.refresh();
+    } finally {
+      busyRef.current = false;
+      setIsWorking(false);
+      bumpAttempts();
+    }
+  }, [router, bumpAttempts, maxRetries]);
+
+  const runCycle = useCallback(() => {
+    if (!shouldPoll || busyRef.current || attemptsRef.current >= maxRetries) {
+      return;
+    }
+    if (reference) {
+      void verifyWithPaystack();
+    } else {
+      runSoftRefresh();
+    }
+  }, [reference, shouldPoll, maxRetries, verifyWithPaystack, runSoftRefresh]);
+
+  const runCycleRef = useRef(runCycle);
+  runCycleRef.current = runCycle;
+
+  // Per-second countdown → one action when it hits zero.
   useEffect(() => {
-    if (!shouldAutoVerify || !reference || hasReachedMaxRetries) return;
+    if (!shouldPoll || atLimit) return;
 
     const interval = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          verifyPayment();
+          runCycleRef.current();
           return intervalSeconds;
         }
         return prev - 1;
@@ -75,42 +123,69 @@ export function AutoVerifyPayment({
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [shouldAutoVerify, reference, intervalSeconds, verifyPayment, hasReachedMaxRetries]);
+  }, [shouldPoll, intervalSeconds, atLimit]);
 
-  // Reset states when orderStatus changes (especially when payment succeeds)
+  // One early cycle after mount / when becoming pending (stable deps — no attempts).
+  useEffect(() => {
+    if (!shouldPoll || atLimit) return;
+    const t = window.setTimeout(() => {
+      runCycleRef.current();
+    }, 600);
+    return () => window.clearTimeout(t);
+  }, [shouldPoll, reference, atLimit]);
+
+  // When leaving pending or interval / reference identity changes, reset counters.
   useEffect(() => {
     setCountdown(intervalSeconds);
-    setIsVerifying(false);
+    setIsWorking(false);
     setError(null);
-    setRetryCount(0);                    // Reset retry count when status changes
-  }, [orderStatus, intervalSeconds]);
+    attemptsRef.current = 0;
+    setAttempts(0);
+    busyRef.current = false;
+  }, [orderStatus, intervalSeconds, reference]);
 
-  // Completely hide component when payment is successful or max retries reached
-  if (!shouldAutoVerify || hasReachedMaxRetries) return null;
+  if (!shouldPoll || atLimit) {
+    return null;
+  }
+
+  const approxMinutes = Math.round((maxRetries * intervalSeconds) / 60) || 1;
 
   return (
     <div className="mt-4 space-y-3">
       <div className="flex items-center space-x-2 text-sm text-yellow-600">
         <RefreshCw
-          className={`h-4 w-4 ${isVerifying ? "animate-spin" : ""}`}
+          className={`h-4 w-4 shrink-0 ${isWorking ? "animate-spin" : ""}`}
         />
         <span>
-          {isVerifying
-            ? "Verifying payment with Paystack..."
-            : `Auto-checking in ${countdown}s... (${retryCount}/${maxRetries})`
-          }
+          {isWorking
+            ? reference
+              ? "Verifying payment with Paystack…"
+              : "Checking for payment update…"
+            : reference
+              ? `Next check in ${countdown}s (${attempts}/${maxRetries})`
+              : `Refreshing in ${countdown}s (${attempts}/${maxRetries}) — waiting on payment update`}
         </span>
       </div>
 
+      {!reference && (
+        <p className="text-xs text-yellow-800 bg-yellow-100/60 rounded px-2 py-1.5">
+          No transaction reference on file yet. This page will reload
+          periodically; if nothing changes, use &quot;Verify Payment Now&quot;
+          after paying.
+        </p>
+      )}
+
       {error && (
         <p className="text-xs text-red-600 flex items-center gap-1">
-          <AlertTriangle className="h-3 w-3" />
+          <AlertTriangle className="h-3 w-3 shrink-0" />
           {error}
         </p>
       )}
 
       <p className="text-xs text-gray-500">
-        Automatically verifying every {intervalSeconds}s • Will stop after {maxRetries} attempts (~2 minutes)
+        {reference
+          ? `Confirms with Paystack every ${intervalSeconds}s (up to ~${approxMinutes} min), then refreshes this page.`
+          : `Reloads this page every ${intervalSeconds}s (up to ~${approxMinutes} min) so a completed payment can appear when the server is notified.`}
       </p>
     </div>
   );

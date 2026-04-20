@@ -76,10 +76,10 @@ export function DeleteTicketDialog({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-[#123524]">
+          <AlertDialogTitle className="text-dash-ink">
             Delete Ticket Type
           </AlertDialogTitle>
-          <AlertDialogDescription className="text-[#3E7B27]">
+          <AlertDialogDescription className="text-dash-muted">
             Are you sure you want to delete <strong>{ticket.name}</strong>?
             This action cannot be undone.
           </AlertDialogDescription>
@@ -87,7 +87,7 @@ export function DeleteTicketDialog({
         <AlertDialogFooter>
           <AlertDialogCancel
             disabled={isDeleting}
-            className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+            className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
           >
             Cancel
           </AlertDialogCancel>

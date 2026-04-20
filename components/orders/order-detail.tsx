@@ -110,7 +110,7 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
       {/* Header */}
       <div>
         <Link href="/dashboard/orders">
-          <Button variant="ghost" size="sm" className="text-[#3E7B27] mb-4">
+          <Button variant="ghost" size="sm" className="text-dash-muted mb-4">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Orders
           </Button>
@@ -119,14 +119,14 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-3xl font-bold text-[#123524]">
+              <h1 className="text-3xl font-bold text-dash-ink">
                 {order.orderNumber}
               </h1>
               <Badge className={cn("text-sm", statusConfig[order.status].className)}>
                 {statusConfig[order.status].label}
               </Badge>
             </div>
-            <p className="text-[#3E7B27]">
+            <p className="text-dash-muted">
               Placed on{" "}
               {order.createdAt.toLocaleDateString("en-US", {
                 month: "long",
@@ -143,7 +143,7 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
               variant="outline"
               size="sm"
               onClick={handlePrintReceipt}
-              className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+              className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
             >
               <Printer className="mr-2 h-4 w-4" />
               Print
@@ -152,7 +152,7 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
               variant="outline"
               size="sm"
               onClick={handleSendReceipt}
-              className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+              className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
             >
               <Mail className="mr-2 h-4 w-4" />
               Send Receipt
@@ -160,7 +160,7 @@ export function OrderDetailClient({ order }: OrderDetailClientProps) {
             <Button
               variant="outline"
               size="sm"
-              className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+              className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
             >
               <Download className="mr-2 h-4 w-4" />
               Download

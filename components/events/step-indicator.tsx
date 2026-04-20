@@ -29,7 +29,7 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
               <div
                 className={cn(
                   "absolute left-1/2 top-5 h-0.5 w-full",
-                  step.id < currentStep ? "bg-[#85A947]" : "bg-[#85A947]/20"
+                  step.id < currentStep ? "bg-dash-accent" : "bg-dash-accent/20"
                 )}
                 style={{ transform: "translateX(50%)" }}
               />
@@ -41,11 +41,11 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
                 className={cn(
                   "flex h-10 w-10 items-center justify-center rounded-full border-2 transition-colors",
                   step.id < currentStep &&
-                    "border-[#85A947] bg-[#85A947] text-white",
+                    "border-dash-accent bg-dash-accent text-white",
                   step.id === currentStep &&
-                    "border-[#3E7B27] bg-white text-[#3E7B27]",
+                    "border-dash-accent-strong bg-white text-dash-muted",
                   step.id > currentStep &&
-                    "border-[#85A947]/20 bg-white text-[#85A947]"
+                    "border-dash-border bg-white text-dash-accent"
                 )}
               >
                 {step.id < currentStep ? (
@@ -62,13 +62,13 @@ export function StepIndicator({ steps, currentStep }: StepIndicatorProps) {
                 className={cn(
                   "text-sm font-medium",
                   step.id === currentStep
-                    ? "text-[#123524]"
-                    : "text-[#85A947]"
+                    ? "text-dash-ink"
+                    : "text-dash-accent"
                 )}
               >
                 {step.name}
               </p>
-              <p className="text-xs text-[#85A947] hidden sm:block">
+              <p className="text-xs text-dash-accent hidden sm:block">
                 {step.description}
               </p>
             </div>

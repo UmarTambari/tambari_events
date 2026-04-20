@@ -1,6 +1,8 @@
+import { cache } from "react";
 import { createClient }     from "@/lib/supabase/server";
 import { getUserByAuthId, createUser } from "@/lib/queries/users.queries";
 import { redirect }     from "next/navigation";
+import { headers }      from "next/headers";
 
 // ---------------------------------------------------------------------------
 // Low-level: get the raw Supabase auth user (never redirects)
@@ -41,21 +43,31 @@ async function resolveDbUser(supabaseUser: NonNullable<Awaited<ReturnType<typeof
   return user;
 }
 
+async function redirectToSignIn(): Promise<never> {
+  const h = await headers();
+  const pathname = h.get("x-pathname") ?? "/";
+  const search = h.get("x-search") ?? "";
+  const returnTo = pathname + search;
+  redirect(`/sign-in?redirect=${encodeURIComponent(returnTo)}`);
+}
+
 // ---------------------------------------------------------------------------
 // For SERVER COMPONENTS & PAGES only.
 // Redirects to /sign-in when the user is not authenticated.
+// Wrapped in React.cache() so layout + page + children in the same request share
+// one Supabase getUser + DB resolve (API routes use getCurrentUserIdOrNull).
 // Do NOT call this from API route handlers — use getCurrentUserIdOrNull instead.
 // ---------------------------------------------------------------------------
-export async function getCurrentUserId(): Promise<string> {
+export const getCurrentUserId = cache(async function getCurrentUserId(): Promise<string> {
   const supabaseUser = await getCurrentUser();
 
   if (!supabaseUser) {
-    redirect("/sign-in");
+    await redirectToSignIn();
   }
 
-  const user = await resolveDbUser(supabaseUser);
+  const user = await resolveDbUser(supabaseUser!);
   return user.id;
-}
+});
 
 // ---------------------------------------------------------------------------
 // For API ROUTE HANDLERS.
@@ -81,10 +93,10 @@ export async function requireAuth() {
   const user = await getCurrentUser();
 
   if (!user) {
-    redirect("/sign-in");
+    await redirectToSignIn();
   }
 
-  return user;
+  return user!;
 }
 
 // ---------------------------------------------------------------------------

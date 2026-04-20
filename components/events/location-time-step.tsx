@@ -76,10 +76,10 @@ export function LocationTimeStep() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-[#123524] mb-2">
+        <h2 className="text-2xl font-bold text-dash-ink mb-2">
           Location & Time
         </h2>
-        <p className="text-sm text-[#3E7B27]">
+        <p className="text-sm text-dash-muted">
           Where and when will your event take place?
         </p>
       </div>
@@ -91,13 +91,13 @@ export function LocationTimeStep() {
           name="venue"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-[#123524]">
+              <FormLabel className="text-dash-ink">
                 Venue Name <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
                 <Input
                   placeholder="e.g., Eko Convention Center"
-                  className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                  className="border-dash-border focus:border-dash-accent-strong"
                   {...field}
                 />
               </FormControl>
@@ -112,13 +112,13 @@ export function LocationTimeStep() {
           name="location"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-[#123524]">
+              <FormLabel className="text-dash-ink">
                 City, State <span className="text-red-500">*</span>
               </FormLabel>
               <FormControl>
                 <Input
                   placeholder="e.g., Lagos, Nigeria"
-                  className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                  className="border-dash-border focus:border-dash-accent-strong"
                   {...field}
                 />
               </FormControl>
@@ -131,7 +131,7 @@ export function LocationTimeStep() {
         <div className="grid gap-6 sm:grid-cols-2">
           {/* Start Date & Time */}
           <div className="space-y-3">
-            <FormLabel className="text-[#123524]">
+            <FormLabel className="text-dash-ink">
               Start Date & Time <span className="text-red-500">*</span>
             </FormLabel>
 
@@ -146,7 +146,7 @@ export function LocationTimeStep() {
                         <Button
                           variant="outline"
                           className={cn(
-                            "w-full justify-start text-left font-normal border-[#85A947]/20",
+                            "w-full justify-start text-left font-normal border-dash-border",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -180,7 +180,7 @@ export function LocationTimeStep() {
                       const datePart = field.value?.split("T")[0] || null;
                       updateDateTime("eventDate", datePart, e.target.value);
                     }}
-                    className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                    className="border-dash-border focus:border-dash-accent-strong"
                   />
 
                   <FormMessage />
@@ -191,7 +191,7 @@ export function LocationTimeStep() {
 
           {/* End Date & Time */}
           <div className="space-y-3">
-            <FormLabel className="text-[#123524]">
+            <FormLabel className="text-dash-ink">
               End Date & Time (Optional)
             </FormLabel>
 
@@ -206,7 +206,7 @@ export function LocationTimeStep() {
                         <Button
                           variant="outline"
                           className={cn(
-                            "w-full justify-start text-left font-normal border-[#85A947]/20",
+                            "w-full justify-start text-left font-normal border-dash-border",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -241,7 +241,7 @@ export function LocationTimeStep() {
                       updateDateTime("eventEndDate", datePart, e.target.value);
                     }}
                     disabled={!field.value}
-                    className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                    className="border-dash-border focus:border-dash-accent-strong"
                   />
 
                   <FormMessage />
@@ -257,18 +257,18 @@ export function LocationTimeStep() {
           name="totalCapacity"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-[#123524]">Total Capacity</FormLabel>
+              <FormLabel className="text-dash-ink">Total Capacity</FormLabel>
               <FormControl>
                 <Input
                   type="number"
                   placeholder="Leave empty for unlimited"
-                  className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                  className="border-dash-border focus:border-dash-accent-strong"
                   min="1"
                   value={field.value ?? ""}
                   onChange={(e) => field.onChange(e.target.value || null)}
                 />
               </FormControl>
-              <p className="text-xs text-[#85A947]">
+              <p className="text-xs text-dash-accent">
                 Maximum number of attendees for this event
               </p>
               <FormMessage />

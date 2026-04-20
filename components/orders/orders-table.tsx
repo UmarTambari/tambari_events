@@ -73,10 +73,10 @@ const statusConfig: Record<OrderStatus, { label: string; className: string }> =
 export function OrdersTable({ orders }: OrdersTableProps) {
   if (orders.length === 0) {
     return (
-      <Card className="bg-white border-[#85A947]/20">
+      <Card className="bg-white border-dash-border">
         <CardContent className="flex flex-col items-center justify-center py-12">
-          <p className="text-[#3E7B27] mb-2">No orders found</p>
-          <p className="text-sm text-[#85A947]">
+          <p className="text-dash-muted mb-2">No orders found</p>
+          <p className="text-sm text-dash-accent">
             Orders will appear here once customers start purchasing tickets
           </p>
         </CardContent>
@@ -85,31 +85,31 @@ export function OrdersTable({ orders }: OrdersTableProps) {
   }
 
   return (
-    <Card className="bg-white border-[#85A947]/20">
+    <Card className="bg-white border-dash-border">
       <CardContent className="p-0">
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow className="bg-[#EFE3C2] hover:bg-[#EFE3C2]">
-                <TableHead className="text-[#123524] font-semibold">
+              <TableRow className="bg-dash-highlight hover:bg-dash-highlight">
+                <TableHead className="text-dash-ink font-semibold">
                   Order Details
                 </TableHead>
-                <TableHead className="text-[#123524] font-semibold">
+                <TableHead className="text-dash-ink font-semibold">
                   Customer
                 </TableHead>
-                <TableHead className="text-[#123524] font-semibold">
+                <TableHead className="text-dash-ink font-semibold">
                   Event
                 </TableHead>
-                <TableHead className="text-[#123524] font-semibold">
+                <TableHead className="text-dash-ink font-semibold">
                   Amount
                 </TableHead>
-                <TableHead className="text-[#123524] font-semibold">
+                <TableHead className="text-dash-ink font-semibold">
                   Status
                 </TableHead>
-                <TableHead className="text-[#123524] font-semibold">
+                <TableHead className="text-dash-ink font-semibold">
                   Date
                 </TableHead>
-                <TableHead className="text-[#123524] font-semibold text-right">
+                <TableHead className="text-dash-ink font-semibold text-right">
                   Actions
                 </TableHead>
               </TableRow>
@@ -119,10 +119,10 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                 <TableRow key={order.id}>
                   <TableCell>
                     <div>
-                      <p className="font-mono text-sm font-medium text-[#123524]">
+                      <p className="font-mono text-sm font-medium text-dash-ink">
                         {order.orderNumber}
                       </p>
-                      <p className="text-xs text-[#85A947] mt-0.5">
+                      <p className="text-xs text-dash-accent mt-0.5">
                         {order.ticketCount} ticket
                         {order.ticketCount !== 1 ? "s" : ""}
                       </p>
@@ -131,19 +131,19 @@ export function OrdersTable({ orders }: OrdersTableProps) {
 
                   <TableCell>
                     <div>
-                      <p className="font-medium text-[#123524]">
+                      <p className="font-medium text-dash-ink">
                         {order.customerName}
                       </p>
                       <div className="flex items-center gap-2 mt-1">
-                        <Mail className="h-3 w-3 text-[#85A947]" />
-                        <p className="text-xs text-[#3E7B27] truncate max-w-[200px]">
+                        <Mail className="h-3 w-3 text-dash-accent" />
+                        <p className="text-xs text-dash-muted truncate max-w-[200px]">
                           {order.customerEmail}
                         </p>
                       </div>
                       {order.customerPhone && (
                         <div className="flex items-center gap-2 mt-0.5">
-                          <Phone className="h-3 w-3 text-[#85A947]" />
-                          <p className="text-xs text-[#3E7B27]">
+                          <Phone className="h-3 w-3 text-dash-accent" />
+                          <p className="text-xs text-dash-muted">
                             {order.customerPhone}
                           </p>
                         </div>
@@ -154,14 +154,14 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                   <TableCell>
                     <Link
                       href={`/dashboard/events/${order.eventSlug}`}
-                      className="text-sm text-[#3E7B27] hover:text-[#123524] hover:underline line-clamp-2"
+                      className="text-sm text-dash-muted hover:text-dash-ink hover:underline line-clamp-2"
                     >
                       {order.eventTitle}
                     </Link>
                   </TableCell>
 
                   <TableCell>
-                    <span className="font-semibold text-[#123524]">
+                    <span className="font-semibold text-dash-ink">
                       ₦{(order.totalAmount / 100).toLocaleString()}
                     </span>
                   </TableCell>
@@ -179,14 +179,14 @@ export function OrdersTable({ orders }: OrdersTableProps) {
 
                   <TableCell>
                     <div className="text-sm">
-                      <p className="text-[#123524]">
+                      <p className="text-dash-ink">
                         {new Date(order.createdAt).toLocaleDateString("en-US", {
                           month: "short",
                           day: "numeric",
                           year: "numeric",
                         })}
                       </p>
-                      <p className="text-xs text-[#85A947]">
+                      <p className="text-xs text-dash-accent">
                         {new Date(order.createdAt).toLocaleTimeString("en-US", {
                           hour: "numeric",
                           minute: "2-digit",
@@ -201,7 +201,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-[#3E7B27]"
+                          className="h-8 w-8 text-dash-muted"
                         >
                           <ExternalLink className="h-4 w-4" />
                         </Button>
@@ -211,7 +211,7 @@ export function OrdersTable({ orders }: OrdersTableProps) {
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-[#3E7B27]"
+                            className="h-8 w-8 text-dash-muted"
                           >
                             <MoreVertical className="h-4 w-4" />
                           </Button>

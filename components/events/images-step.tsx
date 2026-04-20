@@ -32,8 +32,8 @@ export function ImagesStep() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-[#123524] mb-2">Event Images</h2>
-        <p className="text-sm text-[#3E7B27]">
+        <h2 className="text-2xl font-bold text-dash-ink mb-2">Event Images</h2>
+        <p className="text-sm text-dash-muted">
           Add image URLs to make your event more appealing
         </p>
       </div>
@@ -45,16 +45,16 @@ export function ImagesStep() {
             name="bannerImageUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[#123524]">
+                <FormLabel className="text-dash-ink">
                   Banner Image URL
-                  <span className="text-xs text-[#85A947] ml-2 font-normal">
+                  <span className="text-xs text-dash-accent ml-2 font-normal">
                     (Recommended: 1920×1080px)
                   </span>
                 </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="https://example.com/banner.jpg"
-                    className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                    className="border-dash-border focus:border-dash-accent-strong"
                     {...field}
                     value={field.value || ""}
                   />
@@ -65,7 +65,7 @@ export function ImagesStep() {
           />
 
           {bannerImageUrl && (
-            <div className="relative rounded-lg overflow-hidden border border-[#85A947]/20 shadow-sm">
+            <div className="relative rounded-lg overflow-hidden border border-dash-border shadow-sm">
               <Image
                 src={bannerImageUrl}
                 alt="Banner preview"
@@ -86,7 +86,7 @@ export function ImagesStep() {
             </div>
           )}
 
-          <p className="text-xs text-[#85A947]">
+          <p className="text-xs text-dash-accent">
             This image will be displayed at the top of your event page
           </p>
         </div>
@@ -97,16 +97,16 @@ export function ImagesStep() {
             name="thumbnailImageUrl"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-[#123524]">
+                <FormLabel className="text-dash-ink">
                   Thumbnail Image URL
-                  <span className="text-xs text-[#85A947] ml-2 font-normal">
+                  <span className="text-xs text-dash-accent ml-2 font-normal">
                     (Recommended: 800×600px)
                   </span>
                 </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="https://example.com/thumbnail.jpg"
-                    className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                    className="border-dash-border focus:border-dash-accent-strong"
                     {...field}
                     value={field.value || ""}
                   />
@@ -117,7 +117,7 @@ export function ImagesStep() {
           />
 
           {thumbnailImageUrl && (
-            <div className="relative rounded-lg overflow-hidden border border-[#85A947]/20 shadow-sm max-w-md">
+            <div className="relative rounded-lg overflow-hidden border border-dash-border shadow-sm max-w-md">
               <Image
                 src={thumbnailImageUrl}
                 alt="Thumbnail preview"
@@ -138,7 +138,7 @@ export function ImagesStep() {
             </div>
           )}
 
-          <p className="text-xs text-[#85A947]">
+          <p className="text-xs text-dash-accent">
             This image will be shown in event listings and cards
           </p>
         </div>

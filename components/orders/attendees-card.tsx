@@ -19,14 +19,14 @@ export function AttendeesCard({ attendees }: AttendeesCardProps) {
   const checkedInCount = attendees.filter((a) => a.isCheckedIn).length;
 
   return (
-    <Card className="bg-white border-[#85A947]/20">
+    <Card className="bg-white border-dash-border">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-[#123524] flex items-center justify-between">
+        <CardTitle className="text-lg font-semibold text-dash-ink flex items-center justify-between">
           <span className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-[#85A947]" />
+            <Users className="h-5 w-5 text-dash-accent" />
             Attendees ({attendees.length})
           </span>
-          <span className="text-sm font-normal text-[#3E7B27]">
+          <span className="text-sm font-normal text-dash-muted">
             {checkedInCount} checked in
           </span>
         </CardTitle>
@@ -36,12 +36,12 @@ export function AttendeesCard({ attendees }: AttendeesCardProps) {
           {attendees.map((attendee) => (
             <div
               key={attendee.id}
-              className="p-4 rounded-lg border border-[#85A947]/20 bg-[#EFE3C2]/10"
+              className="p-4 rounded-lg border border-dash-border bg-dash-highlight/10"
             >
               <div className="flex items-start justify-between mb-2">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
-                    <p className="font-medium text-[#123524]">
+                    <p className="font-medium text-dash-ink">
                       {attendee.firstName} {attendee.lastName}
                     </p>
                     {attendee.isCheckedIn ? (
@@ -50,34 +50,34 @@ export function AttendeesCard({ attendees }: AttendeesCardProps) {
                         Checked In
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="text-xs border-[#85A947]/30">
+                      <Badge variant="outline" className="text-xs border-dash-accent/30">
                         <XCircle className="h-3 w-3 mr-1" />
                         Not Checked In
                       </Badge>
                     )}
                   </div>
-                  <p className="text-sm text-[#3E7B27]">{attendee.email}</p>
+                  <p className="text-sm text-dash-muted">{attendee.email}</p>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-[#85A947]/20">
+              <div className="flex items-center justify-between pt-2 border-t border-dash-border">
                 <div>
-                  <p className="text-xs text-[#85A947]">Ticket Type</p>
-                  <p className="text-sm font-medium text-[#123524]">
+                  <p className="text-xs text-dash-accent">Ticket Type</p>
+                  <p className="text-sm font-medium text-dash-ink">
                     {attendee.ticketTypeName}
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-[#85A947]">Ticket Code</p>
-                  <p className="text-sm font-mono font-medium text-[#123524]">
+                  <p className="text-xs text-dash-accent">Ticket Code</p>
+                  <p className="text-sm font-mono font-medium text-dash-ink">
                     {attendee.ticketCode}
                   </p>
                 </div>
               </div>
 
               {attendee.isCheckedIn && attendee.checkedInAt && (
-                <div className="mt-2 pt-2 border-t border-[#85A947]/20">
-                  <p className="text-xs text-[#85A947]">
+                <div className="mt-2 pt-2 border-t border-dash-border">
+                  <p className="text-xs text-dash-accent">
                     Checked in on{" "}
                     {attendee.checkedInAt.toLocaleDateString("en-US", {
                       month: "short",

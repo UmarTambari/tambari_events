@@ -41,7 +41,7 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         );
       default:
         return (
-          <Badge variant="outline" className="border-[#85A947]/30">
+          <Badge variant="outline" className="border-dash-accent/30">
             {status}
           </Badge>
         );
@@ -49,9 +49,9 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
   };
 
   return (
-    <Card className="bg-white border-[#85A947]/20">
+    <Card className="bg-white border-dash-border">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-[#123524] flex items-center justify-between">
+        <CardTitle className="text-lg font-semibold text-dash-ink flex items-center justify-between">
           <span>Transaction Details</span>
           {getStatusBadge(transaction.status)}
         </CardTitle>
@@ -59,14 +59,14 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-xs text-[#85A947] mb-1">Reference</p>
-            <p className="text-sm font-mono font-medium text-[#123524]">
+            <p className="text-xs text-dash-accent mb-1">Reference</p>
+            <p className="text-sm font-mono font-medium text-dash-ink">
               {transaction.reference}
             </p>
           </div>
           <div>
-            <p className="text-xs text-[#85A947] mb-1">Provider</p>
-            <p className="text-sm font-medium text-[#123524] capitalize">
+            <p className="text-xs text-dash-accent mb-1">Provider</p>
+            <p className="text-sm font-medium text-dash-ink capitalize">
               {transaction.provider}
             </p>
           </div>
@@ -75,14 +75,14 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         {transaction.channel && (
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-[#85A947] mb-1">Payment Method</p>
-              <p className="text-sm font-medium text-[#123524] capitalize">
+              <p className="text-xs text-dash-accent mb-1">Payment Method</p>
+              <p className="text-sm font-medium text-dash-ink capitalize">
                 {transaction.channel}
               </p>
             </div>
             <div>
-              <p className="text-xs text-[#85A947] mb-1">Amount</p>
-              <p className="text-sm font-medium text-[#123524]">
+              <p className="text-xs text-dash-accent mb-1">Amount</p>
+              <p className="text-sm font-medium text-dash-ink">
                 ₦{(transaction.amount / 100).toLocaleString()}
               </p>
             </div>
@@ -90,16 +90,16 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         )}
 
         {transaction.cardType && transaction.lastFourDigits && (
-          <div className="p-3 rounded-lg bg-[#EFE3C2]/30 border border-[#85A947]/20">
+          <div className="p-3 rounded-lg bg-dash-highlight/30 border border-dash-border">
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center">
-                <CreditCard className="h-5 w-5 text-[#3E7B27]" />
+                <CreditCard className="h-5 w-5 text-dash-muted" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium text-[#123524] capitalize">
+                <p className="text-sm font-medium text-dash-ink capitalize">
                   {transaction.cardType} Card
                 </p>
-                <p className="text-xs text-[#85A947]">
+                <p className="text-xs text-dash-accent">
                   •••• •••• •••• {transaction.lastFourDigits}
                 </p>
               </div>
@@ -109,10 +109,10 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
 
         {transaction.bank && (
           <div className="flex items-center gap-2">
-            <Building2 className="h-4 w-4 text-[#85A947]" />
+            <Building2 className="h-4 w-4 text-dash-accent" />
             <div>
-              <p className="text-xs text-[#85A947]">Bank</p>
-              <p className="text-sm font-medium text-[#123524]">
+              <p className="text-xs text-dash-accent">Bank</p>
+              <p className="text-sm font-medium text-dash-ink">
                 {transaction.bank}
               </p>
             </div>
@@ -120,9 +120,9 @@ export function TransactionCard({ transaction }: TransactionCardProps) {
         )}
 
         {transaction.paidAt && (
-          <div className="pt-3 border-t border-[#85A947]/20">
-            <p className="text-xs text-[#85A947]">Payment Date</p>
-            <p className="text-sm font-medium text-[#123524] mt-1">
+          <div className="pt-3 border-t border-dash-border">
+            <p className="text-xs text-dash-accent">Payment Date</p>
+            <p className="text-sm font-medium text-dash-ink mt-1">
               {transaction.paidAt.toLocaleDateString("en-US", {
                 month: "long",
                 day: "numeric",

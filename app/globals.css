@@ -4,6 +4,22 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Dashboard shell — tweak these in :root to retheme the organizer UI */
+  --color-dash-canvas: var(--dash-canvas);
+  --color-dash-sidebar: var(--dash-sidebar);
+  --color-dash-sidebar-border: var(--dash-sidebar-border);
+  --color-dash-sidebar-muted: var(--dash-sidebar-muted);
+  --color-dash-sidebar-active: var(--dash-sidebar-active);
+  --color-dash-sidebar-active-fg: var(--dash-sidebar-active-fg);
+  --color-dash-ink: var(--dash-ink);
+  --color-dash-muted: var(--dash-muted);
+  --color-dash-subtle: var(--dash-subtle);
+  --color-dash-accent: var(--dash-accent);
+  --color-dash-accent-strong: var(--dash-accent-strong);
+  --color-dash-highlight: var(--dash-highlight);
+  --color-dash-border: var(--dash-border);
+  --color-dash-card: var(--dash-card);
+  --color-dash-primary-foreground: var(--dash-primary-foreground);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
@@ -44,6 +60,42 @@
 }
 
 :root {
+  /* -------------------------------------------------------------------------
+     Dashboard theme (“EventHub Pro”): deep slate shell + teal accent.
+     Adjust only these tokens to reskin the organizer dashboard & related UI.
+     ------------------------------------------------------------------------- */
+  --dash-canvas: oklch(0.98 0.006 260);
+  --dash-sidebar: oklch(0.21 0.042 268);
+  --dash-sidebar-border: oklch(0.3 0.04 268);
+  --dash-sidebar-muted: oklch(0.72 0.03 260);
+  --dash-sidebar-active: oklch(0.4 0.11 195);
+  --dash-sidebar-active-fg: oklch(0.99 0.01 260);
+  --dash-ink: oklch(0.22 0.04 268);
+  --dash-muted: oklch(0.48 0.03 260);
+  --dash-subtle: oklch(0.58 0.04 200);
+  --dash-accent: oklch(0.62 0.16 195);
+  --dash-accent-strong: oklch(0.52 0.14 195);
+  --dash-highlight: oklch(0.94 0.03 200);
+  --dash-border: oklch(0.9 0.02 260);
+  --dash-card: oklch(1 0 0);
+  --dash-primary-foreground: oklch(0.99 0 0);
+
+  /*
+   * Tailwind usage (examples):
+   *   bg-dash-canvas          page shell behind sidebar
+   *   bg-dash-sidebar         left rail
+   *   text-dash-sidebar-muted / text-dash-sidebar-active-fg  nav labels on sidebar
+   *   bg-dash-sidebar-active  current nav pill
+   *   text-dash-ink           headings on white cards
+   *   text-dash-muted         secondary copy
+   *   text-dash-accent        accent labels & icons on light bg
+   *   bg-dash-accent          primary buttons
+   *   hover:bg-dash-accent-strong
+   *   border-dash-border      hairlines & inputs
+   *   bg-dash-highlight       soft rows, progress tracks
+   * Hex for QR/PDF: see lib/dash-palette.ts (approx. ink ≈ #1e2a38)
+   */
+
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

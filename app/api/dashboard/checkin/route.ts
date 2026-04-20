@@ -3,12 +3,13 @@ import {
   getAttendeeByTicketCode,
   checkInAttendee,
 } from "@/lib/queries/attendee.queries";
-import { getEventById } from "@/lib/queries/events.queries";
+import { getCurrentUserIdOrNull } from "@/lib/auth";
+import { getEventById }           from "@/lib/queries/events.queries";
 
 // POST /api/checkin - Check in an attendee
 export async function POST(request: NextRequest) {
   try {
-    const organizerId = request.headers.get("x-user-id");
+    const organizerId = await getCurrentUserIdOrNull();
 
     if (!organizerId) {
       return NextResponse.json(

@@ -1,15 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { User } from "@/lib/types/user.type";
-import { Order } from "@/lib/types/order.type";
-import { OrderItem } from "@/lib/types/orderItem.type";
+import type { Order } from "@/lib/types/order.type";
 
 const attendeeSchema = z.object({
   firstName: z.string().min(2, "First name is required"),
@@ -24,18 +22,22 @@ const checkoutSchema = z.object({
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
 
+/** Checkout needs line items to size the attendee form; bare `Order` has no `items`. */
+type OrderForCheckout = Order & {
+  items: ReadonlyArray<{ quantity: number }>;
+};
+
 interface CheckoutFormProps {
-  order: Order;
+  order: OrderForCheckout;
   user: User;
 }
 
 export function CheckoutForm({ order, user }: CheckoutFormProps) {
-  const router = useRouter();
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Calculate total number of attendees
   const totalAttendees = order.items.reduce(
-    (sum: number, item: OrderItem) => sum + item.quantity,
+    (sum, item) => sum + item.quantity,
     0
   );
 

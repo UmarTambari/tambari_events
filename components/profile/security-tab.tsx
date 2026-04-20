@@ -51,21 +51,21 @@ export function SecurityTab() {
   return (
     <div className="grid gap-6 lg:grid-cols-3">
       {/* Change Password */}
-      <Card className="bg-white border-[#85A947]/20 lg:col-span-2">
+      <Card className="bg-white border-dash-border lg:col-span-2">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524] flex items-center gap-2">
-            <Lock className="h-5 w-5 text-[#85A947]" />
+          <CardTitle className="text-lg font-semibold text-dash-ink flex items-center gap-2">
+            <Lock className="h-5 w-5 text-dash-accent" />
             Change Password
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {/* Current Password */}
           <div className="space-y-2">
-            <Label htmlFor="currentPassword" className="text-[#123524]">
+            <Label htmlFor="currentPassword" className="text-dash-ink">
               Current Password
             </Label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#85A947]" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-dash-accent" />
               <Input
                 id="currentPassword"
                 type={showCurrentPassword ? "text" : "password"}
@@ -77,12 +77,12 @@ export function SecurityTab() {
                   })
                 }
                 placeholder="Enter current password"
-                className="pl-10 pr-10 border-[#85A947]/20 focus:border-[#3E7B27]"
+                className="pl-10 pr-10 border-dash-border focus:border-dash-accent-strong"
               />
               <button
                 type="button"
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#85A947] hover:text-[#3E7B27]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-dash-accent hover:text-dash-muted"
               >
                 {showCurrentPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -95,11 +95,11 @@ export function SecurityTab() {
 
           {/* New Password */}
           <div className="space-y-2">
-            <Label htmlFor="newPassword" className="text-[#123524]">
+            <Label htmlFor="newPassword" className="text-dash-ink">
               New Password
             </Label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#85A947]" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-dash-accent" />
               <Input
                 id="newPassword"
                 type={showNewPassword ? "text" : "password"}
@@ -111,12 +111,12 @@ export function SecurityTab() {
                   })
                 }
                 placeholder="Enter new password"
-                className="pl-10 pr-10 border-[#85A947]/20 focus:border-[#3E7B27]"
+                className="pl-10 pr-10 border-dash-border focus:border-dash-accent-strong"
               />
               <button
                 type="button"
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#85A947] hover:text-[#3E7B27]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-dash-accent hover:text-dash-muted"
               >
                 {showNewPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -134,11 +134,11 @@ export function SecurityTab() {
 
           {/* Confirm Password */}
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword" className="text-[#123524]">
+            <Label htmlFor="confirmPassword" className="text-dash-ink">
               Confirm New Password
             </Label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#85A947]" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-dash-accent" />
               <Input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
@@ -150,12 +150,12 @@ export function SecurityTab() {
                   })
                 }
                 placeholder="Confirm new password"
-                className="pl-10 pr-10 border-[#85A947]/20 focus:border-[#3E7B27]"
+                className="pl-10 pr-10 border-dash-border focus:border-dash-accent-strong"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#85A947] hover:text-[#3E7B27]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-dash-accent hover:text-dash-muted"
               >
                 {showConfirmPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -175,7 +175,7 @@ export function SecurityTab() {
             <Button
               onClick={handleChangePassword}
               disabled={!isPasswordValid() || isChangingPassword}
-              className="bg-[#85A947] hover:bg-[#3E7B27] text-white"
+              className="bg-dash-accent hover:bg-dash-accent-strong text-white"
             >
               {isChangingPassword ? (
                 <>
@@ -191,10 +191,10 @@ export function SecurityTab() {
       </Card>
 
       {/* Security Tips */}
-      <Card className="bg-white border-[#85A947]/20">
+      <Card className="bg-white border-dash-border">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524] flex items-center gap-2">
-            <Shield className="h-5 w-5 text-[#85A947]" />
+          <CardTitle className="text-lg font-semibold text-dash-ink flex items-center gap-2">
+            <Shield className="h-5 w-5 text-dash-accent" />
             Security Tips
           </CardTitle>
         </CardHeader>
@@ -202,26 +202,26 @@ export function SecurityTab() {
           <ul className="space-y-3">
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
-              <p className="text-sm text-[#3E7B27]">
+              <p className="text-sm text-dash-muted">
                 Use at least 8 characters with a mix of letters, numbers, and
                 symbols
               </p>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
-              <p className="text-sm text-[#3E7B27]">
+              <p className="text-sm text-dash-muted">
                 Don&apos;t use common words or personal information
               </p>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
-              <p className="text-sm text-[#3E7B27]">
+              <p className="text-sm text-dash-muted">
                 Change your password regularly
               </p>
             </li>
             <li className="flex items-start gap-2">
               <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 shrink-0" />
-              <p className="text-sm text-[#3E7B27]">
+              <p className="text-sm text-dash-muted">
                 Never share your password with anyone
               </p>
             </li>
@@ -230,26 +230,26 @@ export function SecurityTab() {
       </Card>
 
       {/* Two-Factor Authentication */}
-      <Card className="bg-white border-[#85A947]/20 lg:col-span-3">
+      <Card className="bg-white border-dash-border lg:col-span-3">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Two-Factor Authentication
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <p className="font-medium text-[#123524]">
+              <p className="font-medium text-dash-ink">
                 Enable Two-Factor Authentication
               </p>
-              <p className="text-sm text-[#3E7B27] mt-1">
+              <p className="text-sm text-dash-muted mt-1">
                 Add an extra layer of security to your account by requiring a
                 verification code in addition to your password.
               </p>
             </div>
             <Button
               variant="outline"
-              className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2] whitespace-nowrap"
+              className="border-dash-accent text-dash-muted hover:bg-dash-highlight whitespace-nowrap"
             >
               Enable 2FA
             </Button>
@@ -258,34 +258,34 @@ export function SecurityTab() {
       </Card>
 
       {/* Active Sessions */}
-      <Card className="bg-white border-[#85A947]/20 lg:col-span-3">
+      <Card className="bg-white border-dash-border lg:col-span-3">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Active Sessions
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {/* Current Session */}
-            <div className="flex items-center justify-between p-4 rounded-lg border border-[#85A947]/20 bg-[#EFE3C2]/20">
+            <div className="flex items-center justify-between p-4 rounded-lg border border-dash-border bg-dash-highlight/20">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <p className="font-medium text-[#123524]">Current Session</p>
+                  <p className="font-medium text-dash-ink">Current Session</p>
                   <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full">
                     Active
                   </span>
                 </div>
-                <p className="text-sm text-[#3E7B27]">
+                <p className="text-sm text-dash-muted">
                   Chrome on Windows • Lagos, Nigeria
                 </p>
-                <p className="text-xs text-[#85A947] mt-1">
+                <p className="text-xs text-dash-accent mt-1">
                   Last active: Just now
                 </p>
               </div>
             </div>
 
             <div className="text-center py-4">
-              <p className="text-sm text-[#85A947]">
+              <p className="text-sm text-dash-accent">
                 No other active sessions found
               </p>
             </div>

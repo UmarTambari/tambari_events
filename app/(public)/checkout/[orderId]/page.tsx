@@ -30,7 +30,7 @@ export default async function CheckoutPage({ params }: CheckoutPageProps) {
   // Get user from your database
   const user = await getUserByAuthId(supabaseUser.id);
   if (!user) {
-    redirect("/sign-in");
+    redirect(`/sign-in?redirect=/checkout/${orderId}`);
   }
 
   // Get order with details

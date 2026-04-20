@@ -42,22 +42,22 @@ export function TicketsStep() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-[#123524] mb-2">
+        <h2 className="text-2xl font-bold text-dash-ink mb-2">
           Ticket Types
         </h2>
-        <p className="text-sm text-[#3E7B27]">
+        <p className="text-sm text-dash-muted">
           Create different ticket types with varying prices and quantities
         </p>
       </div>
 
       <div className="space-y-4">
         {fields.length === 0 ? (
-          <Card className="bg-[#EFE3C2]/30 border-2 border-dashed border-[#85A947]/30">
+          <Card className="bg-dash-highlight/30 border-2 border-dashed border-dash-accent/30">
             <CardContent className="flex flex-col items-center justify-center py-12">
-              <p className="text-[#3E7B27] mb-4">No ticket types added yet</p>
+              <p className="text-dash-muted mb-4">No ticket types added yet</p>
               <Button
                 onClick={addTicketType}
-                className="bg-[#85A947] hover:bg-[#3E7B27] text-white"
+                className="bg-dash-accent hover:bg-dash-accent-strong text-white"
               >
                 <Plus className="mr-2 h-4 w-4" />
                 Add Your First Ticket Type
@@ -67,9 +67,9 @@ export function TicketsStep() {
         ) : (
           <>
             {fields.map((field, index) => (
-              <Card key={field.id} className="bg-white border-[#85A947]/20">
+              <Card key={field.id} className="bg-white border-dash-border">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                  <CardTitle className="text-lg font-semibold text-[#123524]">
+                  <CardTitle className="text-lg font-semibold text-dash-ink">
                     Ticket Type {index + 1}
                   </CardTitle>
                   <Button
@@ -89,13 +89,13 @@ export function TicketsStep() {
                     name={`ticketTypes.${index}.name`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[#123524]">
+                        <FormLabel className="text-dash-ink">
                           Name <span className="text-red-500">*</span>
                         </FormLabel>
                         <FormControl>
                           <Input
                             placeholder="e.g., Early Bird, VIP, Regular"
-                            className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                            className="border-dash-border focus:border-dash-accent-strong"
                             {...field}
                           />
                         </FormControl>
@@ -109,14 +109,14 @@ export function TicketsStep() {
                     name={`ticketTypes.${index}.description`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-[#123524]">
+                        <FormLabel className="text-dash-ink">
                           Description
                         </FormLabel>
                         <FormControl>
                           <Textarea
                             placeholder="Brief description of this ticket type"
                             rows={2}
-                            className="resize-none border-[#85A947]/20 focus:border-[#3E7B27]"
+                            className="resize-none border-dash-border focus:border-dash-accent-strong"
                             {...field}
                           />
                         </FormControl>
@@ -131,7 +131,7 @@ export function TicketsStep() {
                       name={`ticketTypes.${index}.price`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#123524]">
+                          <FormLabel className="text-dash-ink">
                             Price (₦) <span className="text-red-500">*</span>
                           </FormLabel>
                           <FormControl>
@@ -139,11 +139,11 @@ export function TicketsStep() {
                               type="number"
                               placeholder="1000"
                               min="100"
-                              className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                              className="border-dash-border focus:border-dash-accent-strong"
                               {...field}
                             />
                           </FormControl>
-                          <p className="text-xs text-[#85A947]">Price in Naira</p>
+                          <p className="text-xs text-dash-accent">Price in Naira</p>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -154,7 +154,7 @@ export function TicketsStep() {
                       name={`ticketTypes.${index}.quantity`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#123524]">
+                          <FormLabel className="text-dash-ink">
                             Quantity <span className="text-red-500">*</span>
                           </FormLabel>
                           <FormControl>
@@ -162,11 +162,11 @@ export function TicketsStep() {
                               type="number"
                               placeholder="100"
                               min="1"
-                              className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                              className="border-dash-border focus:border-dash-accent-strong"
                               {...field}
                             />
                           </FormControl>
-                          <p className="text-xs text-[#85A947]">
+                          <p className="text-xs text-dash-accent">
                             Available tickets
                           </p>
                           <FormMessage />
@@ -181,14 +181,14 @@ export function TicketsStep() {
                       name={`ticketTypes.${index}.minPurchase`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#123524]">
+                          <FormLabel className="text-dash-ink">
                             Min Purchase
                           </FormLabel>
                           <FormControl>
                             <Input
                               type="number"
                               min="1"
-                              className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                              className="border-dash-border focus:border-dash-accent-strong"
                               {...field}
                             />
                           </FormControl>
@@ -202,14 +202,14 @@ export function TicketsStep() {
                       name={`ticketTypes.${index}.maxPurchase`}
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel className="text-[#123524]">
+                          <FormLabel className="text-dash-ink">
                             Max Purchase
                           </FormLabel>
                           <FormControl>
                             <Input
                               type="number"
                               min="1"
-                              className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                              className="border-dash-border focus:border-dash-accent-strong"
                               {...field}
                             />
                           </FormControl>
@@ -226,7 +226,7 @@ export function TicketsStep() {
               type="button"
               onClick={addTicketType}
               variant="outline"
-              className="w-full border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+              className="w-full border-dash-accent text-dash-muted hover:bg-dash-highlight"
             >
               <Plus className="mr-2 h-4 w-4" />
               Add Another Ticket Type

@@ -41,7 +41,7 @@ export function ViewTicketDialog({ ticket }: ViewTicketDialogProps) {
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-[#3E7B27] hover:bg-[#EFE3C2]"
+          className="h-8 w-8 text-dash-muted hover:bg-dash-highlight"
         >
           <Eye className="h-4 w-4" />
         </Button>
@@ -50,10 +50,10 @@ export function ViewTicketDialog({ ticket }: ViewTicketDialogProps) {
         <DialogHeader>
           <div className="flex items-start justify-between">
             <div>
-              <DialogTitle className="text-2xl text-[#123524]">
+              <DialogTitle className="text-2xl text-dash-ink">
                 {ticket.name}
               </DialogTitle>
-              <DialogDescription className="text-[#3E7B27] mt-1">
+              <DialogDescription className="text-dash-muted mt-1">
                 Ticket type details and sales information
               </DialogDescription>
             </div>
@@ -73,55 +73,55 @@ export function ViewTicketDialog({ ticket }: ViewTicketDialogProps) {
           {/* Description */}
           {ticket.description && (
             <div>
-              <h3 className="text-sm font-semibold text-[#123524] mb-2">
+              <h3 className="text-sm font-semibold text-dash-ink mb-2">
                 Description
               </h3>
-              <p className="text-sm text-[#3E7B27]">{ticket.description}</p>
+              <p className="text-sm text-dash-muted">{ticket.description}</p>
             </div>
           )}
 
           {/* Pricing */}
           <div>
-            <h3 className="text-sm font-semibold text-[#123524] mb-2">
+            <h3 className="text-sm font-semibold text-dash-ink mb-2">
               Pricing
             </h3>
-            <div className="bg-[#EFE3C2]/30 rounded-lg p-4">
-              <div className="text-3xl font-bold text-[#123524]">
+            <div className="bg-dash-highlight/30 rounded-lg p-4">
+              <div className="text-3xl font-bold text-dash-ink">
                 ₦{(ticket.price / 100).toLocaleString()}
               </div>
-              <p className="text-sm text-[#85A947] mt-1">per ticket</p>
+              <p className="text-sm text-dash-accent mt-1">per ticket</p>
             </div>
           </div>
 
           {/* Sales Statistics */}
           <div>
-            <h3 className="text-sm font-semibold text-[#123524] mb-3">
+            <h3 className="text-sm font-semibold text-dash-ink mb-3">
               Sales Statistics
             </h3>
             <div className="grid gap-4 sm:grid-cols-3">
-              <div className="bg-white border border-[#85A947]/20 rounded-lg p-4">
-                <p className="text-sm text-[#85A947]">Sold</p>
-                <p className="text-2xl font-bold text-[#123524] mt-1">
+              <div className="bg-white border border-dash-border rounded-lg p-4">
+                <p className="text-sm text-dash-accent">Sold</p>
+                <p className="text-2xl font-bold text-dash-ink mt-1">
                   {ticket.quantitySold}
                 </p>
               </div>
-              <div className="bg-white border border-[#85A947]/20 rounded-lg p-4">
-                <p className="text-sm text-[#85A947]">Remaining</p>
-                <p className="text-2xl font-bold text-[#123524] mt-1">
+              <div className="bg-white border border-dash-border rounded-lg p-4">
+                <p className="text-sm text-dash-accent">Remaining</p>
+                <p className="text-2xl font-bold text-dash-ink mt-1">
                   {remaining}
                 </p>
               </div>
-              <div className="bg-white border border-[#85A947]/20 rounded-lg p-4">
-                <p className="text-sm text-[#85A947]">Total</p>
-                <p className="text-2xl font-bold text-[#123524] mt-1">
+              <div className="bg-white border border-dash-border rounded-lg p-4">
+                <p className="text-sm text-dash-accent">Total</p>
+                <p className="text-2xl font-bold text-dash-ink mt-1">
                   {ticket.quantity}
                 </p>
               </div>
             </div>
             <div className="mt-4">
               <div className="flex justify-between text-sm mb-2">
-                <span className="text-[#3E7B27]">Sales Progress</span>
-                <span className="text-[#123524] font-semibold">
+                <span className="text-dash-muted">Sales Progress</span>
+                <span className="text-dash-ink font-semibold">
                   {soldPercentage.toFixed(1)}%
                 </span>
               </div>
@@ -131,14 +131,14 @@ export function ViewTicketDialog({ ticket }: ViewTicketDialogProps) {
 
           {/* Revenue */}
           <div>
-            <h3 className="text-sm font-semibold text-[#123524] mb-2">
+            <h3 className="text-sm font-semibold text-dash-ink mb-2">
               Revenue Generated
             </h3>
-            <div className="bg-[#85A947]/10 rounded-lg p-4">
-              <div className="text-2xl font-bold text-[#123524]">
+            <div className="bg-dash-accent/10 rounded-lg p-4">
+              <div className="text-2xl font-bold text-dash-ink">
                 ₦{revenue.toLocaleString()}
               </div>
-              <p className="text-sm text-[#3E7B27] mt-1">
+              <p className="text-sm text-dash-muted mt-1">
                 From {ticket.quantitySold} ticket{ticket.quantitySold !== 1 ? "s" : ""} sold
               </p>
             </div>
@@ -146,19 +146,19 @@ export function ViewTicketDialog({ ticket }: ViewTicketDialogProps) {
 
           {/* Purchase Limits */}
           <div>
-            <h3 className="text-sm font-semibold text-[#123524] mb-3">
+            <h3 className="text-sm font-semibold text-dash-ink mb-3">
               Purchase Limits
             </h3>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="bg-white border border-[#85A947]/20 rounded-lg p-4">
-                <p className="text-sm text-[#85A947]">Minimum Purchase</p>
-                <p className="text-xl font-bold text-[#123524] mt-1">
+              <div className="bg-white border border-dash-border rounded-lg p-4">
+                <p className="text-sm text-dash-accent">Minimum Purchase</p>
+                <p className="text-xl font-bold text-dash-ink mt-1">
                   {ticket.minPurchase} ticket{ticket.minPurchase !== 1 ? "s" : ""}
                 </p>
               </div>
-              <div className="bg-white border border-[#85A947]/20 rounded-lg p-4">
-                <p className="text-sm text-[#85A947]">Maximum Purchase</p>
-                <p className="text-xl font-bold text-[#123524] mt-1">
+              <div className="bg-white border border-dash-border rounded-lg p-4">
+                <p className="text-sm text-dash-accent">Maximum Purchase</p>
+                <p className="text-xl font-bold text-dash-ink mt-1">
                   {ticket.maxPurchase} ticket{ticket.maxPurchase !== 1 ? "s" : ""}
                 </p>
               </div>
@@ -167,19 +167,19 @@ export function ViewTicketDialog({ ticket }: ViewTicketDialogProps) {
 
           {/* Sale Period */}
           <div>
-            <h3 className="text-sm font-semibold text-[#123524] mb-3">
+            <h3 className="text-sm font-semibold text-dash-ink mb-3">
               Sale Period
             </h3>
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="bg-white border border-[#85A947]/20 rounded-lg p-4">
-                <p className="text-sm text-[#85A947]">Sale Starts</p>
-                <p className="text-sm font-medium text-[#123524] mt-1">
+              <div className="bg-white border border-dash-border rounded-lg p-4">
+                <p className="text-sm text-dash-accent">Sale Starts</p>
+                <p className="text-sm font-medium text-dash-ink mt-1">
                   {formatDate(ticket.saleStartDate)}
                 </p>
               </div>
-              <div className="bg-white border border-[#85A947]/20 rounded-lg p-4">
-                <p className="text-sm text-[#85A947]">Sale Ends</p>
-                <p className="text-sm font-medium text-[#123524] mt-1">
+              <div className="bg-white border border-dash-border rounded-lg p-4">
+                <p className="text-sm text-dash-accent">Sale Ends</p>
+                <p className="text-sm font-medium text-dash-ink mt-1">
                   {formatDate(ticket.saleEndDate)}
                 </p>
               </div>
@@ -187,10 +187,10 @@ export function ViewTicketDialog({ ticket }: ViewTicketDialogProps) {
           </div>
         </div>
 
-        <div className="flex justify-end pt-4 border-t border-[#85A947]/20 shrink-0">
+        <div className="flex justify-end pt-4 border-t border-dash-border shrink-0">
           <Button
             onClick={() => setOpen(false)}
-            className="bg-[#85A947] hover:bg-[#3E7B27] text-white"
+            className="bg-dash-accent hover:bg-dash-accent-strong text-white"
           >
             Close
           </Button>

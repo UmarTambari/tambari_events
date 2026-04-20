@@ -67,7 +67,7 @@ export function ToggleTicketStatus({
       size="icon"
       onClick={handleToggle}
       disabled={isToggling}
-      className="h-8 w-8 text-[#3E7B27] hover:bg-[#EFE3C2]"
+      className="h-8 w-8 text-dash-muted hover:bg-dash-highlight"
       title={ticket.isActive ? "Deactivate ticket" : "Activate ticket"}
     >
       {ticket.isActive ? (

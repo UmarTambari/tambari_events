@@ -6,14 +6,18 @@ import { toast } from 'sonner'
 import { Loader2, CheckCircle } from 'lucide-react'
 
 interface VerifyPaymentButtonProps {
-  reference: string
+  reference?: string | null;
 }
 
 export function VerifyPaymentButton({ reference }: VerifyPaymentButtonProps) {
-  const [isVerifying, setIsVerifying] = useState(false)
-  const router = useRouter()
+  const [isVerifying, setIsVerifying] = useState(false);
+  const router = useRouter();
 
- const handleVerify = async () => {
+  if (!reference) {
+    return null;
+  }
+
+  const handleVerify = async () => {
   setIsVerifying(true)
 
 try {

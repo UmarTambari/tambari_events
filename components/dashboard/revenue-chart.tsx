@@ -56,15 +56,15 @@ export function RevenueChart() {
 
   if (isLoading) {
     return (
-      <Card className="bg-white border-[#85A947]/20">
+      <Card className="bg-white border-dash-border">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Revenue Overview
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-[280px] flex items-center justify-center">
-            <div className="animate-pulse text-[#85A947]">Loading...</div>
+            <div className="animate-pulse text-dash-accent">Loading...</div>
           </div>
         </CardContent>
       </Card>
@@ -73,9 +73,9 @@ export function RevenueChart() {
 
   if (error) {
     return (
-      <Card className="bg-white border-[#85A947]/20">
+      <Card className="bg-white border-dash-border">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Revenue Overview
           </CardTitle>
         </CardHeader>
@@ -91,12 +91,12 @@ export function RevenueChart() {
   }
 
   return (
-    <Card className="bg-white border-[#85A947]/20">
+    <Card className="bg-white border-dash-border">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-[#123524]">
+        <CardTitle className="text-lg font-semibold text-dash-ink">
           Revenue Overview
         </CardTitle>
-        <p className="text-sm text-[#3E7B27]">
+        <p className="text-sm text-dash-muted">
           Monthly revenue for the past year
         </p>
       </CardHeader>
@@ -105,22 +105,22 @@ export function RevenueChart() {
           <AreaChart data={data}>
             <defs>
               <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#85A947" stopOpacity={0.3} />
-                <stop offset="95%" stopColor="#85A947" stopOpacity={0} />
+                <stop offset="5%" stopColor="var(--dash-accent)" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="var(--dash-accent)" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid
               strokeDasharray="3 3"
-              stroke="#85A947"
+              stroke="var(--dash-accent)"
               opacity={0.1}
             />
             <XAxis
               dataKey="month"
-              stroke="#3E7B27"
+              stroke="var(--dash-accent-strong)"
               style={{ fontSize: "12px" }}
             />
             <YAxis
-              stroke="#3E7B27"
+              stroke="var(--dash-accent-strong)"
               style={{ fontSize: "12px" }}
               tickFormatter={(value: number) =>
                 `₦${(value / 100 / 1000).toFixed(0)}k`
@@ -128,8 +128,8 @@ export function RevenueChart() {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#EFE3C2",
-                border: "1px solid #85A947",
+                backgroundColor: "var(--dash-highlight)",
+                border: "1px solid var(--dash-accent)",
                 borderRadius: "8px",
                 fontSize: "12px",
               }}
@@ -137,12 +137,12 @@ export function RevenueChart() {
                 return `₦${(value / 100).toLocaleString()}`;
               }}
               labelFormatter={(label) => `Month: ${label}`}
-              labelStyle={{ color: "#123524", fontWeight: "bold" }}
+              labelStyle={{ color: "var(--dash-ink)", fontWeight: "bold" }}
             />
             <Area
               type="monotone"
               dataKey="revenue"
-              stroke="#3E7B27"
+              stroke="var(--dash-accent-strong)"
               strokeWidth={2}
               fillOpacity={1}
               fill="url(#colorRevenue)"

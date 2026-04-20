@@ -80,9 +80,9 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
   return (
     <div className="grid gap-6 lg:grid-cols-3">
       {/* Profile Form */}
-      <Card className="bg-white border-[#85A947]/20 lg:col-span-2">
+      <Card className="bg-white border-dash-border lg:col-span-2">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Personal Information
           </CardTitle>
           {!isEditing && (
@@ -90,7 +90,7 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
               variant="outline"
               size="sm"
               onClick={() => setIsEditing(true)}
-              className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+              className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
             >
               Edit Profile
             </Button>
@@ -99,11 +99,11 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
         <CardContent className="space-y-4">
           {/* Full Name */}
           <div className="space-y-2">
-            <Label htmlFor="fullName" className="text-[#123524]">
+            <Label htmlFor="fullName" className="text-dash-ink">
               Full Name
             </Label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#85A947]" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-dash-accent" />
               <Input
                 id="fullName"
                 value={formData.fullName}
@@ -111,37 +111,37 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
                   setFormData({ ...formData, fullName: e.target.value })
                 }
                 disabled={!isEditing}
-                className="pl-10 border-[#85A947]/20 focus:border-[#3E7B27] disabled:opacity-100 disabled:cursor-default"
+                className="pl-10 border-dash-border focus:border-dash-accent-strong disabled:opacity-100 disabled:cursor-default"
               />
             </div>
           </div>
 
           {/* Email - Read only */}
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-[#123524]">
+            <Label htmlFor="email" className="text-dash-ink">
               Email Address
             </Label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#85A947]" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-dash-accent" />
               <Input
                 id="email"
                 value={user.email}
                 disabled
-                className="pl-10 border-[#85A947]/20 disabled:opacity-100 disabled:cursor-default"
+                className="pl-10 border-dash-border disabled:opacity-100 disabled:cursor-default"
               />
             </div>
-            <p className="text-xs text-[#85A947]">
+            <p className="text-xs text-dash-accent">
               Email cannot be changed. Contact support if you need assistance.
             </p>
           </div>
 
           {/* Phone Number */}
           <div className="space-y-2">
-            <Label htmlFor="phoneNumber" className="text-[#123524]">
+            <Label htmlFor="phoneNumber" className="text-dash-ink">
               Phone Number
             </Label>
             <div className="relative">
-              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#85A947]" />
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-dash-accent" />
               <Input
                 id="phoneNumber"
                 value={formData.phoneNumber}
@@ -150,7 +150,7 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
                 }
                 disabled={!isEditing}
                 placeholder="+234 800 000 0000"
-                className="pl-10 border-[#85A947]/20 focus:border-[#3E7B27] disabled:opacity-100 disabled:cursor-default"
+                className="pl-10 border-dash-border focus:border-dash-accent-strong disabled:opacity-100 disabled:cursor-default"
               />
             </div>
           </div>
@@ -161,7 +161,7 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
               <Button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="bg-[#85A947] hover:bg-[#3E7B27] text-white"
+                className="bg-dash-accent hover:bg-dash-accent-strong text-white"
               >
                 {isSaving ? (
                   <>
@@ -179,7 +179,7 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
                 variant="outline"
                 onClick={handleCancel}
                 disabled={isSaving}
-                className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+                className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
               >
                 Cancel
               </Button>
@@ -189,27 +189,27 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
       </Card>
 
       {/* Account Info */}
-      <Card className="bg-white border-[#85A947]/20">
+      <Card className="bg-white border-dash-border">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Account Information
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <p className="text-sm text-[#85A947] mb-1">Account Status</p>
+            <p className="text-sm text-dash-accent mb-1">Account Status</p>
             <Badge className="bg-green-100 text-green-700 border-green-200">
               Active
             </Badge>
           </div>
 
-          <div className="h-px bg-[#85A947]/20" />
+          <div className="h-px bg-dash-accent/20" />
 
           <div>
-            <p className="text-sm text-[#85A947] mb-1">Member Since</p>
+            <p className="text-sm text-dash-accent mb-1">Member Since</p>
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4 text-[#3E7B27]" />
-              <p className="text-sm font-medium text-[#123524]">
+              <Calendar className="h-4 w-4 text-dash-muted" />
+              <p className="text-sm font-medium text-dash-ink">
                 {user.createdAt.toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
@@ -220,8 +220,8 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
           </div>
 
           <div>
-            <p className="text-sm text-[#85A947] mb-1">Last Updated</p>
-            <p className="text-sm font-medium text-[#123524]">
+            <p className="text-sm text-dash-accent mb-1">Last Updated</p>
+            <p className="text-sm font-medium text-dash-ink">
               {user.updatedAt.toLocaleDateString("en-US", {
                 month: "short",
                 day: "numeric",
@@ -232,11 +232,11 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
             </p>
           </div>
 
-          <div className="h-px bg-[#85A947]/20" />
+          <div className="h-px bg-dash-accent/20" />
 
           <div>
-            <p className="text-sm text-[#85A947] mb-2">Account ID</p>
-            <p className="text-xs font-mono text-[#123524] bg-[#EFE3C2] p-2 rounded break-all">
+            <p className="text-sm text-dash-accent mb-2">Account ID</p>
+            <p className="text-xs font-mono text-dash-ink bg-dash-highlight p-2 rounded break-all">
               {user.id}
             </p>
           </div>
@@ -253,8 +253,8 @@ export function ProfileInfoTab({ user }: ProfileInfoTabProps) {
         <CardContent>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <p className="font-medium text-[#123524]">Delete Account</p>
-              <p className="text-sm text-[#3E7B27] mt-1">
+              <p className="font-medium text-dash-ink">Delete Account</p>
+              <p className="text-sm text-dash-muted mt-1">
                 Once you delete your account, there is no going back. All your
                 events, orders, and data will be permanently deleted.
               </p>

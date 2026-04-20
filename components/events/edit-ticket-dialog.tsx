@@ -112,15 +112,15 @@ export function EditTicketDialog({
         <Button
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-[#3E7B27] hover:bg-[#EFE3C2]"
+          className="h-8 w-8 text-dash-muted hover:bg-dash-highlight"
         >
           <Edit className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-[#123524]">Edit Ticket Type</DialogTitle>
-          <DialogDescription className="text-[#3E7B27]">
+          <DialogTitle className="text-dash-ink">Edit Ticket Type</DialogTitle>
+          <DialogDescription className="text-dash-muted">
             Update ticket type details.
             {hasSales && (
               <span className="block mt-2 text-amber-600 font-medium">
@@ -138,13 +138,13 @@ export function EditTicketDialog({
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#123524]">
+                  <FormLabel className="text-dash-ink">
                     Name <span className="text-red-500">*</span>
                   </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g., Early Bird, VIP, Regular"
-                      className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                      className="border-dash-border focus:border-dash-accent-strong"
                       disabled={hasSales}
                       {...field}
                     />
@@ -159,12 +159,12 @@ export function EditTicketDialog({
               name="description"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-[#123524]">Description</FormLabel>
+                  <FormLabel className="text-dash-ink">Description</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Brief description of this ticket type"
                       rows={3}
-                      className="resize-none border-[#85A947]/20 focus:border-[#3E7B27]"
+                      className="resize-none border-dash-border focus:border-dash-accent-strong"
                       {...field}
                       value={field.value || ""}
                     />
@@ -180,7 +180,7 @@ export function EditTicketDialog({
                 name="price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Price (₦) <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
@@ -189,12 +189,12 @@ export function EditTicketDialog({
                         placeholder="1000"
                         min="100"
                         step="0.01"
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         disabled={hasSales}
                         {...field}
                       />
                     </FormControl>
-                    <p className="text-xs text-[#85A947]">Price in Naira</p>
+                    <p className="text-xs text-dash-accent">Price in Naira</p>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -205,7 +205,7 @@ export function EditTicketDialog({
                 name="quantity"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Quantity <span className="text-red-500">*</span>
                     </FormLabel>
                     <FormControl>
@@ -213,12 +213,12 @@ export function EditTicketDialog({
                         type="number"
                         placeholder="100"
                         min={ticket.quantitySold}
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         disabled={hasSales}
                         {...field}
                       />
                     </FormControl>
-                    <p className="text-xs text-[#85A947]">
+                    <p className="text-xs text-dash-accent">
                       {hasSales
                         ? `Min: ${ticket.quantitySold} (already sold)`
                         : "Available tickets"}
@@ -235,14 +235,14 @@ export function EditTicketDialog({
                 name="minPurchase"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Min Purchase
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min="1"
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         disabled={hasSales}
                         {...field}
                       />
@@ -257,14 +257,14 @@ export function EditTicketDialog({
                 name="maxPurchase"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Max Purchase
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         min="1"
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         disabled={hasSales}
                         {...field}
                       />
@@ -279,12 +279,12 @@ export function EditTicketDialog({
               control={form.control}
               name="isActive"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-[#85A947]/20 p-4">
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border border-dash-border p-4">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-base text-[#123524]">
+                    <FormLabel className="text-base text-dash-ink">
                       Active Status
                     </FormLabel>
-                    <p className="text-sm text-[#85A947]">
+                    <p className="text-sm text-dash-accent">
                       {field.value
                         ? "Ticket is available for purchase"
                         : "Ticket sales are paused"}
@@ -306,18 +306,18 @@ export function EditTicketDialog({
                 name="saleStartDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Sale Start Date
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="datetime-local"
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         value={field.value || ""}
                         onChange={field.onChange}
                       />
                     </FormControl>
-                    <p className="text-xs text-[#85A947]">
+                    <p className="text-xs text-dash-accent">
                       When sales begin
                     </p>
                     <FormMessage />
@@ -330,18 +330,18 @@ export function EditTicketDialog({
                 name="saleEndDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-[#123524]">
+                    <FormLabel className="text-dash-ink">
                       Sale End Date
                     </FormLabel>
                     <FormControl>
                       <Input
                         type="datetime-local"
-                        className="border-[#85A947]/20 focus:border-[#3E7B27]"
+                        className="border-dash-border focus:border-dash-accent-strong"
                         value={field.value || ""}
                         onChange={field.onChange}
                       />
                     </FormControl>
-                    <p className="text-xs text-[#85A947]">When sales end</p>
+                    <p className="text-xs text-dash-accent">When sales end</p>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -354,14 +354,14 @@ export function EditTicketDialog({
                 variant="outline"
                 onClick={() => setOpen(false)}
                 disabled={isSubmitting}
-                className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+                className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="bg-[#85A947] hover:bg-[#3E7B27] text-white"
+                className="bg-dash-accent hover:bg-dash-accent-strong text-white"
               >
                 {isSubmitting ? "Updating..." : "Update Ticket Type"}
               </Button>

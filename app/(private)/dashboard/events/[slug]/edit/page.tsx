@@ -23,7 +23,7 @@ export default async function EditEventPage({ params }: EditEventPageProps) {
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <Button variant="ghost" size="sm" className="text-[#3E7B27] w-fit" asChild>
+        <Button variant="ghost" size="sm" className="text-dash-muted w-fit" asChild>
           <Link href={`/dashboard/events/${event.slug}`}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to event
@@ -32,8 +32,8 @@ export default async function EditEventPage({ params }: EditEventPageProps) {
       </div>
 
       <div>
-        <h1 className="text-3xl font-bold text-[#123524]">Edit event</h1>
-        <p className="text-[#3E7B27] mt-1">
+        <h1 className="text-3xl font-bold text-dash-ink">Edit event</h1>
+        <p className="text-dash-muted mt-1">
           Update details, schedule, and images. Manage ticket types from the
           event page.
         </p>

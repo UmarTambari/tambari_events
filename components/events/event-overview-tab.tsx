@@ -52,24 +52,24 @@ export function EventOverviewTab({ event }: EventOverviewTabProps) {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Event Details Card */}
-      <Card className="bg-white border-[#85A947]/20">
+      <Card className="bg-white border-dash-border">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Event Details
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-start gap-3">
-            <div className="h-10 w-10 rounded-full bg-[#EFE3C2] flex items-center justify-center shrink-0">
-              <Calendar className="h-5 w-5 text-[#3E7B27]" />
+            <div className="h-10 w-10 rounded-full bg-dash-highlight flex items-center justify-center shrink-0">
+              <Calendar className="h-5 w-5 text-dash-muted" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#123524]">Date & Time</p>
-              <p className="text-sm text-[#3E7B27] mt-1">
+              <p className="text-sm font-medium text-dash-ink">Date & Time</p>
+              <p className="text-sm text-dash-muted mt-1">
                 {formatDateTime(eventDate)}
               </p>
               {eventEndDate && (
-                <p className="text-sm text-[#3E7B27]">
+                <p className="text-sm text-dash-muted">
                   to {formatDateTime(eventEndDate)}
                 </p>
               )}
@@ -77,35 +77,35 @@ export function EventOverviewTab({ event }: EventOverviewTabProps) {
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="h-10 w-10 rounded-full bg-[#EFE3C2] flex items-center justify-center shrink-0">
-              <Clock className="h-5 w-5 text-[#3E7B27]" />
+            <div className="h-10 w-10 rounded-full bg-dash-highlight flex items-center justify-center shrink-0">
+              <Clock className="h-5 w-5 text-dash-muted" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#123524]">Duration</p>
-              <p className="text-sm text-[#3E7B27] mt-1">
+              <p className="text-sm font-medium text-dash-ink">Duration</p>
+              <p className="text-sm text-dash-muted mt-1">
                 {getEventDuration()}
               </p>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="h-10 w-10 rounded-full bg-[#EFE3C2] flex items-center justify-center shrink-0">
-              <MapPin className="h-5 w-5 text-[#3E7B27]" />
+            <div className="h-10 w-10 rounded-full bg-dash-highlight flex items-center justify-center shrink-0">
+              <MapPin className="h-5 w-5 text-dash-muted" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#123524]">Location</p>
-              <p className="text-sm text-[#3E7B27] mt-1">{event.venue}</p>
-              <p className="text-sm text-[#85A947]">{event.location}</p>
+              <p className="text-sm font-medium text-dash-ink">Location</p>
+              <p className="text-sm text-dash-muted mt-1">{event.venue}</p>
+              <p className="text-sm text-dash-accent">{event.location}</p>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <div className="h-10 w-10 rounded-full bg-[#EFE3C2] flex items-center justify-center shrink-0">
-              <Users className="h-5 w-5 text-[#3E7B27]" />
+            <div className="h-10 w-10 rounded-full bg-dash-highlight flex items-center justify-center shrink-0">
+              <Users className="h-5 w-5 text-dash-muted" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#123524]">Capacity</p>
-              <p className="text-sm text-[#3E7B27] mt-1">
+              <p className="text-sm font-medium text-dash-ink">Capacity</p>
+              <p className="text-sm text-dash-muted mt-1">
                 {event.totalCapacity
                   ? `${event.totalCapacity} attendees`
                   : "Unlimited"}
@@ -115,12 +115,12 @@ export function EventOverviewTab({ event }: EventOverviewTabProps) {
 
           {event.category && (
             <div className="flex items-start gap-3">
-              <div className="h-10 w-10 rounded-full bg-[#EFE3C2] flex items-center justify-center shrink-0">
-                <Tag className="h-5 w-5 text-[#3E7B27]" />
+              <div className="h-10 w-10 rounded-full bg-dash-highlight flex items-center justify-center shrink-0">
+                <Tag className="h-5 w-5 text-dash-muted" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-[#123524]">Category</p>
-                <p className="text-sm text-[#3E7B27] mt-1">{event.category}</p>
+                <p className="text-sm font-medium text-dash-ink">Category</p>
+                <p className="text-sm text-dash-muted mt-1">{event.category}</p>
               </div>
             </div>
           )}
@@ -128,31 +128,31 @@ export function EventOverviewTab({ event }: EventOverviewTabProps) {
       </Card>
 
       {/* Description Card */}
-      <Card className="bg-white border-[#85A947]/20">
+      <Card className="bg-white border-dash-border">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Description
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-[#3E7B27] leading-relaxed whitespace-pre-wrap">
+          <p className="text-dash-muted leading-relaxed whitespace-pre-wrap">
             {event.description}
           </p>
         </CardContent>
       </Card>
 
       {/* Metadata Card */}
-      <Card className="bg-white border-[#85A947]/20 lg:col-span-2">
+      <Card className="bg-white border-dash-border lg:col-span-2">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Event Metadata
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <p className="text-sm font-medium text-[#123524]">Created</p>
-              <p className="text-sm text-[#3E7B27] mt-1">
+              <p className="text-sm font-medium text-dash-ink">Created</p>
+              <p className="text-sm text-dash-muted mt-1">
                 {createdAt.toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",
@@ -163,8 +163,8 @@ export function EventOverviewTab({ event }: EventOverviewTabProps) {
               </p>
             </div>
             <div>
-              <p className="text-sm font-medium text-[#123524]">Last Updated</p>
-              <p className="text-sm text-[#3E7B27] mt-1">
+              <p className="text-sm font-medium text-dash-ink">Last Updated</p>
+              <p className="text-sm text-dash-muted mt-1">
                 {updatedAt.toLocaleDateString("en-US", {
                   month: "long",
                   day: "numeric",

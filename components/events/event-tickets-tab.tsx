@@ -78,7 +78,7 @@ export function EventTicketsTab({ eventId }: EventTicketsTabProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#85A947]"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent"></div>
       </div>
     );
   }
@@ -87,7 +87,7 @@ export function EventTicketsTab({ eventId }: EventTicketsTabProps) {
     return (
       <div className="text-center py-12">
         <p className="text-red-600 mb-2">Error loading tickets</p>
-        <p className="text-sm text-[#85A947]">{error}</p>
+        <p className="text-sm text-dash-accent">{error}</p>
       </div>
     );
   }
@@ -108,22 +108,22 @@ export function EventTicketsTab({ eventId }: EventTicketsTabProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardContent className="p-4">
-            <p className="text-sm text-[#3E7B27]">Total Ticket Types</p>
-            <p className="text-2xl font-bold text-[#123524] mt-1">
+            <p className="text-sm text-dash-muted">Total Ticket Types</p>
+            <p className="text-2xl font-bold text-dash-ink mt-1">
               {ticketTypes.length}
             </p>
-            <p className="text-xs text-[#85A947] mt-1">
+            <p className="text-xs text-dash-accent mt-1">
               {ticketTypes.filter((t) => t.isActive).length} active
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardContent className="p-4">
-            <p className="text-sm text-[#3E7B27]">Tickets Sold</p>
-            <p className="text-2xl font-bold text-[#123524] mt-1">
+            <p className="text-sm text-dash-muted">Tickets Sold</p>
+            <p className="text-2xl font-bold text-dash-ink mt-1">
               {totalSold} / {totalQuantity}
             </p>
             <Progress
@@ -133,20 +133,20 @@ export function EventTicketsTab({ eventId }: EventTicketsTabProps) {
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardContent className="p-4">
-            <p className="text-sm text-[#3E7B27]">Total Revenue</p>
-            <p className="text-2xl font-bold text-[#123524] mt-1">
+            <p className="text-sm text-dash-muted">Total Revenue</p>
+            <p className="text-2xl font-bold text-dash-ink mt-1">
               ₦{(totalRevenue / 100).toLocaleString()}
             </p>
-            <p className="text-xs text-[#85A947] mt-1">From ticket sales</p>
+            <p className="text-xs text-dash-accent mt-1">From ticket sales</p>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="bg-white border-[#85A947]/20">
+      <Card className="bg-white border-dash-border">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             Ticket Types
           </CardTitle>
           <AddTicketDialog eventId={eventId} onSuccess={refetchTickets} />
@@ -154,33 +154,33 @@ export function EventTicketsTab({ eventId }: EventTicketsTabProps) {
         <CardContent>
           {ticketTypes.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-[#85A947] mb-2">No ticket types created yet</p>
-              <p className="text-sm text-[#3E7B27] mb-4">
+              <p className="text-dash-accent mb-2">No ticket types created yet</p>
+              <p className="text-sm text-dash-muted mb-4">
                 Create ticket types to start selling tickets
               </p>
               <AddTicketDialog eventId={eventId} onSuccess={refetchTickets} />
             </div>
           ) : (
-            <div className="rounded-md border border-[#85A947]/20 overflow-hidden">
+            <div className="rounded-md border border-dash-border overflow-hidden">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-[#EFE3C2] hover:bg-[#EFE3C2]">
-                    <TableHead className="text-[#123524] font-semibold">
+                  <TableRow className="bg-dash-highlight hover:bg-dash-highlight">
+                    <TableHead className="text-dash-ink font-semibold">
                       Name
                     </TableHead>
-                    <TableHead className="text-[#123524] font-semibold">
+                    <TableHead className="text-dash-ink font-semibold">
                       Price
                     </TableHead>
-                    <TableHead className="text-[#123524] font-semibold">
+                    <TableHead className="text-dash-ink font-semibold">
                       Sold / Total
                     </TableHead>
-                    <TableHead className="text-[#123524] font-semibold">
+                    <TableHead className="text-dash-ink font-semibold">
                       Status
                     </TableHead>
-                    <TableHead className="text-[#123524] font-semibold">
+                    <TableHead className="text-dash-ink font-semibold">
                       Sale Period
                     </TableHead>
-                    <TableHead className="text-[#123524] font-semibold text-right">
+                    <TableHead className="text-dash-ink font-semibold text-right">
                       Actions
                     </TableHead>
                   </TableRow>
@@ -196,24 +196,24 @@ export function EventTicketsTab({ eventId }: EventTicketsTabProps) {
                       <TableRow key={ticket.id}>
                         <TableCell>
                           <div>
-                            <p className="font-medium text-[#123524]">
+                            <p className="font-medium text-dash-ink">
                               {ticket.name}
                             </p>
                             {ticket.description && (
-                              <p className="text-sm text-[#85A947] line-clamp-1">
+                              <p className="text-sm text-dash-accent line-clamp-1">
                                 {ticket.description}
                               </p>
                             )}
                           </div>
                         </TableCell>
                         <TableCell>
-                          <span className="font-semibold text-[#123524]">
+                          <span className="font-semibold text-dash-ink">
                             ₦{(ticket.price / 100).toLocaleString()}
                           </span>
                         </TableCell>
                         <TableCell>
                           <div className="space-y-1">
-                            <p className="text-sm text-[#123524]">
+                            <p className="text-sm text-dash-ink">
                               {ticket.quantitySold} / {ticket.quantity}
                             </p>
                             <Progress
@@ -242,7 +242,7 @@ export function EventTicketsTab({ eventId }: EventTicketsTabProps) {
                           )}
                         </TableCell>
                         <TableCell>
-                          <div className="text-sm text-[#3E7B27]">
+                          <div className="text-sm text-dash-muted">
                             {ticket.saleStartDate && ticket.saleEndDate ? (
                               <>
                                 <p>
@@ -253,7 +253,7 @@ export function EventTicketsTab({ eventId }: EventTicketsTabProps) {
                                     day: "numeric",
                                   })}
                                 </p>
-                                <p className="text-[#85A947]">
+                                <p className="text-dash-accent">
                                   to{" "}
                                   {new Date(
                                     ticket.saleEndDate
@@ -273,7 +273,7 @@ export function EventTicketsTab({ eventId }: EventTicketsTabProps) {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8 text-[#3E7B27]"
+                              className="h-8 w-8 text-dash-muted"
                             >
                               {ticket.isActive ? (
                                 <ToggleRight className="h-4 w-4" />

@@ -11,9 +11,7 @@ import {
 }                           from "@/lib/queries/dashboard.queries";
 import { getCurrentUserId } from "@/lib/auth";
 
-async function getDashboardData() {
-  const organizerId = await getCurrentUserId();
-
+async function getDashboardData(organizerId: string) {
   const [stats, revenueGrowth, ordersGrowth] = await Promise.all([
     getDashboardStats(organizerId),
     getRevenueGrowth(organizerId),
@@ -28,13 +26,14 @@ async function getDashboardData() {
 }
 
 export default async function DashboardPage() {
-  const stats = await getDashboardData();
+  const organizerId = await getCurrentUserId();
+  const stats = await getDashboardData(organizerId);
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-[#123524]">Dashboard</h1>
-        <p className="text-[#3E7B27] mt-1">
+        <h1 className="text-3xl font-bold text-dash-ink">Dashboard</h1>
+        <p className="text-dash-muted mt-1">
           Welcome back! Here&apos;s what&apos;s happening with your events.
         </p>
       </div>
@@ -88,7 +87,7 @@ export default async function DashboardPage() {
             <div className="h-[350px] bg-white rounded-lg animate-pulse" />
           }
         >
-          <UpcomingEvents />
+          <UpcomingEvents organizerId={organizerId} />
         </Suspense>
       </div>
 
@@ -97,7 +96,7 @@ export default async function DashboardPage() {
           <div className="h-[400px] bg-white rounded-lg animate-pulse" />
         }
       >
-        <RecentOrders />
+        <RecentOrders organizerId={organizerId} />
       </Suspense>
     </div>
   );

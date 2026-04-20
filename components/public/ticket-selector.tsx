@@ -9,6 +9,8 @@ import { TicketType } from "@/lib/types/ticketTypes.type";
 
 interface TicketSelectorProps {
   eventId: string;
+  /** Public URL segment for this event (`/events/[slug]`), not the UUID. */
+  eventSlug: string;
   tickets: TicketType[];
 }
 
@@ -19,7 +21,7 @@ interface SelectedTicket {
   price: number;
 }
 
-export function TicketSelector({ eventId, tickets }: TicketSelectorProps) {
+export function TicketSelector({ eventId, eventSlug, tickets }: TicketSelectorProps) {
   const router = useRouter();
   const [isSignedIn, setIsSignedIn] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -126,7 +128,7 @@ export function TicketSelector({ eventId, tickets }: TicketSelectorProps) {
 
     if (!isSignedIn) {
       toast.error("Please sign in to continue");
-      router.push(`/login?redirect=/events/${eventId}`);
+      router.push(`/sign-in?redirect=/events/${encodeURIComponent(eventSlug)}`);
       return;
     }
 

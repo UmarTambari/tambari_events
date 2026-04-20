@@ -88,7 +88,7 @@ export function EventOrdersTab({ eventId }: EventOrdersTabProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#85A947]"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-dash-accent"></div>
       </div>
     );
   }
@@ -102,50 +102,50 @@ export function EventOrdersTab({ eventId }: EventOrdersTabProps) {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardContent className="p-4">
-            <p className="text-sm text-[#3E7B27]">Total Orders</p>
-            <p className="text-2xl font-bold text-[#123524] mt-1">
+            <p className="text-sm text-dash-muted">Total Orders</p>
+            <p className="text-2xl font-bold text-dash-ink mt-1">
               {totalOrders}
             </p>
-            <p className="text-xs text-[#85A947] mt-1">
+            <p className="text-xs text-dash-accent mt-1">
               {paidOrders} completed
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardContent className="p-4">
-            <p className="text-sm text-[#3E7B27]">Total Revenue</p>
-            <p className="text-2xl font-bold text-[#123524] mt-1">
+            <p className="text-sm text-dash-muted">Total Revenue</p>
+            <p className="text-2xl font-bold text-dash-ink mt-1">
               ₦{(totalRevenue / 100).toLocaleString()}
             </p>
-            <p className="text-xs text-[#85A947] mt-1">From paid orders</p>
+            <p className="text-xs text-dash-accent mt-1">From paid orders</p>
           </CardContent>
         </Card>
 
-        <Card className="bg-white border-[#85A947]/20">
+        <Card className="bg-white border-dash-border">
           <CardContent className="p-4">
-            <p className="text-sm text-[#3E7B27]">Average Order Value</p>
-            <p className="text-2xl font-bold text-[#123524] mt-1">
+            <p className="text-sm text-dash-muted">Average Order Value</p>
+            <p className="text-2xl font-bold text-dash-ink mt-1">
               ₦
               {paidOrders > 0
                 ? (totalRevenue / paidOrders / 100).toFixed(0)
                 : 0}
             </p>
-            <p className="text-xs text-[#85A947] mt-1">Per completed order</p>
+            <p className="text-xs text-dash-accent mt-1">Per completed order</p>
           </CardContent>
         </Card>
       </div>
 
-      <Card className="bg-white border-[#85A947]/20">
+      <Card className="bg-white border-dash-border">
         <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-lg font-semibold text-[#123524]">
+          <CardTitle className="text-lg font-semibold text-dash-ink">
             All Orders
           </CardTitle>
           <Button
             variant="outline"
-            className="border-[#85A947] text-[#3E7B27] hover:bg-[#EFE3C2]"
+            className="border-dash-accent text-dash-muted hover:bg-dash-highlight"
           >
             <Download className="mr-2 h-4 w-4" />
             Export Orders
@@ -154,32 +154,32 @@ export function EventOrdersTab({ eventId }: EventOrdersTabProps) {
         <CardContent>
           {orders.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-[#85A947]">No orders yet</p>
-              <p className="text-sm text-[#3E7B27] mt-1">
+              <p className="text-dash-accent">No orders yet</p>
+              <p className="text-sm text-dash-muted mt-1">
                 Orders will appear here once customers purchase tickets
               </p>
             </div>
           ) : (
-            <div className="rounded-md border border-[#85A947]/20 overflow-hidden">
+            <div className="rounded-md border border-dash-border overflow-hidden">
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-[#EFE3C2] hover:bg-[#EFE3C2]">
-                    <TableHead className="text-[#123524] font-semibold">
+                  <TableRow className="bg-dash-highlight hover:bg-dash-highlight">
+                    <TableHead className="text-dash-ink font-semibold">
                       Order #
                     </TableHead>
-                    <TableHead className="text-[#123524] font-semibold">
+                    <TableHead className="text-dash-ink font-semibold">
                       Customer
                     </TableHead>
-                    <TableHead className="text-[#123524] font-semibold">
+                    <TableHead className="text-dash-ink font-semibold">
                       Amount
                     </TableHead>
-                    <TableHead className="text-[#123524] font-semibold">
+                    <TableHead className="text-dash-ink font-semibold">
                       Status
                     </TableHead>
-                    <TableHead className="text-[#123524] font-semibold">
+                    <TableHead className="text-dash-ink font-semibold">
                       Date
                     </TableHead>
-                    <TableHead className="text-[#123524] font-semibold text-right">
+                    <TableHead className="text-dash-ink font-semibold text-right">
                       Actions
                     </TableHead>
                   </TableRow>
@@ -188,22 +188,22 @@ export function EventOrdersTab({ eventId }: EventOrdersTabProps) {
                   {orders.map((order) => (
                     <TableRow key={order.id}>
                       <TableCell>
-                        <span className="font-mono text-sm text-[#123524]">
+                        <span className="font-mono text-sm text-dash-ink">
                           {order.orderNumber}
                         </span>
                       </TableCell>
                       <TableCell>
                         <div>
-                          <p className="font-medium text-[#123524]">
+                          <p className="font-medium text-dash-ink">
                             {order.customerName}
                           </p>
-                          <p className="text-sm text-[#85A947]">
+                          <p className="text-sm text-dash-accent">
                             {order.customerEmail}
                           </p>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <span className="font-semibold text-[#123524]">
+                        <span className="font-semibold text-dash-ink">
                           ₦{(order.totalAmount / 100).toLocaleString()}
                         </span>
                       </TableCell>
@@ -218,7 +218,7 @@ export function EventOrdersTab({ eventId }: EventOrdersTabProps) {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <div className="text-sm text-[#3E7B27]">
+                        <div className="text-sm text-dash-muted">
                           <p>
                             {new Date(order.createdAt).toLocaleDateString(
                               "en-US",
@@ -228,7 +228,7 @@ export function EventOrdersTab({ eventId }: EventOrdersTabProps) {
                               }
                             )}
                           </p>
-                          <p className="text-[#85A947]">
+                          <p className="text-dash-accent">
                             {new Date(order.createdAt).toLocaleTimeString(
                               "en-US",
                               {
@@ -245,7 +245,7 @@ export function EventOrdersTab({ eventId }: EventOrdersTabProps) {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="h-8 w-8 text-[#3E7B27]"
+                              className="h-8 w-8 text-dash-muted"
                             >
                               <ExternalLink className="h-4 w-4" />
                             </Button>

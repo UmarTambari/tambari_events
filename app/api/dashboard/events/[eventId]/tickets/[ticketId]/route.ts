@@ -4,7 +4,7 @@ import {
   updateTicketType,
   deleteTicketType,
 } from "@/lib/queries/ticketTypes.queries";
-import { getEventById } from "@/lib/queries/events.queries";
+import { getEventById }           from "@/lib/queries/events.queries";
 import { updateTicketTypeSchema } from "@/lib/types/ticketTypes.type";
 import { getCurrentUserIdOrNull } from "@/lib/auth";
 import { validatePrice, validateQuantity } from "@/lib/validations";

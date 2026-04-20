@@ -29,7 +29,7 @@ export default async function MyTicketsPage() {
 
   const user = await getUserByAuthId(supabaseUser.id);
   if (!user) {
-    redirect("/sign-in");
+    redirect("/sign-in?redirect=/my-tickets");
   }
 
   // Get user's orders
