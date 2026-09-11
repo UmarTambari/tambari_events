@@ -4,7 +4,8 @@ import {
   checkInAttendee,
 } from "@/lib/queries/attendee.queries";
 import { getCurrentUserIdOrNull } from "@/lib/auth";
-import { getEventById }           from "@/lib/queries/events.queries";
+import { getEventById } from "@/lib/queries/events.queries";
+import { getOrderById } from "@/lib/queries/order.queries";
 
 // POST /api/checkin - Check in an attendee
 export async function POST(request: NextRequest) {
@@ -51,6 +52,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Make sure the ticket belongs to a successfully paid order.
+    const order = await getOrderById(attendee.orderId);
+
+    if (!order || order.status !== "paid") {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "This ticket is not valid because payment has not been completed",
+        },
+        { status: 400 }
+      );
+    }
+
     if (attendee.isCheckedIn) {
       return NextResponse.json(
         {
@@ -66,6 +81,7 @@ export async function POST(request: NextRequest) {
 
     // Verify organizer owns this event
     const event = await getEventById(attendee.eventId);
+
     if (!event || event.organizerId !== organizerId) {
       return NextResponse.json(
         { success: false, error: "Forbidden" },
@@ -74,7 +90,10 @@ export async function POST(request: NextRequest) {
     }
 
     // Check in attendee
-    const checkedInAttendee = await checkInAttendee(attendee.id, organizerId);
+    const checkedInAttendee = await checkInAttendee(
+      attendee.id,
+      organizerId
+    );
 
     return NextResponse.json({
       success: true,
@@ -83,6 +102,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error checking in attendee:", error);
+
     return NextResponse.json(
       {
         success: false,

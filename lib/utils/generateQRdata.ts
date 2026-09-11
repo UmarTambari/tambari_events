@@ -1,7 +1,7 @@
 /**
  * Generates the data payload that gets encoded into the QR code.
  *
- * We store this string in attendees.qrCodeUrl (used as qrCodeData).
+ * We store this string in attendees.qrCodeData (used as qrCodeData).
  * The frontend renders it as a QR image using react-qr-code.
  * The download API generates a PNG from it server-side using the qrcode package.
  *

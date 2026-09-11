@@ -4,7 +4,7 @@ import QRCode from "react-qr-code";
 import { DASH_INK_HEX } from "@/lib/dash-palette";
 
 interface TicketQRCodeProps {
-  /** The raw QR data string stored in attendees.qrCodeUrl */
+  /** The raw QR data string stored in attendees.qrCodeData */
   value: string;
   /** Size in pixels — defaults to 120 */
   size?: number;

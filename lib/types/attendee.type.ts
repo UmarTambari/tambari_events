@@ -28,7 +28,7 @@ export const attendeeSchema = z.object({
   isRevoked: z.boolean().default(false),
   revokedAt: z.date().optional().nullable(),
   revokedReason: z.string().optional().nullable(),
-  qrCodeUrl: z.url().optional().nullable(),
+  qrCodeData: z.url().optional().nullable(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

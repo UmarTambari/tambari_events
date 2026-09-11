@@ -50,7 +50,7 @@ export const attendees = pgTable("attendees", {
   revokedReason: text("revoked_reason"),
   
   // QR code URL (for easy check-in)
-  qrCodeUrl: text("qr_code_url"),
+  qrCodeData: text("qr_code_data"),
   
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

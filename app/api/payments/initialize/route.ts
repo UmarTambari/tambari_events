@@ -8,9 +8,10 @@ import {
 } from "@/lib/queries/order.queries";
 import { getUserByAuthId } from "@/lib/queries/users.queries";
 import { createTransaction } from "@/lib/queries/transactions.queries";
-import { createAttendee, updateAttendeeQRCode } from "@/lib/queries/attendee.queries";
-import { incrementTicketSold } from "@/lib/queries/ticketTypes.queries";
-import { generateQRData } from "@/lib/utils/generateQRdata";
+import { createAttendee } from "@/lib/queries/attendee.queries";
+import { 
+  generateTransactionReference, 
+  generateTicketCode } from "@/lib/utils/generateReference";
 
 const attendeeSchema = z.object({
   firstName: z.string().min(2),
@@ -23,15 +24,6 @@ const initializePaymentSchema = z.object({
   orderId: z.uuid(),
   attendees: z.array(attendeeSchema),
 });
-
-function generateTicketCode(): string {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let code = "TKT-";
-  for (let i = 0; i < 10; i++) {
-    code += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return code;
-}
 
 export async function POST(request: NextRequest) {
   try {
@@ -84,10 +76,7 @@ export async function POST(request: NextRequest) {
 
     await updateOrderStatus(orderId, "processing");
 
-    const reference = `TXN-${Date.now()}-${Math.random()
-      .toString(36)
-      .substring(2, 10)
-      .toUpperCase()}`;
+    const reference = generateTransactionReference();
 
     const paystackResponse = await fetch(
       "https://api.paystack.co/transaction/initialize",
@@ -132,43 +121,31 @@ export async function POST(request: NextRequest) {
       authorizationUrl: paystackData.data.authorization_url,
     });
 
-    // Create attendee records and generate QR data for each
-    let attendeeIndex = 0;
-    for (const item of order.items) {
-      for (let i = 0; i < item.quantity; i++) {
-        const attendeeInput = attendees[attendeeIndex];
-        const ticketCode = generateTicketCode();
+    // Create attendee records.
+// QR codes and ticket inventory will only be processed after
+// successful payment confirmation.
+let attendeeIndex = 0;
 
-        // Step 1: Create the attendee to get the generated UUID
-        const newAttendee = await createAttendee({
-          orderId: order.id,
-          orderItemId: item.id,
-          eventId: order.eventId,
-          ticketTypeId: item.ticketTypeId,
-          ticketCode,
-          firstName: attendeeInput.firstName,
-          lastName: attendeeInput.lastName,
-          email: attendeeInput.email,
-          phoneNumber: attendeeInput.phoneNumber,
-        });
+for (const item of order.items) {
+  for (let i = 0; i < item.quantity; i++) {
+    const attendeeInput = attendees[attendeeIndex];
+    const ticketCode = generateTicketCode();
 
-        // Step 2: Generate QR data now that we have the attendee ID
-        // This data string is what gets encoded into the QR code image on the frontend
-        const qrData = generateQRData({
-          ticketCode,
-          attendeeId: newAttendee.id,
-          eventId: order.eventId,
-        });
+    await createAttendee({
+      orderId: order.id,
+      orderItemId: item.id,
+      eventId: order.eventId,
+      ticketTypeId: item.ticketTypeId,
+      ticketCode,
+      firstName: attendeeInput.firstName,
+      lastName: attendeeInput.lastName,
+      email: attendeeInput.email,
+      phoneNumber: attendeeInput.phoneNumber,
+    });
 
-        // Step 3: Store the QR data string back on the attendee record
-        await updateAttendeeQRCode(newAttendee.id, qrData);
-
-        attendeeIndex++;
-      }
-
-      await incrementTicketSold(item.ticketTypeId, item.quantity);
-    }
-
+    attendeeIndex++;
+  }
+}
     return NextResponse.json({
       success: true,
       reference,

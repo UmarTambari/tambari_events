@@ -4,7 +4,7 @@ import { generateTransactionReference } from "@/lib/utils/generateReference";
 
 export async function GET() {
   try {
-w    const reference = generateTransactionReference();
+    const reference = generateTransactionReference();
     const result = await initializePayment({
       email: "test@example.com",
       amount: nairaToKobo(1000), // ₦1,000
@@ -19,6 +19,7 @@ w    const reference = generateTransactionReference();
         authorization_url: result.data.authorization_url,
       },
     });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     return NextResponse.json(
       {

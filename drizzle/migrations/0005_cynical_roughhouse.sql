@@ -1,0 +1,1 @@
+ALTER TABLE "attendees" RENAME COLUMN "qr_code_url" TO "qr_code_data";

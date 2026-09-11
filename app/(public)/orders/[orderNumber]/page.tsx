@@ -289,9 +289,9 @@ export default async function OrderConfirmationPage({
                     </div>
 
                     {/* QR Code — rendered from the stored data string */}
-                    {attendee.qrCodeUrl && (
+                    {attendee.qrCodeData && (
                       <div className="ml-4 flex flex-col items-center gap-1">
-                        <TicketQRCode value={attendee.qrCodeUrl} size={100} />
+                        <TicketQRCode value={attendee.qrCodeData} size={100} />
                         <p className="text-xs text-gray-400">
                           Scan at entrance
                         </p>

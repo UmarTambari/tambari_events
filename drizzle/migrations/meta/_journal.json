@@ -29,6 +29,20 @@
       "when": 1776613280438,
       "tag": "0003_slow_lethal_legion",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1776686499518,
+      "tag": "0004_glamorous_dragon_man",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1776689369690,
+      "tag": "0005_cynical_roughhouse",
+      "breakpoints": true
     }
   ]
 }

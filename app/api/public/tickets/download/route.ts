@@ -269,10 +269,10 @@ export async function GET(request: NextRequest) {
       }
 
       // ── QR Code ──────────────────────────────────────────────────────────────
-      if (attendee.qrCodeUrl) {
+      if (attendee.qrCodeData) {
         try {
           // Generate a PNG buffer server-side from the stored QR data string
-          const qrPngBuffer = await QRCode.toBuffer(attendee.qrCodeUrl, {
+          const qrPngBuffer = await QRCode.toBuffer(attendee.qrCodeData, {
             type: "png",
             width: QR_SIZE * 2, // 2x for retina clarity in PDF
             margin: 1,

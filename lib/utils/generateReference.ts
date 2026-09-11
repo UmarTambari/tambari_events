@@ -1,18 +1,17 @@
+import { nanoid } from "nanoid";
+
 export function generateTransactionReference(): string {
   const date = new Date();
   const dateStr = date.toISOString().split("T")[0].replace(/-/g, "");
-  const random = Math.random().toString(36).substring(2, 15);
-  return `TXN_${dateStr}_${random}`;
+  return `TXN_${dateStr}_${nanoid(12)}`;
 }
 
 export function generateOrderNumber(): string {
   const date = new Date();
   const dateStr = date.toISOString().split("T")[0].replace(/-/g, "");
-  const random = Math.random().toString(36).substring(2, 15);
-  return `ORD_${dateStr}_${random}`;
+  return `ORD_${dateStr}_${nanoid(12)}`;
 }
 
 export function generateTicketCode(): string {
-  const random = Math.random().toString(36).substring(2, 15).toUpperCase();
-  return `TKT_${random}`;
+  return `TKT_${nanoid(12).toUpperCase()}`;
 }

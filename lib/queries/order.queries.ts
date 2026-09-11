@@ -67,7 +67,7 @@ export async function getOrderWithDetails(orderId: string) {
       isCheckedIn: attendees.isCheckedIn,
       checkedInAt: attendees.checkedInAt,
       ticketTypeName: ticketTypes.name,
-      qrCodeUrl: attendees.qrCodeUrl,               // ← Added for public page
+      qrCodeData: attendees.qrCodeData,               // ← Added for public page
     })
     .from(attendees)
     .innerJoin(ticketTypes, eq(attendees.ticketTypeId, ticketTypes.id))

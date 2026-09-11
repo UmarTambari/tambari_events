@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, and } from "drizzle-orm";
 import { ticketTypes } from "@/lib/db/schema";
 
 export async function sumQuantitySoldForEvent(eventId: string) {
@@ -78,8 +78,18 @@ export async function incrementTicketSold(
       quantitySold: sql`${ticketTypes.quantitySold} + ${quantity}`,
       updatedAt: new Date(),
     })
-    .where(eq(ticketTypes.id, ticketTypeId))
+    .where(
+      and(
+        eq(ticketTypes.id, ticketTypeId),
+        sql`${ticketTypes.quantitySold} + ${quantity} <= ${ticketTypes.quantity}`
+      )
+    )
     .returning();
+
+  if (!ticket) {
+    throw new Error("Not enough tickets available");
+  }
+
   return ticket;
 }
 
