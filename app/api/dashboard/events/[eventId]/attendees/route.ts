@@ -4,14 +4,14 @@ import { getCurrentUserIdOrNull } from "@/lib/auth";
 import { getAttendeesByEvent }    from "@/lib/queries/attendee.queries";
 
 interface RouteContext {
-  params: {
-    slug: string;
-  };
+  params: Promise<{
+    eventId: string;
+  }>;
 }
 
 export async function GET(request: NextRequest, context: RouteContext) {
   try {
-    const { slug } = context.params;
+    const { eventId } = await context.params;
     const organizerId = await getCurrentUserIdOrNull();
 
     if (!organizerId) {
@@ -21,7 +21,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
       );
     }
 
-    const event = await getEventBySlug(slug);
+    const event = await getEventBySlug(eventId);
 
     if (!event) {
       return NextResponse.json(

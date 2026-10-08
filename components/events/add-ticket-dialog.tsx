@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
-import { z } from "zod";
 
 import {
   Dialog,
@@ -28,23 +27,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import {
   addTicketFormSchema,
-  AddTicketFormData,
   transformTicketFormToAPI,
-  transformTicketAPIToForm,
 } from "@/lib/types/ticketTypesForm";
-import { TicketType } from "@/lib/types/ticketTypes.type";
+import z from "zod";
 
-type AddTicketFormValues = z.infer<typeof addTicketFormSchema>;
+type AddTicketFormValues = z.input<typeof addTicketFormSchema>;
 
 interface AddTicketDialogProps {
   eventId: string;
-  ticket: TicketType;
   onSuccess: () => void;
 }
 
 export function AddTicketDialog({
   eventId,
-  ticket,
   onSuccess,
 }: AddTicketDialogProps) {
   const [open, setOpen] = useState(false);
@@ -52,16 +47,29 @@ export function AddTicketDialog({
 
   const form = useForm<AddTicketFormValues>({
     resolver: zodResolver(addTicketFormSchema),
-    defaultValues: transformTicketAPIToForm(ticket),
+    defaultValues: {
+      name: "",
+      description: "",
+      price: "",
+      quantity: "",
+      minPurchase: "1",
+      maxPurchase: "10",
+      saleStartDate: "",
+      saleEndDate: "",
+    },
   });
 
-  const onSubmit = async (data: AddTicketFormData) => {
+  const onSubmit = async (data: AddTicketFormValues) => {
     setIsSubmitting(true);
 
     try {
       const apiPayload = {
-        ...transformTicketFormToAPI(data),
-        isActive: true, // New tickets are active by default
+        ...transformTicketFormToAPI({
+          ...data,
+          minPurchase: data.minPurchase ?? "1",
+          maxPurchase: data.maxPurchase ?? "10",
+        }),
+        isActive: true,
       };
 
       const response = await fetch(`/api/dashboard/events/${eventId}/tickets`, {
@@ -83,7 +91,7 @@ export function AddTicketDialog({
     } catch (error) {
       console.error("Error creating ticket:", error);
       toast.error(
-        error instanceof Error ? error.message : "Failed to create ticket"
+        error instanceof Error ? error.message : "Failed to create ticket",
       );
     } finally {
       setIsSubmitting(false);
@@ -193,7 +201,9 @@ export function AddTicketDialog({
                         {...field}
                       />
                     </FormControl>
-                    <p className="text-xs text-dash-accent">Available tickets</p>
+                    <p className="text-xs text-dash-accent">
+                      Available tickets
+                    </p>
                     <FormMessage />
                   </FormItem>
                 )}

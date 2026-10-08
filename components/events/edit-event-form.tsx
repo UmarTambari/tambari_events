@@ -66,6 +66,8 @@ export function EditEventForm({ event }: EditEventFormProps) {
   const { isSubmitting } = formState;
 
   const onSubmit = async (data: EditEventFormValues) => {
+    const eventEndDateValue = data.eventEndDate?.trim();
+
     const payload = {
       title: data.title.trim(),
       description: data.description.trim(),
@@ -75,8 +77,8 @@ export function EditEventForm({ event }: EditEventFormProps) {
       tags: data.tags?.length ? data.tags : [],
       eventDate: new Date(data.eventDate).toISOString(),
       eventEndDate:
-        data.eventEndDate?.trim() !== ""
-          ? new Date(data.eventEndDate).toISOString()
+        eventEndDateValue && eventEndDateValue !== ""
+          ? new Date(eventEndDateValue).toISOString()
           : null,
       totalCapacity:
         data.totalCapacity !== undefined &&

@@ -23,10 +23,8 @@ interface EventPageProps {
     slug: string;
   }>;
 }
-export async function generateStaticParams() {
-  const events: Event[] = await getPublishedEvents({});
-  return events.map((event) => ({ slug: event.slug }));
-}
+
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: EventPageProps) {
   const { slug } = await params;

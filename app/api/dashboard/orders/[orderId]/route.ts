@@ -2,15 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { getOrderWithDetails } from "@/lib/queries/order.queries";
 import { getEventById } from "@/lib/queries/events.queries";
 import { getCurrentUserIdOrNull } from "@/lib/auth";
+
 interface RouteContext {
-  params: {
-    id: string;
-  };
+  params: Promise<{ orderId: string }>;
 }
 
 export async function GET(request: NextRequest, context: RouteContext) {
   try {
-    const { id } = context.params;
+    const { orderId } = await context.params;
     const organizerId = await getCurrentUserIdOrNull();
 
     if (!organizerId) {
@@ -20,7 +19,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
       );
     }
 
-    const order = await getOrderWithDetails(id);
+    const order = await getOrderWithDetails(orderId);
 
     if (!order) {
       return NextResponse.json(

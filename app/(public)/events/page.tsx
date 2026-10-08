@@ -18,7 +18,7 @@ interface EventsPageProps {
 
 async function EventsList({ searchParams }: EventsPageProps) {
   const params = await searchParams;
-  
+
   // Fetch all published events
   let events = await getPublishedEvents();
 
@@ -30,13 +30,15 @@ async function EventsList({ searchParams }: EventsPageProps) {
         event.title.toLowerCase().includes(searchLower) ||
         event.description.toLowerCase().includes(searchLower) ||
         event.location.toLowerCase().includes(searchLower) ||
-        event.venue.toLowerCase().includes(searchLower)
+        event.venue.toLowerCase().includes(searchLower),
     );
   }
 
   // Apply category filter
   if (params.category) {
-    events = events.filter((event: Event) => event.category === params.category);
+    events = events.filter(
+      (event: Event) => event.category === params.category,
+    );
   }
 
   // Enhance events with ticket information
@@ -44,13 +46,17 @@ async function EventsList({ searchParams }: EventsPageProps) {
     events.map(async (event: Event) => {
       const tickets: TicketType[] = await getTicketTypesByEvent(event.id);
       const activeTickets = tickets.filter((t) => t.isActive);
-      
-      const lowestPrice = activeTickets.length > 0 
-        ? Math.min(...activeTickets.map((t) => t.price))
-        : 0;
+
+      const lowestPrice =
+        activeTickets.length > 0
+          ? Math.min(...activeTickets.map((t) => t.price))
+          : 0;
 
       const totalCapacity = tickets.reduce((sum, t) => sum + t.quantity, 0);
-      const totalTicketsSold = tickets.reduce((sum, t) => sum + t.quantitySold, 0);
+      const totalTicketsSold = tickets.reduce(
+        (sum, t) => sum + t.quantitySold,
+        0,
+      );
 
       return {
         ...event,
@@ -58,13 +64,15 @@ async function EventsList({ searchParams }: EventsPageProps) {
         totalCapacity,
         totalTicketsSold,
       };
-    })
+    }),
   );
 
   // Apply price filter
   let filteredEvents = eventsWithTickets;
   if (params.price === "free") {
-    filteredEvents = eventsWithTickets.filter((event) => event.lowestPrice === 0);
+    filteredEvents = eventsWithTickets.filter(
+      (event) => event.lowestPrice === 0,
+    );
   } else if (params.price === "paid") {
     filteredEvents = eventsWithTickets.filter((event) => event.lowestPrice > 0);
   }
@@ -73,12 +81,16 @@ async function EventsList({ searchParams }: EventsPageProps) {
   const sortedEvents = [...filteredEvents].sort((a, b) => {
     switch (params.sort) {
       case "newest":
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
       case "popular":
         return (b.totalTicketsSold || 0) - (a.totalTicketsSold || 0);
       case "date":
       default:
-        return new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime();
+        return (
+          new Date(a.eventDate).getTime() - new Date(b.eventDate).getTime()
+        );
     }
   });
 
@@ -109,7 +121,10 @@ function EventsListSkeleton() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {[...Array(6)].map((_, i) => (
-        <div key={i} className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 animate-pulse">
+        <div
+          key={i}
+          className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 animate-pulse"
+        >
           <div className="h-48 bg-gray-200" />
           <div className="p-5 space-y-3">
             <div className="h-6 bg-gray-200 rounded" />
@@ -121,6 +136,16 @@ function EventsListSkeleton() {
           </div>
         </div>
       ))}
+    </div>
+  );
+}
+
+function EventsFiltersSkeleton() {
+  return (
+    <div className="bg-white border-b border-gray-200 sticky top-16 z-40">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+        <div className="h-12 bg-gray-100 rounded-lg animate-pulse" />
+      </div>
     </div>
   );
 }
@@ -139,7 +164,10 @@ export default function EventsPage({ searchParams }: EventsPageProps) {
         </div>
       </div>
 
-      <EventsFilters />
+      {/* EventsFilters uses useSearchParams and needs a Suspense boundary when prerendered. */}
+      <Suspense fallback={<EventsFiltersSkeleton />}>
+        <EventsFilters />
+      </Suspense>
 
       {/* Events Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

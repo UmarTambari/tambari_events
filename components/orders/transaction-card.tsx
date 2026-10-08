@@ -18,7 +18,15 @@ interface TransactionCardProps {
 }
 
 export function TransactionCard({ transaction }: TransactionCardProps) {
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string | null) => {
+    if (!status) {
+      return (
+        <Badge variant="outline" className="border-dash-accent/30">
+          Unspecified
+        </Badge>
+      );
+    }
+
     switch (status.toLowerCase()) {
       case "success":
         return (

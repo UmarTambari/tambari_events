@@ -107,9 +107,9 @@ export function EventCard({ event }: EventCardProps) {
               </div>
             )}
 
-            <button className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+            <span className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
               {isSoldOut ? "View Details" : "Get Tickets"}
-            </button>
+            </span>
           </div>
         </div>
       </div>

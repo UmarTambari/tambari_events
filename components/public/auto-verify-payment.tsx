@@ -34,8 +34,7 @@ export function AutoVerifyPayment({
   const busyRef = useRef(false);
   const attemptsRef = useRef(0);
 
-  const shouldPoll =
-    orderStatus === "pending" || orderStatus === "processing";
+  const shouldPoll = orderStatus === "pending" || orderStatus === "processing";
 
   const atLimit = attempts >= maxRetries;
 
@@ -67,8 +66,19 @@ export function AutoVerifyPayment({
 
       const data = await res.json();
 
-      if (!res.ok || !data.success) {
+      if (!res.ok) {
+        // A genuine HTTP-level error from our own API (500, auth issue, etc).
         setError(data.error || "Verification failed");
+      } else if (data.pending) {
+        // Payment simply hasn't completed yet — this is expected and
+        // normal while the user is on/just left the Paystack page.
+        // Do NOT show this as an error; just keep polling silently.
+        setError(null);
+      } else if (!data.success) {
+        // A real failure Paystack reported (e.g. amount mismatch).
+        setError(data.error || "Verification failed");
+      } else {
+        setError(null);
       }
     } catch (err) {
       console.error("Auto verify network error:", err);

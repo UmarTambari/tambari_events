@@ -126,7 +126,14 @@ export function verifyWebhookSignature(
     .update(payload)
     .digest("hex");
 
-  return hash === signature;
+  const hashBuffer = Buffer.from(hash, "hex");
+  const signatureBuffer = Buffer.from(signature, "hex");
+
+  if (hashBuffer.length !== signatureBuffer.length) {
+    return false;
+  }
+
+  return crypto.timingSafeEqual(hashBuffer, signatureBuffer);
 }
 
 export function nairaToKobo(naira: number): number {

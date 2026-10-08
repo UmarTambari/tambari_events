@@ -7,6 +7,7 @@ import { getEventById } from "@/lib/queries/events.queries";
 import { getTicketTypeById } from "@/lib/queries/ticketTypes.queries";
 import { getUserByAuthId } from "@/lib/queries/users.queries";
 import { createOrderSchema } from "@/lib/types/order.type";
+import { generateOrderNumber } from "@/lib/utils/generateReference";
 
 export async function POST(request: NextRequest) {
   try {
@@ -102,7 +103,7 @@ export async function POST(request: NextRequest) {
     const totalAmount = subtotal + serviceFee;
 
     // Generate order number
-    const orderNumber = `ORD-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    const orderNumber = generateOrderNumber();
 
     // Create order
     const order = await createOrder({
@@ -111,7 +112,7 @@ export async function POST(request: NextRequest) {
       eventId,
       customerName: user.fullName,
       customerEmail: user.email,
-      customerPhone: user.phoneNumber,
+      customerPhone: user.phoneNumber ?? "",
       subtotal,
       serviceFee,
       totalAmount,

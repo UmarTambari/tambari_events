@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getOrdersByEvent }          from "@/lib/queries/order.queries";
-import { getEventById }              from "@/lib/queries/events.queries";
-import { getCurrentUserIdOrNull }    from "@/lib/auth";
+import { getOrdersByEvent } from "@/lib/queries/order.queries";
+import { getEventById } from "@/lib/queries/events.queries";
+import { getCurrentUserIdOrNull } from "@/lib/auth";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { eventId: string } }
+  { params }: { params: Promise<{ eventId: string }> }
 ) {
   try {
     const userId = await getCurrentUserIdOrNull();
@@ -16,7 +16,9 @@ export async function GET(
       );
     }
 
-    const event = await getEventById(params.eventId);
+    const { eventId } = await params;
+
+    const event = await getEventById(eventId);
     if (!event) {
       return NextResponse.json(
         { success: false, error: "Event not found" },
@@ -31,7 +33,7 @@ export async function GET(
       );
     }
 
-    const orders = await getOrdersByEvent(params.eventId);
+    const orders = await getOrdersByEvent(eventId);
 
     return NextResponse.json(orders);
   } catch (error) {

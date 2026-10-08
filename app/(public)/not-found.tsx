@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Search, Home, ArrowLeft } from "lucide-react";
+import { BackButton } from "@/components/public/back-button";
+import { Search, Home } from "lucide-react";
 
 export default function NotFound() {
   return (
@@ -12,8 +13,8 @@ export default function NotFound() {
             Page Not Found
           </h2>
           <p className="text-gray-600 mb-8">
-            Sorry, we couldn&apos;t find the page you&apos;re looking for. The event may
-            have been removed or the URL might be incorrect.
+            Sorry, we couldn&apos;t find the page you&apos;re looking for. The
+            event may have been removed or the URL might be incorrect.
           </p>
         </div>
 
@@ -34,13 +35,7 @@ export default function NotFound() {
           </Link>
         </div>
 
-        <button
-          onClick={() => window.history.back()}
-          className="mt-6 inline-flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          <span>Go Back</span>
-        </button>
+        <BackButton />
       </div>
     </div>
   );

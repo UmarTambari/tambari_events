@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
-import { Loader2, CheckCircle } from 'lucide-react'
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Loader2, CheckCircle } from "lucide-react";
 
 interface VerifyPaymentButtonProps {
   reference?: string | null;
@@ -18,35 +18,45 @@ export function VerifyPaymentButton({ reference }: VerifyPaymentButtonProps) {
   }
 
   const handleVerify = async () => {
-  setIsVerifying(true)
+    setIsVerifying(true);
 
-try {
-    const fetchPromise = fetch('/api/payments/verify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ reference }),
-    })
+    try {
+      const response = await fetch("/api/payments/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ reference }),
+      });
 
-    await toast.promise(fetchPromise, {
-      loading: 'Verifying payment...',
-      success: 'Payment verified successfully!',
-      error: 'Failed to verify payment',
-    })
+      const data = await response.json();
 
-    const response = await fetchPromise
-    const data = await response.json()
+      if (!response.ok) {
+        // Genuine HTTP-level failure from our own API.
+        throw new Error(data.error || "Verification failed");
+      }
 
-    if (!response.ok) {
-      throw new Error(data.error || 'Verification failed')
+      if (data.pending) {
+        // Not an error — payment just hasn't completed on Paystack's side yet.
+        toast.info(data.message || "Payment has not been completed yet.");
+        router.refresh();
+        return;
+      }
+
+      if (!data.success) {
+        // A real failure Paystack or our checks reported (e.g. amount mismatch).
+        throw new Error(data.error || "Verification failed");
+      }
+
+      toast.success(data.message || "Payment verified successfully!");
+      router.refresh();
+    } catch (error) {
+      console.error("Verification error:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to verify payment",
+      );
+    } finally {
+      setIsVerifying(false);
     }
-
-    router.refresh()
-  } catch (error) {
-    console.error('Verification error:', error)
-  } finally {
-    setIsVerifying(false)
-  }
-}
+  };
 
   return (
     <button
@@ -66,5 +76,5 @@ try {
         </>
       )}
     </button>
-  )
+  );
 }

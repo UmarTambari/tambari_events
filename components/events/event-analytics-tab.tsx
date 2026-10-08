@@ -22,12 +22,14 @@ interface EventAnalyticsTabProps {
 }
 
 interface TicketTypeData {
+  [key: string]: string | number;
   name: string;
   value: number;
   revenue: number;
 }
 
 interface SalesData {
+  [key: string]: string | number;
   date: string;
   tickets: number;
   revenue: number;
@@ -49,19 +51,23 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
     async function fetchAnalyticsData() {
       try {
         // Fetch ticket types
-        const ticketsResponse = await fetch(`/api/dashboard/events/${eventId}/tickets`);
+        const ticketsResponse = await fetch(
+          `/api/dashboard/events/${eventId}/tickets`,
+        );
         const ticketsResult = await ticketsResponse.json();
 
         if (ticketsResult.success) {
-          const ticketTypes = ticketsResult.data.map((ticket: {
-            name: string;
-            quantitySold: number;
-            price: number;
-          }) => ({
-            name: ticket.name,
-            value: ticket.quantitySold,
-            revenue: ticket.quantitySold * ticket.price,
-          }));
+          const ticketTypes = ticketsResult.data.map(
+            (ticket: {
+              name: string;
+              quantitySold: number;
+              price: number;
+            }) => ({
+              name: ticket.name,
+              value: ticket.quantitySold,
+              revenue: ticket.quantitySold * ticket.price,
+            }),
+          );
           setTicketTypeData(ticketTypes);
         }
 
@@ -87,7 +93,9 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-pulse text-dash-accent">Loading analytics...</div>
+        <div className="animate-pulse text-dash-accent">
+          Loading analytics...
+        </div>
       </div>
     );
   }
@@ -115,7 +123,10 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                     stroke="var(--dash-accent-strong)"
                     style={{ fontSize: "12px" }}
                   />
-                  <YAxis stroke="var(--dash-accent-strong)" style={{ fontSize: "12px" }} />
+                  <YAxis
+                    stroke="var(--dash-accent-strong)"
+                    style={{ fontSize: "12px" }}
+                  />
                   <Tooltip
                     contentStyle={{
                       backgroundColor: "var(--dash-highlight)",
@@ -181,7 +192,11 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                       "Revenue",
                     ]}
                   />
-                  <Bar dataKey="revenue" fill="var(--dash-accent)" radius={[8, 8, 0, 0]} />
+                  <Bar
+                    dataKey="revenue"
+                    fill="var(--dash-accent)"
+                    radius={[8, 8, 0, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -212,7 +227,7 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                     cy="50%"
                     labelLine={false}
                     label={({ name, percent }) =>
-                      `${name}: ${(percent * 100).toFixed(0)}%`
+                      `${name}: ${((percent ?? 0) * 100).toFixed(0)}%`
                     }
                     outerRadius={100}
                     fill="#8884d8"
@@ -273,7 +288,7 @@ export function EventAnalyticsTab({ eventId }: EventAnalyticsTabProps) {
                 .map((ticket, index) => {
                   const totalRevenue = ticketTypeData.reduce(
                     (sum, t) => sum + t.revenue,
-                    0
+                    0,
                   );
                   const percentage =
                     totalRevenue > 0
