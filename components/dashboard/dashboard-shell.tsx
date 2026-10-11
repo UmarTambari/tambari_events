@@ -12,6 +12,7 @@ import {
   X,
   Plus,
   LogOut,
+  Home,
 }                 from "lucide-react";
 import { cn }     from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -29,6 +30,7 @@ const navigation = [
   { name: "Events", href: "/dashboard/events", icon: Calendar },
   { name: "Orders", href: "/dashboard/orders", icon: ShoppingBag },
   { name: "Profile", href: "/dashboard/profile", icon: User },
+  { name: "Home", href: "/", icon: Home}
 ];
 
 export function DashboardShell({
