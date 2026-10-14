@@ -33,7 +33,7 @@ export const attendees = pgTable("attendees", {
   // Unique ticket code for check-in
   ticketCode: text("ticket_code").notNull().unique(), // e.g., "TKT-ABC123XYZ"
   
-  // Attendee details (can be different from buyer)
+  // Attendee details
   firstName: text("first_name").notNull(),
   lastName: text("last_name").notNull(),
   email: text("email").notNull(),

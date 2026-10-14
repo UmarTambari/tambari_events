@@ -49,6 +49,7 @@ export async function POST(request: NextRequest) {
     const body = await request.text();
 
     // Parse the body once.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let data: any;
 
     try {
